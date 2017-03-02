@@ -1,0 +1,80 @@
+<html ng-app="app">
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.js"></script>
+		<script>
+			var app = angular.module('app',[]);
+ 
+			app.controller('ctrl', function($scope) {
+				$scope.canvas = 
+					Array.apply(null, new Array(16)).map(function () {
+						return Array.apply(null, new Array(16)).map(function () {
+							return [7, 7, 3];
+						});
+					});
+
+					$scope.eightOptions = [0, 1, 2, 3, 4, 5, 6, 7];
+					$scope.fourOptions = [0, 1, 2, 3];
+
+					$scope.red = 7;
+					$scope.green = 7;
+					$scope.blue = 3;
+
+					$scope.paint = function (x, y) {
+						$scope.canvas[x][y] = [$scope.red, $scope.green, $scope.blue];
+					};
+
+					var hex = "0123456789ABCDEF";
+
+					$scope.toVHDL = function () {
+						return $scope.canvas.map(function (row) {
+							return row.map(function (pixel, i) {
+								var nibble1 = (pixel[0] << 1) + (pixel[1] >> 2);
+								var nibble2 = ((pixel[1] & 3) << 2) + pixel[2];
+								console.log(pixel[0], pixel[1], pixel[2], nibble1, nibble2);
+								return "x'" + hex.charAt(nibble1) + "" + hex.charAt(nibble2) + "'";
+							}).join(", ");
+						}).join("\n");
+					};
+				
+			});
+		</script>
+		<style>
+			table {
+				border-collapse: collapse;
+			}
+			table td {
+				border: 1px solid black;
+				width: 20px;
+				height: 20px;
+				padding: 0;
+				margin: 0;
+			}
+			.choice {
+				width: 20px;
+				height: 20px;
+				display: inline-block;
+				margin: 20px 0px -5px 20px;
+				border: 1px solid black;
+			}
+		</style>
+	</head>
+	<body ng-controller="ctrl">
+		<table>
+			<tr 
+				ng-repeat="row in canvas track by $index"
+				ng-init="$ri = $index">
+				<td 
+					ng-repeat="pixel in row track by $index"
+					ng-init="$ci = $index" 
+					ng-style="{'background': 'rgb('+((pixel[0]+1)*32-1)+','+((pixel[1]+1)*32-1)+','+((pixel[2]+1)*64-1)+')'}"
+					ng-click="paint($ri, $ci)"></td>
+			</tr>
+		</table>
+		<select ng-options="o as o for o in eightOptions" ng-model="red"></select>
+		<select ng-options="o as o for o in eightOptions" ng-model="green"></select>
+		<select ng-options="o as o for o in fourOptions" ng-model="blue"></select>
+		<div class="choice" ng-style="{'background': 'rgb('+((red+1)*32-1)+','+((green+1)*32-1)+','+((blue+1)*64-1)+')'}"></div>
+		<br><br>
+		<textarea cols="100" rows="20">{{ toVHDL() }}</textarea>
+	</body>
+</html>
