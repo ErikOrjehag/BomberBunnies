@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- BOMBER BUNNIES
+-- VGA_MOTOR
 -------------------------------------------------------------------------------
 -- Rolf Sievert
 -- Erik Örjehag
@@ -21,106 +21,74 @@ entity VGA_MOTOR is
     vgaRed      : out std_logic_vector(2 downto 0);
     vgaGreen    : out std_logic_vector(2 downto 0);
     vgaBlue     : out std_logic_vector(2 downto 1);
-    Hsync	: out std_logic;
-    Vsync	: out std_logic);
-    xpixel      : out std_logic;
-    ypixel      : out std_logic;
+    hSync	: out std_logic;
+    vSync	: out std_logic);
+    xPixel      : buffer unsigned(9 downto 0);         -- Horizontal pixel counter
+    yPixel	: buffer unsigned(9 downto 0);		-- Vertical pixel counter
     playerPixel : in std_logic_vector(7 downto 0);   -- pixel from player
-    mapPixel   : in std_logic_vector(7 downto 0);   -- Tile pixel data
-    pixel       : out std_logic_vector(7 downto 0);  -- output to VGA
-
-    );                
+    mapPixel    : in std_logic_vector(7 downto 0);   -- Tile pixel data
+    pixel       : out std_logic_vector(7 downto 0);  -- output to screen
+  );                
 end VGA_MOTOR;
 
 -- architecture
-architecture behavioral of BomberBunnies is
-  signal	Xpixel	        : unsigned(9 downto 0);         -- Horizontal pixel counter
-  signal	Ypixel	        : unsigned(9 downto 0);		-- Vertical pixel counter
-  signal	ClkDiv	        : unsigned(1 downto 0);		-- Clock divisor, to generate 25 MHz signal
-  signal	Clk25		: std_logic;			-- One pulse width 25 MHz signal
-		
+architecture behavioral of VGA_MOTOR is
+  signal	clkDiv	        : unsigned(1 downto 0);		-- Clock divisor, to generate 25 MHz signal
+  signal	clk25		: std_logic;			-- One pulse width 25 MHz signal
   signal	tileAddr	: unsigned(10 downto 0);	-- Tile address
-
   signal        blank           : std_logic;                    -- blanking signal
-
-
-  -- Tile memory type
-  type ram_t is array (0 to 2047) of std_logic_vector(7 downto 0);
-
-  -- Tile memory
-  signal tile_mem : ram_t := ( x"FF", x"FF");  -- tile memory
+  constant      transparent     : std_logic_vector(7 downto 0) := x"90";
   
-begin  -- behavioral
+begin
 
-  -- Clock divisor
   -- Divide system clock (100 MHz) by 4
   process(clk)
   begin
     if rising_edge(clk) then
       if rst='1' then
-	ClkDiv <= (others => '0');
+	clkDiv <= (others => '0');
       else
-	ClkDiv <= ClkDiv + 1;
+	clkDiv <= clkDiv + 1;
       end if;
     end if;
   end process;
 	
-  -- 25 MHz clock (one system clock pulse width)
-  Clk25 <= '1' when (ClkDiv = 3) else '0';
-	
-	
-  -- Horizontal pixel counter
 
-  -- ***********************************
-  -- *                                 *
-  -- *  VHDL for :                     *
-  -- *  Xpixel                         *
-  -- *                                 *
-  -- ***********************************
+  -- 25 MHz clock (one system clock pulse width)
+  clk25 <= '1' when (clkDiv = 3) else '0';	
+
+  
+  -- Horizontal pixel counter
   process(clk)
   begin
     if rising_edge(clk) then
       if rst = '1' then
-        Xpixel <= (others => '0');
-      elsif Clk25 = '1' then
-        if Xpixel = 799 then
-          Xpixel <= (others => '0');
+        xPixel <= (others => '0');
+      elsif clk25 = '1' then
+        if xPixel = 799 then
+          xPixel <= (others => '0');
         else
-          Xpixel <= Xpixel + 1;
+          xPixel <= xPixel + 1;
         end if;
       end if;
     end if;
   end process;
   
   -- Horizontal sync
-
-  -- ***********************************
-  -- *                                 *
-  -- *  VHDL for :                     *
-  -- *  Hsync                          *
-  -- *                                 *
-  -- ***********************************
-  Hsync <= '0' when (Xpixel >= 656 and Xpixel < 752) else '1';
+  hSync <= '0' when (xPixel >= 656 and xPixel < 752) else '1';
   
   -- Vertical pixel counter
-
-  -- ***********************************
-  -- *                                 *
-  -- *  VHDL for :                     *
-  -- *  Ypixel                         *
-  -- *                                 *
-  -- ***********************************
   process(clk)
   begin
     if rising_edge(clk) then
       if rst = '1' then
-        Ypixel <= (others => '0');
-      elsif Clk25 = '1' then  
-        if Xpixel = 799 then
-          if Ypixel = 520 then
-            Ypixel <= (others => '0');
+        yPixel <= (others => '0');
+      elsif clk25 = '1' then  
+        if xPixel = 799 then
+          if yPixel = 520 then
+            yPixel <= (others => '0');
           else
-            Ypixel <= Ypixel + 1;
+            yPixel <= yPixel + 1;
           end if;
         end if;
       end if;
@@ -129,41 +97,30 @@ begin  -- behavioral
 	
 
   -- Vertical sync
+  vSync <= '0' when (yPixel >= 490 and yPixel < 492) else '1';
 
-  -- ***********************************
-  -- *                                 *
-  -- *  VHDL for :                     *
-  -- *  Vsync                          *
-  -- *                                 *
-  -- ***********************************
-  Vsync <= '0' when (Ypixel >= 490 and Ypixel < 492) else '1';
-
-  
   -- Video blanking signal
+  blank <= '1' when (xPixel >= 640 or yPixel >= 480) else '0';
 
-  -- ***********************************
-  -- *                                 *
-  -- *  VHDL for :                     *
-  -- *  Blank                          *
-  -- *                                 *
-  -- ***********************************
-  Blank <= '1' when (Xpixel >= 640 or Ypixel >= 480) else '0';
 
+  -- Assign pixel to tile or sprite
+  pixel <= (others => '0') when blank = '1' else (playerPixel when (playerPixel != transparent) else tilePixel);
+  
   -- Tile memory
-  process(clk)
-  begin
-    if rising_edge(clk) then
-      if blank = '0' then
-        if playerPixel = "01000110" then -- standard transparent color
-          pixel <= mapPixel;
-        else
-          pixel <= playerPixel;
-        end if
-      else
-        pixel <= (others => '0');
-      end if;
-    end if;
-  end process;
+--process(clk)
+--  begin
+--    if rising_edge(clk) then
+--      if blank = '0' then
+  --      if playerPixel = "01000110" then -- standard transparent color
+   --       pixel <= mapPixel;
+   --     else
+   --       pixel <= playerPixel;
+   --     end if
+   --   else
+  --      pixel <= (others => '0');
+  --    end if;
+  --  end if;
+ -- end process;
 
 
 
