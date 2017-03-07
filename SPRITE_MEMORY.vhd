@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- CPU
+-- SPRITE_MEMORY
 -------------------------------------------------------------------------------
 -- Rolf Sievert
 -- Erik Örjehag
@@ -14,18 +14,16 @@ use IEEE.NUMERIC_STD.ALL;               -- and various arithmetic operations
 
 
 -- entity
-entity CPU is
+entity SPRITE_MEMORY is
   port (
     clk         : in std_logic;                      -- system clock (100 MHz)
     rst	        : in std_logic;
   );                
-end CPU;
+end SPRITE_MEMORY;
 
 -- architecture
-architecture behavioral of CPU is
-
+architecture behavioral of SPRITE_MEMORY is
   
-
 begin  -- behavioral
 
 end behavioral;
