@@ -12,7 +12,7 @@ entity TILE_MEMORY is
          rst                    : in std_logic;
 end TILE_MEMORY;
 
-architecture Behavioral of TILE_MEMORY is
+architecture behavioral of TILE_MEMORY is
   -- Tile memory type
   type ram_t is array (0 to 1279) of std_logic_vector(7 downto 0);
 
@@ -29,4 +29,4 @@ begin
         
       end if;
 
-end Behavioral ;
+end behavioral;
