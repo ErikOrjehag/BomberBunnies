@@ -37,7 +37,7 @@ architecture behavioral of VGA_MOTOR is
   signal	clk25		: std_logic;			-- One pulse width 25 MHz signal
   signal	tileAddr	: unsigned(10 downto 0);	-- Tile address
   signal        blank           : std_logic;                    -- blanking signal
-  constant      transparent     : std_logic_vector(7 downto 0) := x"90";
+  constant      transparent     : std_logic_vector(7 downto 0) := "10010000";
   
 begin
 
