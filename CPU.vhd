@@ -92,7 +92,7 @@ begin  -- behavioral
         when "0010" => buss <= IR;
         when "0011" => buss <= PM(to_unsigned(ASR));
         when "0100" => buss <= "0000000000" & PC;
-        when "0101" => buss <= GRx(to_unsigned(IR(13 downto 12)));  -- GRx(IR(M))
+        when "0101" => buss <= GRx(to_unsigned(IR(16 downto 14) when uPM(uPC)(16) = '1' else IR(13 downto 12)));  -- GRx(IR(GRx/M))
         when "0110" => null;
         when "0111" => null;
         when "1000" => buss <= "00000000000000" & tileIndex;
@@ -112,7 +112,7 @@ begin  -- behavioral
         when "0010" => IR <= buss;
         when "0011" => PM(to_unsigned(ASR)) <= buss;
         when "0100" => PC <= buss(11 downto 0);
-        when "0101" => GRx(to_unsigned(IR(13 downto 12))) <= buss;  -- GRx(IR(M))
+        when "0101" => GRx(to_unsigned(IR(16 downto 14) when uPM(uPC)(16) = '1' else IR(13 downto 12))) <= buss;  -- GRx(IR(GRx/M))
         when "0110" => null;
         when "0111" => null;
         when "1000" => tileIndex <= buss(7 downto 0);
@@ -126,6 +126,24 @@ begin  -- behavioral
         when others => null;
       end case;
 
+      -- P
+      if uPM(uPC)(15) = '1' then
+        PC = PC + 1;
+      end if;
+
+      -- LC
+      case uPM(uPC)(14 downto 13) is
+        when "01" => LC <= LC - 1;
+        when "10" => LC <= buss(7 downto 0);
+        when "11" => LC <= uPC(8 downto 0);  -- uAddr
+        when others => null;
+      end case;
+
+      -- SEQ
+      case uPM(uPC)(12 downto 9) is
+        when "0000" => uPC = uPC + 1;
+--        when "0001" => uPC = ;          -- k1...
+      end case;
 
     end if;
 
