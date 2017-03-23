@@ -22,13 +22,11 @@ entity VGA_MOTOR is
     vgaGreen    : out std_logic_vector(2 downto 0);
     vgaBlue     : out std_logic_vector(2 downto 1);
     hSync	: out std_logic;
-    vSync	: out std_logic);
+    vSync	: out std_logic;
     xPixel      : buffer unsigned(9 downto 0);         -- Horizontal pixel counter
     yPixel	: buffer unsigned(9 downto 0);		-- Vertical pixel counter
     playerPixel : in std_logic_vector(7 downto 0);   -- pixel from player
-    mapPixel    : in std_logic_vector(7 downto 0);   -- Tile pixel data
-    pixel       : out std_logic_vector(7 downto 0);  -- output to screen
-  );                
+    mapPixel    : in std_logic_vector(7 downto 0));   -- Tile pixel data
 end VGA_MOTOR;
 
 -- architecture
@@ -38,7 +36,7 @@ architecture behavioral of VGA_MOTOR is
   signal	tileAddr	: unsigned(10 downto 0);	-- Tile address
   signal        blank           : std_logic;                    -- blanking signal
   constant      transparent     : std_logic_vector(7 downto 0) := "10010000";
-  
+  signal        pixel           : std_logic_vector(7 downto 0);  -- output to screen
 begin
 
   -- Divide system clock (100 MHz) by 4
@@ -104,7 +102,9 @@ begin
 
 
   -- Assign pixel to tile or sprite
-  pixel <= (others => '0') when blank = '1' else (playerPixel when (playerPixel != transparent) else tilePixel);
+  pixel <= (others => '0') when blank = '1' else
+           playerPixel when not(playerPixel = transparent) else
+           mapPixel;
   
   -- Tile memory
 --process(clk)

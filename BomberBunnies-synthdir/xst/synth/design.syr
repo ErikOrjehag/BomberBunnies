@@ -1,0 +1,81 @@
+Release 12.4 - xst M.81d (lin64)
+Copyright (c) 1995-2010 Xilinx, Inc.  All rights reserved.
+--> 
+Parameter TMPDIR set to tmpdir
+
+
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.10 secs
+ 
+--> 
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Parsing
+  3) HDL Elaboration
+  4) HDL Synthesis
+       4.1) HDL Synthesis Report
+  5) Advanced HDL Synthesis
+       5.1) Advanced HDL Synthesis Report
+  6) Low Level Synthesis
+  7) Partition Report
+  8) Design Summary
+       8.1) Primitive and Black Box Usage
+       8.2) Device utilization summary
+       8.3) Partition Resource Summary
+       8.4) Timing Report
+            8.4.1) Clock Information
+            8.4.2) Asynchronous Control Signals Information
+            8.4.3) Timing Summary
+            8.4.4) Timing Details
+            8.4.5) Cross Clock Domains Report
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "design.prj"
+
+---- Target Parameters
+Output File Name                   : "design.ngc"
+Target Device                      : xc6slx16-3-csg324
+
+---- Source Options
+Top Module Name                    : BomberBunnies
+
+=========================================================================
+
+WARNING:Xst:29 - Optimization Effort not specified
+The following parameters have been added:
+Optimization Goal                  : SPEED
+
+=========================================================================
+
+=========================================================================
+*                          HDL Parsing                                  *
+=========================================================================
+Parsing VHDL file "/edu/rolsi701/BomberBunnies/BomberBunnies-synthdir/xst/synth/../../../BomberBunnies.vhd" into library work
+Parsing entity <BOMBER_BUNNIES>.
+Parsing architecture <Behavioral> of entity <bomber_bunnies>.
+Parsing VHDL file "/edu/rolsi701/BomberBunnies/BomberBunnies-synthdir/xst/synth/../../../VGA_MOTOR.vhd" into library work
+Parsing entity <VGA_MOTOR>.
+Parsing architecture <behavioral> of entity <vga_motor>.
+Parsing VHDL file "/edu/rolsi701/BomberBunnies/BomberBunnies-synthdir/xst/synth/../../../MAP_MEMORY.vhd" into library work
+Parsing entity <MAP_MEMORY>.
+Parsing architecture <behavioral> of entity <map_memory>.
+Parsing VHDL file "/edu/rolsi701/BomberBunnies/BomberBunnies-synthdir/xst/synth/../../../SPRITE_MEMORY.vhd" into library work
+Parsing entity <SPRITE_MEMORY>.
+Parsing architecture <behavioral> of entity <sprite_memory>.
+ERROR:HDLCompiler:841 - "/edu/rolsi701/BomberBunnies/BomberBunnies-synthdir/xst/synth/../../../SPRITE_MEMORY.vhd" Line 127: Expecting type integer for <player2index>.
+ERROR:HDLCompiler:854 - "/edu/rolsi701/BomberBunnies/BomberBunnies-synthdir/xst/synth/../../../SPRITE_MEMORY.vhd" Line 32: Unit <behavioral> ignored due to previous errors.
+VHDL file /edu/rolsi701/BomberBunnies/BomberBunnies-synthdir/xst/synth/../../../SPRITE_MEMORY.vhd ignored due to errors
+--> 
+
+
+Total memory usage is 396704 kilobytes
+
+Number of errors   :    2 (   0 filtered)
+Number of warnings :    1 (   0 filtered)
+Number of infos    :    0 (   0 filtered)
+
