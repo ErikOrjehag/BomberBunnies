@@ -21,8 +21,7 @@ entity TILE_PIXEL is
     xTile       : out unsigned(9 downto 0);             -- Horizontal pixel counter
     yTile	: out unsigned(9 downto 0);		-- Vertical pixel counter
     xMap        : out unsigned(9 downto 0);             -- Horizontal pixel counter
-    yMap	: out unsigned(9 downto 0);		-- Vertical pixel counter
-  );
+    yMap	: out unsigned(9 downto 0));		-- Vertical pixel counter
 
 end TILE_PIXEL;
 

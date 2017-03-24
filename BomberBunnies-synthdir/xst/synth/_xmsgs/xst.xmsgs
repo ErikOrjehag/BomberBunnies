@@ -5,10 +5,10 @@
      behavior or data corruption.  It is strongly advised that
      users do not edit the contents of this file. -->
 <messages>
-<msg type="error" file="HDLCompiler" num="841" delta="new" >"/edu/rolsi701/BomberBunnies/BomberBunnies-synthdir/xst/synth/../../../SPRITE_MEMORY.vhd" Line 127: Expecting type <arg fmt="%s" index="2">integer</arg> for &lt;<arg fmt="%s" index="1">player2index</arg>&gt;.
+<msg type="info" file="Xst" num="3010" delta="old" >&quot;<arg fmt="%s" index="1">/edu/erior950/BomberBunnies/BomberBunnies.vhd</arg>&quot; line <arg fmt="%d" index="2">115</arg>: Output port &lt;<arg fmt="%s" index="3">xPixel</arg>&gt; of the instance &lt;<arg fmt="%s" index="4">U1</arg>&gt; is unconnected or connected to loadless signal.
 </msg>
 
-<msg type="error" file="HDLCompiler" num="854" delta="old" >"/edu/rolsi701/BomberBunnies/BomberBunnies-synthdir/xst/synth/../../../SPRITE_MEMORY.vhd" Line 32: Unit &lt;<arg fmt="%s" index="1">behavioral</arg>&gt; ignored due to previous errors.
+<msg type="info" file="Xst" num="3010" delta="old" >&quot;<arg fmt="%s" index="1">/edu/erior950/BomberBunnies/BomberBunnies.vhd</arg>&quot; line <arg fmt="%d" index="2">115</arg>: Output port &lt;<arg fmt="%s" index="3">yPixel</arg>&gt; of the instance &lt;<arg fmt="%s" index="4">U1</arg>&gt; is unconnected or connected to loadless signal.
 </msg>
 
 </messages>

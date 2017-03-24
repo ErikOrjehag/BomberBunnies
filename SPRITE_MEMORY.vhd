@@ -30,11 +30,16 @@ end SPRITE_MEMORY;
 
 -- architecture
 architecture behavioral of SPRITE_MEMORY is
+
   constant transparent     : std_logic_vector(7 downto 0) := "10010000";
-  signal player1Index : integer;
-  signal player1XCount : integer;
-  signal player1YCount : integer;
+
+  signal player1Index : integer := 0;
+  signal player1XCount : integer := 0;
   signal player1True : std_logic := '0';
+  
+  signal player2Index : integer := 0;
+  signal player2XCount : integer := 0;
+  signal player2True : std_logic := '0';
   
   -- Tile memory type
   type sprite_t is array (0 to 255) of std_logic_vector(7 downto 0);
@@ -108,31 +113,60 @@ architecture behavioral of SPRITE_MEMORY is
      x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF");
   
 begin  -- behavioral
-  --process(clk)
-  --begin
-  --  if (xPixel >= p1x and xPixel < p1x + 16 and yPixel >= p1y and yPixel < p1y + 16) then
-  --    playerPixel <= player1(unsigned(yPixel - p1y) + unsigned(xPixel - p1x));
-  --  elsif (xPixel >= p2x and xPixel < p2x + "10000" and yPixel >= p2y and yPixel < p2y + "10000") then 
-  --    playerPixel <= player2(player2Index);
-  --  else
-  --    playerPixel <= transparent;
-  --  end if;
-  --end process;
-
   process(clk)
   begin
     if rising_edge(clk) then
-      if xPixel >= p1x and player1XCount < 16 then
-        player1XCount = player1XCount + 1;
-        player1Index = player1Index + 1;
+      if xPixel >= p1x and player1XCount <= 15 and yPixel >= p1y and player1Index <= 16*32-1 then
+        
+        -- P1
+        if player1XCount = 15 then
+          player1XCount <= 0;
+        else
+          player1XCount <= player1XCount + 1;
+          player1Index <= player1Index + 1;
+        end if;
+        
+        if player1Index = 16*32-1 then
+          player1Index <= 0;
+          player1True <= '0';
+        else
+          player1True <= '1';
+        end if;
+      end if;
+      
+      -- P2
+      if player2XCount = 15 then
+        player2XCount <= 0;
+      else
+        player2XCount <= player2XCount + 1;
+        player2Index <= player2Index + 1;
+      end if;
+        
+      if player2Index = 16*32-1 then
+        player2Index <= 0;
+        player2True <= '0';
+      else
+        player2True <= '1';
+      end if;
+      
+      -- Draw closest player ontop
+      if p1y > p2y then
+        if player1True = '1' then
+          playerPixel <= player1(player1Index);
+        elsif player2True = '1' then
+          playerPixel <= player2(player2Index);
+        else
+          playerPixel <= transparent;
+        end if;
+      else
+        if player2True = '1' then
+          playerPixel <= player2(player2Index);
+        elsif player1True = '1' then
+          playerPixel <= player1(player1Index);
+        else
+          playerPixel <= transparent;
+        end if;
       end if;
     end if;
-  end process;
-
-  
-  playerPixel <=
-    --player1((yPixel - p1y) + (xPixel - p1x)) when (xPixel >= p1x and xPixel < p1x + "10000" and yPixel >= p1y and yPixel < p1y + "10000") else --when pixel points at player 1
-    player2(player2Index) when (xPixel >= p2x and xPixel < p2x + "10000" and yPixel >= p2y and yPixel < p2y + "10000");      --when pixel points at player 2
-    --else transparent;                                                                                                                   --else assign transparent
-    
+  end process;    
 end behavioral;

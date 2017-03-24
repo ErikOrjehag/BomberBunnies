@@ -10,7 +10,7 @@ use IEEE.NUMERIC_STD.ALL;               -- IEEE library for the unsigned type
                                         -- and various arithmetic operations
 
 -- entity
-entity BOMBER_BUNNIES is
+entity BomberBunnies is
   port ( clk	                : in std_logic;                         -- system clock
 	 rst                    : in std_logic;                         -- reset
 	 hSync	                : out std_logic;                        -- horizontal sync
@@ -18,11 +18,11 @@ entity BOMBER_BUNNIES is
 	 vgaRed	                : out	std_logic_vector(2 downto 0);   -- VGA red
 	 vgaGreen               : out std_logic_vector(2 downto 0);     -- VGA green
 	 vgaBlue	        : out std_logic_vector(2 downto 1));     -- VGA blue
-end BOMBER_BUNNIES;
+end BomberBunnies;
 
 
 -- architecture
-architecture Behavioral of BOMBER_BUNNIES is
+architecture Behavioral of BomberBunnies is
 
 -- VGA motor component
   component VGA_MOTOR
@@ -112,7 +112,7 @@ architecture Behavioral of BOMBER_BUNNIES is
 begin
 
   -- picture memory component connection
-  U1 : VGA_MOTOR port map(clk=>clk, rst=>rst, vgaRed=>vgaRed, vgaGreen=>vgaGreen, vgaBlue=>vgaBlue, hSync=>hSync, vSync=>vSync, playerPixel=>"11100000", mapPixel=>"10010000");
+  U1 : VGA_MOTOR port map(clk=>clk, rst=>rst, vgaRed=>vgaRed, vgaGreen=>vgaGreen, vgaBlue=>vgaBlue, hSync=>hSync, vSync=>vSync, playerPixel=>"10010000", mapPixel=>"10011000");
 	
   -- VGA motor component connection
   --U2 : VGA_MOTOR port map(clk=>clk, rst=>rst, data=>data_out2_s, addr=>addr2_s, vgaRed=>vgaRed, vgaGreen=>vgaGreen, vgaBlue=>vgaBlue, Hsync=>Hsync, Vsync=>Vsync);

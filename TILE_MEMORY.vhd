@@ -5,16 +5,17 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity TILE_MEMORY is
   port ( clk                    : in std_logic;
-         pixelXPos              : in std_logic_vector(3 downto 0);
-         pixelYPos              : in std_logic_vector(3 downto 0);
-         tileIndex              : in std_logic_vector(7 downto 0);
+         pixelIndex             : in integer;
+         tileIndex              : in integer;
          pixel                  : out std_logic_vector(7 downto 0);
-         rst                    : in std_logic;
+         rst                    : in std_logic);
 end TILE_MEMORY;
 
 architecture behavioral of TILE_MEMORY is
   -- Tile memory type
   type ram_t is array (0 to 1279) of std_logic_vector(7 downto 0);
+
+  signal index : integer := 0;
   
   -- Grass
   -- Wall
@@ -112,6 +113,7 @@ architecture behavioral of TILE_MEMORY is
 
 begin
 
-  pixel <= memory(to_unsigned(tileIndex * 16 * 16 + pixelYPos * 16 + pixelXPos));
+  index <= tileIndex * 16 * 16 + pixelIndex;
+  pixel <= memory(index);
 
 end behavioral;
