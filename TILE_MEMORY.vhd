@@ -8,7 +8,6 @@ entity TILE_MEMORY is
     clk                    : in std_logic;
     tilePixelIndex         : in integer;
     tileIndex              : in integer;
-    rst                    : in std_logic;
     pixel                  : out std_logic_vector(7 downto 0));
 end TILE_MEMORY;
 

@@ -5,7 +5,7 @@ Parameter TMPDIR set to tmpdir
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.10 secs
+Total CPU time to Xst completion: 0.12 secs
  
 --> 
 
@@ -79,14 +79,21 @@ Elaborating entity <BomberBunnies> (architecture <Behavioral>) from library <wor
 
 Elaborating entity <VGA_MOTOR> (architecture <behavioral>) from library <work>.
 
+Elaborating entity <MAP_MEMORY> (architecture <behavioral>) from library <work>.
+
+Elaborating entity <TILE_MEMORY> (architecture <behavioral>) from library <work>.
+
+Elaborating entity <SPRITE_MEMORY> (architecture <behavioral>) from library <work>.
+WARNING:Xst:2972 - "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd" line 154. All outputs of instance <U4> of block <SPRITE_MEMORY> are unconnected in block <BomberBunnies>. Underlying logic will be removed.
+
 =========================================================================
 *                           HDL Synthesis                               *
 =========================================================================
 
 Synthesizing Unit <BomberBunnies>.
     Related source file is "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd".
-INFO:Xst:3010 - "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd" line 114: Output port <xPixel> of the instance <U1> is unconnected or connected to loadless signal.
-INFO:Xst:3010 - "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd" line 114: Output port <yPixel> of the instance <U1> is unconnected or connected to loadless signal.
+INFO:Xst:3010 - "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd" line 134: Output port <readTile> of the instance <U2> is unconnected or connected to loadless signal.
+INFO:Xst:3010 - "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd" line 154: Output port <playerPixel> of the instance <U4> is unconnected or connected to loadless signal.
     Summary:
 	no macro.
 Unit <BomberBunnies> synthesized.
@@ -109,9 +116,37 @@ Synthesizing Unit <VGA_MOTOR>.
 	inferred   3 Adder/Subtractor(s).
 	inferred  22 D-type flip-flop(s).
 	inferred   6 Comparator(s).
+	inferred   1 Multiplexer(s).
 Unit <VGA_MOTOR> synthesized.
+
+Synthesizing Unit <MAP_MEMORY>.
+    Related source file is "/edu/rolsi701/BomberBunnies/MAP_MEMORY.vhd".
+WARNING:Xst:647 - Input <tilePointer<31:8>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:3035 - Index value(s) does not match array range for signal <karta>, simulation mismatch.
+    Found 195x8-bit dual-port RAM <Mram_karta> for signal <karta>.
+    Found 8-bit register for signal <readTile>.
+    Found 14-bit adder for signal <n0018> created at line 65.
+    Found 15-bit adder for signal <n0032[14:0]> created at line 67.
+    Summary:
+	inferred   1 RAM(s).
+	inferred   2 Adder/Subtractor(s).
+	inferred   8 D-type flip-flop(s).
+Unit <MAP_MEMORY> synthesized.
+
+Synthesizing Unit <TILE_MEMORY>.
+    Related source file is "/edu/rolsi701/BomberBunnies/TILE_MEMORY.vhd".
+WARNING:Xst:647 - Input <tileIndex<31:24>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <clk> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:2999 - Signal 'memory', unconnected in block 'TILE_MEMORY', is tied to its initial value.
+WARNING:Xst:3035 - Index value(s) does not match array range for signal <memory>, simulation mismatch.
+    Found 1280x8-bit single-port Read Only RAM <Mram_memory> for signal <memory>.
+    Found 32-bit adder for signal <index> created at line 116.
+    Summary:
+	inferred   1 RAM(s).
+	inferred   1 Adder/Subtractor(s).
+Unit <TILE_MEMORY> synthesized.
 RTL-Simplification CPUSTAT: 0.01 
-RTL-BasicInf CPUSTAT: 0.13 
+RTL-BasicInf CPUSTAT: 0.15 
 RTL-BasicOpt CPUSTAT: 0.00 
 RTL-Remain-Bus CPUSTAT: 0.00 
 
@@ -119,15 +154,24 @@ RTL-Remain-Bus CPUSTAT: 0.00
 HDL Synthesis Report
 
 Macro Statistics
-# Adders/Subtractors                                   : 3
+# RAMs                                                 : 2
+ 1280x8-bit single-port Read Only RAM                  : 1
+ 195x8-bit dual-port RAM                               : 1
+# Adders/Subtractors                                   : 6
  10-bit adder                                          : 2
+ 14-bit adder                                          : 1
+ 15-bit adder                                          : 1
  2-bit adder                                           : 1
-# Registers                                            : 3
+ 32-bit adder                                          : 1
+# Registers                                            : 4
  10-bit register                                       : 2
  2-bit register                                        : 1
+ 8-bit register                                        : 1
 # Comparators                                          : 6
  10-bit comparator greater                             : 2
  10-bit comparator lessequal                           : 4
+# Multiplexers                                         : 1
+ 8-bit 2-to-1 multiplexer                              : 1
 
 =========================================================================
 
@@ -135,6 +179,36 @@ Macro Statistics
 *                       Advanced HDL Synthesis                          *
 =========================================================================
 
+
+Synthesizing (advanced) Unit <BomberBunnies>.
+INFO:Xst:3031 - HDL ADVISOR - The RAM <U2/Mram_karta> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
+    -----------------------------------------------------------------------
+    | ram_type           | Distributed                         |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 195-word x 8-bit                    |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <GND>           | high     |
+    |     addrA          | connected to signal <GND>           |          |
+    |     diA            | connected to signal <GND>           |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 195-word x 8-bit                    |          |
+    |     addrB          | connected to signal <U2/mapIndex>   |          |
+    |     doB            | connected to signal <tileIndexToTILE_MEMORY> |          |
+    -----------------------------------------------------------------------
+INFO:Xst:3031 - HDL ADVISOR - The RAM <U3/Mram_memory> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
+    -----------------------------------------------------------------------
+    | ram_type           | Distributed                         |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 1280-word x 8-bit                   |          |
+    |     weA            | connected to signal <GND>           | high     |
+    |     addrA          | connected to signal <U3/index>      |          |
+    |     diA            | connected to signal <GND>           |          |
+    |     doA            | connected to signal <tilePixel>     |          |
+    -----------------------------------------------------------------------
+Unit <BomberBunnies> synthesized (advanced).
 
 Synthesizing (advanced) Unit <VGA_MOTOR>.
 The following registers are absorbed into counter <xPixel>: 1 register on signal <xPixel>.
@@ -146,26 +220,51 @@ Unit <VGA_MOTOR> synthesized (advanced).
 Advanced HDL Synthesis Report
 
 Macro Statistics
+# RAMs                                                 : 2
+ 1280x8-bit single-port distributed Read Only RAM      : 1
+ 195x8-bit dual-port distributed RAM                   : 1
+# Adders/Subtractors                                   : 3
+ 11-bit adder                                          : 1
+ 15-bit adder                                          : 1
+ 8-bit adder                                           : 1
 # Counters                                             : 3
  10-bit up counter                                     : 2
  2-bit up counter                                      : 1
 # Comparators                                          : 6
  10-bit comparator greater                             : 2
  10-bit comparator lessequal                           : 4
+# Multiplexers                                         : 1
+ 8-bit 2-to-1 multiplexer                              : 1
 
 =========================================================================
 
 =========================================================================
 *                         Low Level Synthesis                           *
 =========================================================================
+WARNING:Xst:2677 - Node <U2/Mram_karta4> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/Mram_karta5> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/Mram_karta8> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/Mram_karta6> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/Mram_karta7> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/Mram_karta12> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/Mram_karta13> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/Mram_karta14> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/Mram_karta15> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/Mram_karta16> of sequential type is unconnected in block <BomberBunnies>.
 
 Optimizing unit <BomberBunnies> ...
 
 Optimizing unit <VGA_MOTOR> ...
+INFO:Xst:2399 - RAMs <U2/Mram_karta3>, <U2/Mram_karta1> are equivalent, second RAM is removed
+INFO:Xst:2399 - RAMs <U2/Mram_karta3>, <U2/Mram_karta2> are equivalent, second RAM is removed
+INFO:Xst:2399 - RAMs <U2/Mram_karta3>, <U2/Mram_karta9> are equivalent, second RAM is removed
+INFO:Xst:2399 - RAMs <U2/Mram_karta3>, <U2/Mram_karta10> are equivalent, second RAM is removed
+INFO:Xst:2399 - RAMs <U2/Mram_karta3>, <U2/Mram_karta11> are equivalent, second RAM is removed
 
 Mapping all equations...
 Building and optimizing final netlist ...
-Found area constraint ratio of 100 (+ 0) on block BomberBunnies, actual ratio is 0.
+Found area constraint ratio of 100 (+ 0) on block BomberBunnies, actual ratio is 3.
+FlipFlop U1/xPixel_0 has been replicated 2 time(s)
 
 Final Macro Processing ...
 
@@ -173,8 +272,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 22
- Flip-Flops                                            : 22
+# Registers                                            : 24
+ Flip-Flops                                            : 24
 
 =========================================================================
 
@@ -197,20 +296,24 @@ Top Level Output File Name         : design.ngc
 
 Primitive and Black Box Usage:
 ------------------------------
-# BELS                             : 103
+# BELS                             : 373
 #      GND                         : 1
 #      INV                         : 3
 #      LUT1                        : 18
-#      LUT2                        : 2
-#      LUT4                        : 21
-#      LUT5                        : 15
-#      LUT6                        : 4
+#      LUT2                        : 19
+#      LUT3                        : 11
+#      LUT4                        : 41
+#      LUT5                        : 35
+#      LUT6                        : 175
 #      MUXCY                       : 18
+#      MUXF7                       : 31
 #      VCC                         : 1
 #      XORCY                       : 20
-# FlipFlops/Latches                : 22
-#      FD                          : 20
+# FlipFlops/Latches                : 24
+#      FD                          : 22
 #      FDR                         : 2
+# RAMS                             : 1
+#      RAM128X1D                   : 1
 # Clock Buffers                    : 1
 #      BUFGP                       : 1
 # IO Buffers                       : 11
@@ -224,15 +327,17 @@ Selected Device : 6slx16csg324-3
 
 
 Slice Logic Utilization: 
- Number of Slice Registers:              22  out of  18224     0%  
- Number of Slice LUTs:                   63  out of   9112     0%  
-    Number used as Logic:                63  out of   9112     0%  
+ Number of Slice Registers:              24  out of  18224     0%  
+ Number of Slice LUTs:                  306  out of   9112     3%  
+    Number used as Logic:               302  out of   9112     3%  
+    Number used as Memory:                4  out of   2176     0%  
+       Number used as RAM:                4
 
 Slice Logic Distribution: 
- Number of LUT Flip Flop pairs used:     63
-   Number with an unused Flip Flop:      41  out of     63    65%  
-   Number with an unused LUT:             0  out of     63     0%  
-   Number of fully used LUT-FF pairs:    22  out of     63    34%  
+ Number of LUT Flip Flop pairs used:    308
+   Number with an unused Flip Flop:     284  out of    308    92%  
+   Number with an unused LUT:             2  out of    308     0%  
+   Number of fully used LUT-FF pairs:    22  out of    308     7%  
    Number of unique control sets:         2
 
 IO Utilization: 
@@ -263,7 +368,7 @@ Clock Information:
 -----------------------------------+------------------------+-------+
 Clock Signal                       | Clock buffer(FF name)  | Load  |
 -----------------------------------+------------------------+-------+
-clk                                | BUFGP                  | 22    |
+clk                                | BUFGP                  | 25    |
 -----------------------------------+------------------------+-------+
 
 Asynchronous Control Signals Information:
@@ -274,9 +379,9 @@ Timing Summary:
 ---------------
 Speed Grade: -3
 
-   Minimum period: 4.025ns (Maximum Frequency: 248.447MHz)
-   Minimum input arrival time before clock: 3.636ns
-   Maximum output required time after clock: 5.998ns
+   Minimum period: 4.738ns (Maximum Frequency: 211.077MHz)
+   Minimum input arrival time before clock: 3.698ns
+   Maximum output required time after clock: 13.389ns
    Maximum combinational path delay: No path found
 
 Timing Details:
@@ -285,69 +390,76 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clk'
-  Clock period: 4.025ns (frequency: 248.447MHz)
-  Total number of paths / destination ports: 622 / 22
+  Clock period: 4.738ns (frequency: 211.077MHz)
+  Total number of paths / destination ports: 648 / 24
 -------------------------------------------------------------------------
-Delay:               4.025ns (Levels of Logic = 3)
+Delay:               4.738ns (Levels of Logic = 3)
   Source:            U1/xPixel_3 (FF)
-  Destination:       U1/xPixel_0 (FF)
+  Destination:       U1/xPixel_5 (FF)
   Source Clock:      clk rising
   Destination Clock: clk rising
 
-  Data Path: U1/xPixel_3 to U1/xPixel_0
+  Data Path: U1/xPixel_3 to U1/xPixel_5
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FD:C->Q               3   0.447   0.995  U1/xPixel_3 (U1/xPixel_3)
-     LUT5:I0->O           12   0.203   1.013  U1/Mcount_yPixel_val12 (U1/Mcount_yPixel_val12)
-     LUT5:I3->O           10   0.203   0.857  U1/Mcount_xPixel_val1 (U1/Mcount_xPixel_val)
-     LUT5:I4->O            1   0.205   0.000  U1/xPixel_0_rstpot (U1/xPixel_0_rstpot)
-     FD:D                      0.102          U1/xPixel_0
+     FD:C->Q              98   0.447   2.093  U1/xPixel_3 (U1/xPixel_3)
+     LUT4:I1->O            3   0.205   0.651  U1/Mcount_xPixel_val1_SW0 (N10)
+     LUT6:I5->O            9   0.205   0.830  U1/Mcount_xPixel_val1 (U1/Mcount_xPixel_val)
+     LUT4:I3->O            1   0.205   0.000  U1/xPixel_5_rstpot (U1/xPixel_5_rstpot)
+     FD:D                      0.102          U1/xPixel_5
     ----------------------------------------
-    Total                      4.025ns (1.160ns logic, 2.865ns route)
-                                       (28.8% logic, 71.2% route)
+    Total                      4.738ns (1.164ns logic, 3.574ns route)
+                                       (24.6% logic, 75.4% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'clk'
-  Total number of paths / destination ports: 22 / 22
+  Total number of paths / destination ports: 27 / 24
 -------------------------------------------------------------------------
-Offset:              3.636ns (Levels of Logic = 3)
+Offset:              3.698ns (Levels of Logic = 3)
   Source:            rst (PAD)
-  Destination:       U1/yPixel_0 (FF)
+  Destination:       U1/yPixel_8 (FF)
   Destination Clock: clk rising
 
-  Data Path: rst to U1/yPixel_0
+  Data Path: rst to U1/yPixel_8
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O             4   1.222   1.048  rst_IBUF (rst_IBUF)
-     LUT6:I0->O           10   0.203   0.857  U1/Mcount_yPixel_val4 (U1/Mcount_yPixel_val)
-     LUT4:I3->O            1   0.205   0.000  U1/yPixel_0_rstpot (U1/yPixel_0_rstpot)
-     FD:D                      0.102          U1/yPixel_0
+     IBUF:I->O             6   1.222   1.109  rst_IBUF (rst_IBUF)
+     LUT6:I0->O           10   0.203   0.857  U1/Mcount_yPixel_val3 (U1/Mcount_yPixel_val)
+     LUT6:I5->O            1   0.205   0.000  U1/yPixel_9_rstpot (U1/yPixel_9_rstpot)
+     FD:D                      0.102          U1/yPixel_9
     ----------------------------------------
-    Total                      3.636ns (1.732ns logic, 1.905ns route)
-                                       (47.6% logic, 52.4% route)
+    Total                      3.698ns (1.732ns logic, 1.966ns route)
+                                       (46.8% logic, 53.2% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clk'
-  Total number of paths / destination ports: 39 / 5
+  Total number of paths / destination ports: 2396 / 10
 -------------------------------------------------------------------------
-Offset:              5.998ns (Levels of Logic = 3)
-  Source:            U1/yPixel_5 (FF)
-  Destination:       vgaRed<2> (PAD)
+Offset:              13.389ns (Levels of Logic = 10)
+  Source:            U1/xPixel_2 (FF)
+  Destination:       vgaGreen<0> (PAD)
   Source Clock:      clk rising
 
-  Data Path: U1/yPixel_5 to vgaRed<2>
+  Data Path: U1/xPixel_2 to vgaGreen<0>
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FD:C->Q               5   0.447   0.962  U1/yPixel_5 (U1/yPixel_5)
-     LUT4:I0->O            2   0.203   0.961  U1/_n009511 (U1/N3)
-     LUT5:I0->O            3   0.203   0.650  U1/_n00952 (vgaGreen_1_OBUF)
-     OBUF:I->O                 2.571          vgaRed_2_OBUF (vgaRed<2>)
+     FD:C->Q             111   0.447   2.251  U1/xPixel_2 (U1/xPixel_2)
+     LUT6:I1->O            1   0.203   0.924  SF1761 (SF1761)
+     LUT6:I1->O            1   0.203   0.944  SF1765 (SF1765)
+     LUT6:I0->O            5   0.203   0.943  SF1768 (SF176)
+     LUT5:I2->O            3   0.205   0.898  U3/Mram_memory331221 (U3/Mram_memory331220)
+     LUT5:I1->O            1   0.203   0.684  U3/Mram_memory331232 (U3/Mram_memory331231)
+     LUT6:I4->O            1   0.203   0.000  U3/Mram_memory331243_F (N131)
+     MUXF7:I0->O           1   0.131   0.808  U3/Mram_memory331243 (U3/Mram_memory331242)
+     LUT4:I1->O            1   0.205   0.580  U3/Mram_memory3312441 (U3/Mram_memory331244)
+     LUT2:I1->O            1   0.205   0.579  U1/Mmux_pixel31 (vgaGreen_0_OBUF)
+     OBUF:I->O                 2.571          vgaGreen_0_OBUF (vgaGreen<0>)
     ----------------------------------------
-    Total                      5.998ns (3.424ns logic, 2.573ns route)
-                                       (57.1% logic, 42.9% route)
+    Total                     13.389ns (4.779ns logic, 8.610ns route)
+                                       (35.7% logic, 64.3% route)
 
 =========================================================================
 
@@ -359,21 +471,21 @@ Clock to Setup on destination clock clk
                | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
 Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
 ---------------+---------+---------+---------+---------+
-clk            |    4.025|         |         |         |
+clk            |    4.738|         |         |         |
 ---------------+---------+---------+---------+---------+
 
 =========================================================================
 
 
-Total REAL time to Xst completion: 4.00 secs
-Total CPU time to Xst completion: 3.58 secs
+Total REAL time to Xst completion: 6.00 secs
+Total CPU time to Xst completion: 6.43 secs
  
 --> 
 
 
-Total memory usage is 459736 kilobytes
+Total memory usage is 461028 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :    1 (   0 filtered)
-Number of infos    :    2 (   0 filtered)
+Number of warnings :   18 (   0 filtered)
+Number of infos    :    9 (   0 filtered)
 

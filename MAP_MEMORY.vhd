@@ -26,7 +26,7 @@ entity MAP_MEMORY is
     readTile            : out std_logic_vector(7 downto 0) := X"00";
     pixelOut            : out std_logic_vector(7 downto 0);
     tilePixelIndex      : out integer := 0;
-    tileIndex           : out std_logic_vector(7 downto 0) := X"00");
+    tileIndex           : out integer := 0);
     
 end MAP_MEMORY;
 
@@ -63,7 +63,7 @@ begin  -- behavioral
   end process;
 
   mapIndex <= to_integer(xPixel) + to_integer(yPixel) * 16;
-  tileIndex <= karta(mapIndex);
+  tileIndex <= to_integer(unsigned(karta(mapIndex)));
   tilePixelIndex <= to_integer(xPixel mod 16) + (to_integer(yPixel mod 16) * 16);
   pixelOut <= pixelIn;
 

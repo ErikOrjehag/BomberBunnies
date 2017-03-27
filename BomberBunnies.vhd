@@ -31,7 +31,7 @@ architecture Behavioral of BomberBunnies is
       clk		: in std_logic;                         -- system clock
       rst	        : in std_logic;
       playerPixel       : in std_logic_vector(7 downto 0);   -- pixel from player
-      mapPixel          : in std_logic_vector(7 downto 0);   -- Tile pixel data
+      tilePixel         : in std_logic_vector(7 downto 0);   -- Tile pixel data
       xPixel            : buffer unsigned(9 downto 0);         -- Horizontal pixel counter
       yPixel	        : buffer unsigned(9 downto 0);		-- Vertical pixel counter
       vgaRed            : out std_logic_vector(2 downto 0);
@@ -45,7 +45,6 @@ architecture Behavioral of BomberBunnies is
   component MAP_MEMORY
     port (
       clk               : in std_logic;                         -- system clock (100 MHz)
-      rst	        : in std_logic;
       xPixel            : in unsigned(9 downto 0);      -- Horizontal pixel counter
       yPixel	        : in unsigned(9 downto 0);      -- Vertical pixel counter
       readWrite         : in std_logic;                         -- 0 is read, 1 is write
@@ -55,7 +54,7 @@ architecture Behavioral of BomberBunnies is
       readTile          : out std_logic_vector(7 downto 0);
       pixelOut          : out std_logic_vector(7 downto 0);
       tilePixelIndex    : out integer;
-      tileIndex         : out std_logic_vector(7 downto 0));    
+      tileIndex         : out integer);    
   end component;
 
   -- VGA motor component
@@ -64,7 +63,6 @@ architecture Behavioral of BomberBunnies is
       clk	        : in std_logic;                         -- system clock
       tilePixelIndex    : in integer;
       tileIndex         : in integer;
-      rst               : in std_logic;
       pixel             : out std_logic_vector(7 downto 0));
   end component;
 
@@ -72,7 +70,6 @@ architecture Behavioral of BomberBunnies is
   component SPRITE_MEMORY
     port (
       clk		: in std_logic;                 -- system clock
-      rst	        : in std_logic;
       xPixel            : in unsigned(9 downto 0);               -- Horizontal pixel counter
       yPixel	        : in unsigned(9 downto 0);	        -- Vertical pixel counter
       p1x               : in unsigned(7 downto 0);               -- Number of pixels on board 16x16x15
@@ -110,10 +107,12 @@ architecture Behavioral of BomberBunnies is
   signal xPixel : unsigned(9 downto 0);
   signal yPixel : unsigned(9 downto 0);
 
+  signal playerPixel : std_logic_vector(7 downto 0);
   signal tilePixel : std_logic_vector(7 downto 0);
+  
   signal tilePixelToVGA : std_logic_vector(7 downto 0);
   signal tilePixelIndexToTILE_MEMORY : integer;
-  signal tileIndexToTILE_MEMORY : std_logic_vector(7 downto 0);
+  signal tileIndexToTILE_MEMORY : integer;
 	
 begin
 
@@ -140,11 +139,27 @@ begin
     tilePointer => 0,
     pixelIn => tilePixel,
     writeTile => "00000000",
-    readTile => "00000000",
+    --readTile =>,
     pixelOut => tilePixelToVGA,
     tilePixelIndex => tilePixelIndexToTILE_MEMORY,
-    tileIndex => tileIndexToTILE_MEMORY;
-    );
+    tileIndex => tileIndexToTILE_MEMORY);
+
+  
+  U3 : TILE_MEMORY port map (
+    clk => clk,
+    tilePixelIndex => tilePixelIndexToTILE_MEMORY,
+    tileIndex => tileIndexToTILE_MEMORY,
+    pixel => tilePixel);
+
+  U4 : SPRITE_MEMORY port map (
+    clk         => clk,
+    xPixel      => xPixel,
+    yPixel      => yPixel,
+    p1x         => "00000000",
+    p1y         => "00000000",
+    p2x         => "00000000",
+    p2y         => "00000000",
+    playerPixel => playerPixel);
 	
   -- VGA motor component connection
   --U2 : VGA_MOTOR port map(clk=>clk, rst=>rst, data=>data_out2_s, addr=>addr2_s, vgaRed=>vgaRed, vgaGreen=>vgaGreen, vgaBlue=>vgaBlue, Hsync=>Hsync, Vsync=>Vsync);

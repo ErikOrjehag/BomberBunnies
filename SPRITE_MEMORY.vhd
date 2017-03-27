@@ -18,7 +18,6 @@ use IEEE.NUMERIC_STD.ALL;               -- and various arithmetic operations
 entity SPRITE_MEMORY is
   port (
     clk         : in std_logic;                         -- system clock (100 MHz)
-    rst	        : in std_logic;
     xPixel      : in unsigned(9 downto 0);              -- Horizontal pixel counter
     yPixel	: in unsigned(9 downto 0);	        -- Vertical pixel counter
     p1x         : in unsigned(7 downto 0);              -- Number of pixels on board 16x16x15
@@ -42,7 +41,7 @@ architecture behavioral of SPRITE_MEMORY is
   signal player2True : std_logic := '0';
   
   -- Tile memory type
-  type sprite_t is array (0 to 255) of std_logic_vector(7 downto 0);
+  type sprite_t is array (0 to 511) of std_logic_vector(7 downto 0);
 
   constant player1 : sprite_t :=
     (x"90", x"90", x"90", x"90", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
