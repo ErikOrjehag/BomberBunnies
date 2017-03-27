@@ -9,7 +9,7 @@ Target Device  : xc6slx16
 Target Package : csg324
 Target Speed   : -3
 Mapper Version : spartan6 -- $Revision: 1.52.76.2 $
-Mapped Date    : Fri Mar 24 11:55:59 2017
+Mapped Date    : Mon Mar 27 14:12:12 2017
 
 Design Summary
 --------------
@@ -34,7 +34,7 @@ Slice Logic Utilization:
       Number with other load:                    0
 
 Slice Logic Distribution:
-  Number of occupied Slices:                    23 out of   2,278    1%
+  Number of occupied Slices:                    22 out of   2,278    1%
   Number of LUT Flip Flop pairs used:           62
     Number with an unused Flip Flop:            40 out of      62   64%
     Number with an unused LUT:                   0 out of      62    0%
@@ -78,11 +78,11 @@ Specific Feature Utilization:
   Number of STARTUPs:                            0 out of       1    0%
   Number of SUSPEND_SYNCs:                       0 out of       1    0%
 
-Average Fanout of Non-Clock Nets:                3.14
+Average Fanout of Non-Clock Nets:                3.16
 
 Peak Memory Usage:  566 MB
-Total REAL time to MAP completion:  7 secs 
-Total CPU time to MAP completion:   6 secs 
+Total REAL time to MAP completion:  10 secs 
+Total CPU time to MAP completion:   7 secs 
 
 Table of Contents
 -----------------
@@ -239,8 +239,8 @@ Section 13 - Utilization by Hierarchy
 +---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Module             | Partition | Slices*       | Slice Reg     | LUTs          | LUTRAM        | BRAM/FIFO | DSP48A1 | BUFG  | BUFIO | BUFR  | DCM   | PLL_ADV   | Full Hierarchical  |
 +---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| BomberBunnies/     |           | 2/25          | 0/22          | 0/44          | 0/0           | 0/0       | 0/0     | 1/1   | 0/0   | 0/0   | 0/0   | 0/0       | BomberBunnies      |
-| +U1                |           | 23/23         | 22/22         | 44/44         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0   | 0/0       | BomberBunnies/U1   |
+| BomberBunnies/     |           | 2/24          | 0/22          | 0/44          | 0/0           | 0/0       | 0/0     | 1/1   | 0/0   | 0/0   | 0/0   | 0/0       | BomberBunnies      |
+| +U1                |           | 22/22         | 22/22         | 44/44         | 0/0           | 0/0       | 0/0     | 0/0   | 0/0   | 0/0   | 0/0   | 0/0       | BomberBunnies/U1   |
 +---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 * Slices can be packed with basic elements from multiple hierarchies.

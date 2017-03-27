@@ -64,10 +64,16 @@ architecture Behavioral of BomberBunnies is
 	
   -- VGA motor component
   component MAP_MEMORY
-    port ( clk			: in std_logic;                         -- system clock
-           rst	        : in std_logic;
-           xPos        : in unsigned;
-           yPos        : in unsigned);
+    port (
+    clk         : in std_logic;                      -- system clock (100 MHz)
+    rst	        : in std_logic;
+    xPos        : in integer;
+    yPos        : in integer;
+    readWrite   : in std_logic;    -- 0 is read, 1 is write
+    tilePointer : in integer;
+    newTile     : in std_logic_vector(7 downto 0);
+    tile        : out std_logic_vector(7 downto 0) := X"00";
+    tileIndex   : out integer := 0);
            
   end component;
 
