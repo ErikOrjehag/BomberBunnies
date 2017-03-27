@@ -4,11 +4,12 @@ use IEEE.STD_LOGIC_1164.ALL;            -- basic IEEE library
 use IEEE.NUMERIC_STD.ALL;
 
 entity TILE_MEMORY is
-  port ( clk                    : in std_logic;
-         pixelIndex             : in integer;
-         tileIndex              : in integer;
-         pixel                  : out std_logic_vector(7 downto 0);
-         rst                    : in std_logic);
+  port (
+    clk                    : in std_logic;
+    tilePixelIndex         : in integer;
+    tileIndex              : in integer;
+    rst                    : in std_logic;
+    pixel                  : out std_logic_vector(7 downto 0));
 end TILE_MEMORY;
 
 architecture behavioral of TILE_MEMORY is
@@ -93,7 +94,7 @@ architecture behavioral of TILE_MEMORY is
                  x"A4",x"E0",x"C4",x"E0",x"E8",x"E8",x"E0",x"E8",x"E8",x"E8",x"E8",x"E0",x"E0",x"E0",x"E0",x"A4",
                  x"A4",x"A4",x"A4",x"C4",x"E0",x"E0",x"E0",x"E0",x"E0",x"C4",x"E0",x"C4",x"E0",x"A4",x"A4",x"A4",
 
-                 x"58",x"58",x"58",x"58",x"58",x"58",x"EF",x"02",x"EF",x"58",x"58",x"58",x"58",x"58",x"54",x"54",   -- Eggbomb
+                 x"58",x"58",x"58",x"58",x"58",x"58",x"EF",x"02",x"EF",x"58",x"58",x"58",x"58",x"58",x"54",x"54",   -- Äggmök
                  x"58",x"58",x"58",x"58",x"58",x"02",x"EF",x"EF",x"EF",x"02",x"58",x"58",x"58",x"54",x"54",x"54",
                  x"58",x"58",x"58",x"58",x"0F",x"0F",x"0F",x"0F",x"0F",x"0F",x"0F",x"58",x"54",x"54",x"54",x"58",
                  x"58",x"58",x"58",x"0F",x"E0",x"0F",x"E0",x"0F",x"E0",x"0F",x"E0",x"0F",x"54",x"54",x"58",x"58",
@@ -113,7 +114,7 @@ architecture behavioral of TILE_MEMORY is
 
 begin
 
-  index <= tileIndex * 16 * 16 + pixelIndex;
+  index <= tileIndex * 16 * 16 + tilePixelIndex;
   pixel <= memory(index);
 
 end behavioral;

@@ -17,15 +17,15 @@ use IEEE.NUMERIC_STD.ALL;               -- and various arithmetic operations
 -- entity
 entity SPRITE_MEMORY is
   port (
-    clk         : in std_logic;                      -- system clock (100 MHz)
+    clk         : in std_logic;                         -- system clock (100 MHz)
     rst	        : in std_logic;
-    xPixel      : in std_logic_vector(9 downto 0);         -- Horizontal pixel counter
-    yPixel	: in std_logic_vector(9 downto 0);	   -- Vertical pixel counter
-    p1x         : in std_logic_vector(7 downto 0);  -- Number of pixels on board 16x16x15
-    p1y         : in std_logic_vector(7 downto 0);  -- Number of pixels on board 16x16x13
-    p2x         : in std_logic_vector(7 downto 0);  -- Number of pixels on board 16x16x15
-    p2y         : in std_logic_vector(7 downto 0);  -- Number of pixels on board 16x16x13
-    playerPixel : out std_logic_vector(7 downto 0));   -- pixel from player 
+    xPixel      : in unsigned(9 downto 0);              -- Horizontal pixel counter
+    yPixel	: in unsigned(9 downto 0);	        -- Vertical pixel counter
+    p1x         : in unsigned(7 downto 0);              -- Number of pixels on board 16x16x15
+    p1y         : in unsigned(7 downto 0);              -- Number of pixels on board 16x16x13
+    p2x         : in unsigned(7 downto 0);              -- Number of pixels on board 16x16x15
+    p2y         : in unsigned(7 downto 0);              -- Number of pixels on board 16x16x13
+    playerPixel : out std_logic_vector(7 downto 0));    -- pixel from player 
 end SPRITE_MEMORY;
 
 -- architecture

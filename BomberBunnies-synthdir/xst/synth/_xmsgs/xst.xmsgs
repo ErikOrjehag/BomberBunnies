@@ -5,10 +5,10 @@
      behavior or data corruption.  It is strongly advised that
      users do not edit the contents of this file. -->
 <messages>
-<msg type="info" file="Xst" num="3010" delta="new" >&quot;<arg fmt="%s" index="1">/edu/rolsi701/BomberBunnies/BomberBunnies.vhd</arg>&quot; line <arg fmt="%d" index="2">121</arg>: Output port &lt;<arg fmt="%s" index="3">xPixel</arg>&gt; of the instance &lt;<arg fmt="%s" index="4">U1</arg>&gt; is unconnected or connected to loadless signal.
+<msg type="info" file="Xst" num="3010" delta="new" >&quot;<arg fmt="%s" index="1">/edu/rolsi701/BomberBunnies/BomberBunnies.vhd</arg>&quot; line <arg fmt="%d" index="2">114</arg>: Output port &lt;<arg fmt="%s" index="3">xPixel</arg>&gt; of the instance &lt;<arg fmt="%s" index="4">U1</arg>&gt; is unconnected or connected to loadless signal.
 </msg>
 
-<msg type="info" file="Xst" num="3010" delta="new" >&quot;<arg fmt="%s" index="1">/edu/rolsi701/BomberBunnies/BomberBunnies.vhd</arg>&quot; line <arg fmt="%d" index="2">121</arg>: Output port &lt;<arg fmt="%s" index="3">yPixel</arg>&gt; of the instance &lt;<arg fmt="%s" index="4">U1</arg>&gt; is unconnected or connected to loadless signal.
+<msg type="info" file="Xst" num="3010" delta="new" >&quot;<arg fmt="%s" index="1">/edu/rolsi701/BomberBunnies/BomberBunnies.vhd</arg>&quot; line <arg fmt="%d" index="2">114</arg>: Output port &lt;<arg fmt="%s" index="3">yPixel</arg>&gt; of the instance &lt;<arg fmt="%s" index="4">U1</arg>&gt; is unconnected or connected to loadless signal.
 </msg>
 
 </messages>

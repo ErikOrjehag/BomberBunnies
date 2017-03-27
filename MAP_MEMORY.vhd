@@ -17,16 +17,15 @@ use IEEE.NUMERIC_STD.ALL;               -- and various arithmetic operations
 entity MAP_MEMORY is
   port (
     clk                 : in std_logic;                      -- system clock (100 MHz)
-    rst	                : in std_logic;
-    xPixel              : in std_logic_vector(9 downto 0);              -- Horizontal pixel counter
-    yPixel	        : in std_logic_vector(9 downto 0);		-- Vertical pixel counter
+    xPixel              : in unsigned(9 downto 0);              -- Horizontal pixel counter
+    yPixel	        : in unsigned(9 downto 0);		-- Vertical pixel counter
     readWrite           : in std_logic;    -- 0 is read, 1 is write
     tilePointer         : in integer;
-    newTile             : in std_logic_vector(7 downto 0);
     pixelIn             : in std_logic_vector(7 downto 0);
+    writeTile           : in std_logic_vector(7 downto 0);
+    readTile            : out std_logic_vector(7 downto 0) := X"00";
     pixelOut            : out std_logic_vector(7 downto 0);
     tilePixelIndex      : out integer := 0;
-    tile                : out std_logic_vector(7 downto 0) := X"00";
     tileIndex           : out std_logic_vector(7 downto 0) := X"00");
     
 end MAP_MEMORY;
@@ -56,16 +55,16 @@ begin  -- behavioral
   begin
     if rising_edge(clk) then
       if readWrite = '0' then
-        tile <= karta(tilePointer);
+        readTile <= karta(tilePointer);
       else
-        karta(tilePointer) <= newTile;
+        karta(tilePointer) <= writeTile;
       end if;
     end if;
   end process;
 
-  mapIndex <= to_integer(unsigned(xPixel)) + to_integer(unsigned(yPixel)) * 16;
+  mapIndex <= to_integer(xPixel) + to_integer(yPixel) * 16;
   tileIndex <= karta(mapIndex);
-  tilePixelIndex <= to_integer(unsigned(xPixel) mod 16) + (to_integer(unsigned(yPixel) mod 16) * 16);
+  tilePixelIndex <= to_integer(xPixel mod 16) + (to_integer(yPixel mod 16) * 16);
   pixelOut <= pixelIn;
 
 end behavioral;

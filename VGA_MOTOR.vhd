@@ -16,17 +16,17 @@ use IEEE.NUMERIC_STD.ALL;               -- and various arithmetic operations
 -- entity
 entity VGA_MOTOR is
   port (
-    clk         : in std_logic;                      -- system clock (100 MHz)
-    rst	        : in std_logic;
-    vgaRed      : out std_logic_vector(2 downto 0);
-    vgaGreen    : out std_logic_vector(2 downto 0);
-    vgaBlue     : out std_logic_vector(2 downto 1);
-    hSync	: out std_logic;
-    vSync	: out std_logic;
-    xPixel      : buffer unsigned(9 downto 0);         -- Horizontal pixel counter
-    yPixel	: buffer unsigned(9 downto 0);		-- Vertical pixel counter
-    playerPixel : in std_logic_vector(7 downto 0);   -- pixel from player
-    mapPixel    : in std_logic_vector(7 downto 0));   -- Tile pixel data
+    clk		        : in std_logic;                         -- system clock
+    rst	                : in std_logic;
+    playerPixel         : in std_logic_vector(7 downto 0);   -- pixel from player
+    tilePixel            : in std_logic_vector(7 downto 0);   -- Tile pixel data
+    xPixel              : buffer unsigned(9 downto 0) := "0000000000";         -- Horizontal pixel counter
+    yPixel	        : buffer unsigned(9 downto 0) := "0000000000";		-- Vertical pixel counter
+    vgaRed              : out std_logic_vector(2 downto 0) := "000";
+    vgaGreen            : out std_logic_vector(2 downto 0) := "000";
+    vgaBlue             : out std_logic_vector(2 downto 1) := "00";
+    hSync               : out std_logic;
+    vSync               : out std_logic);
 end VGA_MOTOR;
 
 -- architecture
@@ -104,7 +104,7 @@ begin
   -- Assign pixel to tile or sprite
   pixel <= (others => '0') when blank = '1' else
            playerPixel when not(playerPixel = transparent) else
-           mapPixel;
+           tilePixel;
   
   -- Tile memory
 --process(clk)
