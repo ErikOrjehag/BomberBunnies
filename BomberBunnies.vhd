@@ -120,7 +120,7 @@ begin
   U1 : VGA_MOTOR port map(
     clk=>clk,
     rst=>rst,
-    playerPixel=>"10010000",
+    playerPixel=>playerPixel,
     tilePixel=>tilePixelToVGA,
     xPixel=>xPixel,
     yPixel=>yPixel,
@@ -130,7 +130,6 @@ begin
     hSync=>hSync,
     vSync=>vSync);
 
-  
   U2 : MAP_MEMORY port map (
     clk => clk,
     xPixel => xPixel,
@@ -143,7 +142,6 @@ begin
     pixelOut => tilePixelToVGA,
     tilePixelIndex => tilePixelIndexToTILE_MEMORY,
     tileIndex => tileIndexToTILE_MEMORY);
-
   
   U3 : TILE_MEMORY port map (
     clk => clk,

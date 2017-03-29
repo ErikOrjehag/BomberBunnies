@@ -33,23 +33,24 @@ end MAP_MEMORY;
 -- architecture
 architecture behavioral of MAP_MEMORY is
 
+  signal pixelSize : integer := 2;
   signal mapIndex : integer := 0;
   
   type map_t is array (0 to 194) of std_logic_vector(7 downto 0);
   signal karta : map_t :=
-    (x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00",
-     x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00");
+    (x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01",
+     x"01", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"01",
+     x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01",
+     x"01", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"01",
+     x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01",
+     x"01", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"01",
+     x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01",
+     x"01", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"01",
+     x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01",
+     x"01", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"01",
+     x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01", x"00", x"01",
+     x"01", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"01",
+     x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01", x"01");
 begin  -- behavioral
   process(clk)
   begin
@@ -59,12 +60,17 @@ begin  -- behavioral
       else
         karta(tilePointer) <= writeTile;
       end if;
+
+      if xPixel < 16*15*pixelSize and yPixel < 16*13*pixelSize then
+        mapIndex <= to_integer(xPixel) / (16*pixelSize) + (to_integer(yPixel) / (16*pixelSize)) * 15;
+        tileIndex <= to_integer(unsigned(karta(mapIndex)));
+        tilePixelIndex <= (to_integer(xPixel)/pixelSize) mod 16 + ((to_integer(yPixel)/pixelSize) mod 16 * 16);
+        pixelOut <= pixelIn;
+      else
+        pixelOut <= x"00";
+      end if;
     end if;
   end process;
 
-  mapIndex <= to_integer(xPixel) + to_integer(yPixel) * 16;
-  tileIndex <= to_integer(unsigned(karta(mapIndex)));
-  tilePixelIndex <= to_integer(xPixel mod 16) + (to_integer(yPixel mod 16) * 16);
-  pixelOut <= pixelIn;
-
+  
 end behavioral;

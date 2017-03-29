@@ -4,8 +4,8 @@ Copyright (c) 1995-2010 Xilinx, Inc.  All rights reserved.
 Parameter TMPDIR set to tmpdir
 
 
-Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.12 secs
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.09 secs
  
 --> 
 
@@ -80,11 +80,11 @@ Elaborating entity <BomberBunnies> (architecture <Behavioral>) from library <wor
 Elaborating entity <VGA_MOTOR> (architecture <behavioral>) from library <work>.
 
 Elaborating entity <MAP_MEMORY> (architecture <behavioral>) from library <work>.
+WARNING:HDLCompiler:871 - "/edu/rolsi701/BomberBunnies/BomberBunnies-synthdir/xst/synth/../../../MAP_MEMORY.vhd" Line 36: Using initial value 2 for pixelsize since it is never assigned
 
 Elaborating entity <TILE_MEMORY> (architecture <behavioral>) from library <work>.
 
 Elaborating entity <SPRITE_MEMORY> (architecture <behavioral>) from library <work>.
-WARNING:Xst:2972 - "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd" line 154. All outputs of instance <U4> of block <SPRITE_MEMORY> are unconnected in block <BomberBunnies>. Underlying logic will be removed.
 
 =========================================================================
 *                           HDL Synthesis                               *
@@ -92,8 +92,7 @@ WARNING:Xst:2972 - "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd" line 154. All
 
 Synthesizing Unit <BomberBunnies>.
     Related source file is "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd".
-INFO:Xst:3010 - "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd" line 134: Output port <readTile> of the instance <U2> is unconnected or connected to loadless signal.
-INFO:Xst:3010 - "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd" line 154: Output port <playerPixel> of the instance <U4> is unconnected or connected to loadless signal.
+INFO:Xst:3010 - "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd" line 133: Output port <readTile> of the instance <U2> is unconnected or connected to loadless signal.
     Summary:
 	no macro.
 Unit <BomberBunnies> synthesized.
@@ -116,7 +115,7 @@ Synthesizing Unit <VGA_MOTOR>.
 	inferred   3 Adder/Subtractor(s).
 	inferred  22 D-type flip-flop(s).
 	inferred   6 Comparator(s).
-	inferred   1 Multiplexer(s).
+	inferred   2 Multiplexer(s).
 Unit <VGA_MOTOR> synthesized.
 
 Synthesizing Unit <MAP_MEMORY>.
@@ -124,13 +123,22 @@ Synthesizing Unit <MAP_MEMORY>.
 WARNING:Xst:647 - Input <tilePointer<31:8>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
 WARNING:Xst:3035 - Index value(s) does not match array range for signal <karta>, simulation mismatch.
     Found 195x8-bit dual-port RAM <Mram_karta> for signal <karta>.
+    Found 32-bit register for signal <mapIndex>.
+    Found 32-bit register for signal <tileIndex>.
+    Found 32-bit register for signal <tilePixelIndex>.
+    Found 8-bit register for signal <pixelOut>.
     Found 8-bit register for signal <readTile>.
-    Found 14-bit adder for signal <n0018> created at line 65.
-    Found 15-bit adder for signal <n0032[14:0]> created at line 67.
+    Found 10-bit adder for signal <n0048[9:0]> created at line 65.
+    Found 9-bit adder for signal <n0051[8:0]> created at line 67.
+    Found 5x4-bit multiplier for signal <yPixel[9]_PWR_6_o_MuLt_5_OUT> created at line 65.
+    Found 10-bit comparator greater for signal <xPixel[9]_GND_6_o_LessThan_4_o> created at line 64
+    Found 10-bit comparator greater for signal <yPixel[9]_GND_6_o_LessThan_5_o> created at line 64
     Summary:
 	inferred   1 RAM(s).
+	inferred   1 Multiplier(s).
 	inferred   2 Adder/Subtractor(s).
-	inferred   8 D-type flip-flop(s).
+	inferred 112 D-type flip-flop(s).
+	inferred   2 Comparator(s).
 Unit <MAP_MEMORY> synthesized.
 
 Synthesizing Unit <TILE_MEMORY>.
@@ -140,13 +148,33 @@ WARNING:Xst:647 - Input <clk> is never used. This port will be preserved and lef
 WARNING:Xst:2999 - Signal 'memory', unconnected in block 'TILE_MEMORY', is tied to its initial value.
 WARNING:Xst:3035 - Index value(s) does not match array range for signal <memory>, simulation mismatch.
     Found 1280x8-bit single-port Read Only RAM <Mram_memory> for signal <memory>.
-    Found 32-bit adder for signal <index> created at line 116.
+    Found 32-bit adder for signal <index> created at line 133.
     Summary:
 	inferred   1 RAM(s).
 	inferred   1 Adder/Subtractor(s).
 Unit <TILE_MEMORY> synthesized.
-RTL-Simplification CPUSTAT: 0.01 
-RTL-BasicInf CPUSTAT: 0.15 
+
+Synthesizing Unit <SPRITE_MEMORY>.
+    Related source file is "/edu/rolsi701/BomberBunnies/SPRITE_MEMORY.vhd".
+    Found 32-bit register for signal <player2Index>.
+    Found 32-bit register for signal <player2XCount>.
+    Found 8-bit register for signal <playerPixel>.
+    Found 32-bit adder for signal <player2Index[31]_GND_50_o_add_18_OUT> created at line 143.
+    Found 32-bit adder for signal <player2XCount[31]_GND_50_o_add_19_OUT> created at line 144.
+    Found 512x8-bit Read Only RAM for signal <PWR_8_o_PWR_8_o_mux_35_OUT>
+    Found 10-bit comparator lessequal for signal <n0019> created at line 136
+    Found 32-bit comparator greater for signal <GND_50_o_player2XCount[31]_LessThan_15_o> created at line 136
+    Found 10-bit comparator lessequal for signal <n0022> created at line 136
+    Found 32-bit comparator greater for signal <GND_50_o_player2Index[31]_LessThan_17_o> created at line 136
+    Summary:
+	inferred   1 RAM(s).
+	inferred   2 Adder/Subtractor(s).
+	inferred  72 D-type flip-flop(s).
+	inferred   4 Comparator(s).
+	inferred   1 Multiplexer(s).
+Unit <SPRITE_MEMORY> synthesized.
+RTL-Simplification CPUSTAT: 0.07 
+RTL-BasicInf CPUSTAT: 0.16 
 RTL-BasicOpt CPUSTAT: 0.00 
 RTL-Remain-Bus CPUSTAT: 0.00 
 
@@ -154,24 +182,29 @@ RTL-Remain-Bus CPUSTAT: 0.00
 HDL Synthesis Report
 
 Macro Statistics
-# RAMs                                                 : 2
+# RAMs                                                 : 3
  1280x8-bit single-port Read Only RAM                  : 1
  195x8-bit dual-port RAM                               : 1
-# Adders/Subtractors                                   : 6
- 10-bit adder                                          : 2
- 14-bit adder                                          : 1
- 15-bit adder                                          : 1
+ 512x8-bit single-port Read Only RAM                   : 1
+# Multipliers                                          : 1
+ 5x4-bit multiplier                                    : 1
+# Adders/Subtractors                                   : 8
+ 10-bit adder                                          : 3
  2-bit adder                                           : 1
- 32-bit adder                                          : 1
-# Registers                                            : 4
+ 32-bit adder                                          : 3
+ 9-bit adder                                           : 1
+# Registers                                            : 11
  10-bit register                                       : 2
  2-bit register                                        : 1
- 8-bit register                                        : 1
-# Comparators                                          : 6
- 10-bit comparator greater                             : 2
- 10-bit comparator lessequal                           : 4
-# Multiplexers                                         : 1
- 8-bit 2-to-1 multiplexer                              : 1
+ 32-bit register                                       : 5
+ 8-bit register                                        : 3
+# Comparators                                          : 12
+ 10-bit comparator greater                             : 4
+ 10-bit comparator lessequal                           : 6
+ 32-bit comparator greater                             : 2
+# Multiplexers                                         : 3
+ 32-bit 2-to-1 multiplexer                             : 1
+ 8-bit 2-to-1 multiplexer                              : 2
 
 =========================================================================
 
@@ -181,6 +214,23 @@ Macro Statistics
 
 
 Synthesizing (advanced) Unit <BomberBunnies>.
+INFO:Xst:3040 - The RAM <U3/Mram_memory> will be implemented as a BLOCK RAM, absorbing the following register(s): <U2/pixelOut>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 1280-word x 8-bit                   |          |
+    |     mode           | write-first                         |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <GND>           | high     |
+    |     addrA          | connected to signal <U3/index>      |          |
+    |     diA            | connected to signal <GND>           |          |
+    |     doA            | connected to signal <tilePixelToVGA> |          |
+    |     dorstA         | connected to internal node          | low      |
+    | reset value        | 00000000                                       |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
 INFO:Xst:3031 - HDL ADVISOR - The RAM <U2/Mram_karta> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
     -----------------------------------------------------------------------
     | ram_type           | Distributed                         |          |
@@ -195,76 +245,172 @@ INFO:Xst:3031 - HDL ADVISOR - The RAM <U2/Mram_karta> will be implemented on LUT
     | Port B                                                              |
     |     aspect ratio   | 195-word x 8-bit                    |          |
     |     addrB          | connected to signal <U2/mapIndex>   |          |
-    |     doB            | connected to signal <tileIndexToTILE_MEMORY> |          |
-    -----------------------------------------------------------------------
-INFO:Xst:3031 - HDL ADVISOR - The RAM <U3/Mram_memory> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
-    -----------------------------------------------------------------------
-    | ram_type           | Distributed                         |          |
-    -----------------------------------------------------------------------
-    | Port A                                                              |
-    |     aspect ratio   | 1280-word x 8-bit                   |          |
-    |     weA            | connected to signal <GND>           | high     |
-    |     addrA          | connected to signal <U3/index>      |          |
-    |     diA            | connected to signal <GND>           |          |
-    |     doA            | connected to signal <tilePixel>     |          |
+    |     doB            | connected to internal node          |          |
     -----------------------------------------------------------------------
 Unit <BomberBunnies> synthesized (advanced).
 
+Synthesizing (advanced) Unit <MAP_MEMORY>.
+	Multiplier <Mmult_yPixel[9]_PWR_6_o_MuLt_5_OUT> in block <MAP_MEMORY> and adder/subtractor <Madd_n0048[9:0]> in block <MAP_MEMORY> are combined into a MAC<Maddsub_yPixel[9]_PWR_6_o_MuLt_5_OUT>.
+Unit <MAP_MEMORY> synthesized (advanced).
+
+Synthesizing (advanced) Unit <SPRITE_MEMORY>.
+The following registers are absorbed into counter <player2Index>: 1 register on signal <player2Index>.
+The following registers are absorbed into counter <player2XCount>: 1 register on signal <player2XCount>.
+INFO:Xst:3040 - The RAM <Mram_PWR_8_o_PWR_8_o_mux_35_OUT> will be implemented as a BLOCK RAM, absorbing the following register(s): <playerPixel>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 512-word x 8-bit                    |          |
+    |     mode           | write-first                         |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <GND>           | high     |
+    |     addrA          | connected to signal <player2Index<8:0>> |          |
+    |     diA            | connected to signal <GND>           |          |
+    |     doA            | connected to signal <playerPixel>   |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+Unit <SPRITE_MEMORY> synthesized (advanced).
+
 Synthesizing (advanced) Unit <VGA_MOTOR>.
-The following registers are absorbed into counter <xPixel>: 1 register on signal <xPixel>.
 The following registers are absorbed into counter <clkDiv>: 1 register on signal <clkDiv>.
+The following registers are absorbed into counter <xPixel>: 1 register on signal <xPixel>.
 The following registers are absorbed into counter <yPixel>: 1 register on signal <yPixel>.
 Unit <VGA_MOTOR> synthesized (advanced).
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_11> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_12> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_13> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_14> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_15> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_16> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_17> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_18> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_19> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_20> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_21> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_22> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_23> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_24> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_25> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_26> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_27> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_28> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_29> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_30> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tilePixelIndex_31> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_8> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_9> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_10> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_11> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_12> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_13> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_14> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_15> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_16> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_17> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_18> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_19> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_20> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_21> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_22> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_23> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_24> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_25> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_26> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_27> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_28> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_29> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_30> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/mapIndex_31> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_3> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_4> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_5> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_6> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_7> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_8> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_9> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_10> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_11> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_12> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_13> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_14> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_15> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_16> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_17> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_18> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_19> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_20> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_21> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_22> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_23> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_24> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_25> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_26> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_27> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_28> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_29> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_30> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/tileIndex_31> of sequential type is unconnected in block <BomberBunnies>.
 
 =========================================================================
 Advanced HDL Synthesis Report
 
 Macro Statistics
-# RAMs                                                 : 2
- 1280x8-bit single-port distributed Read Only RAM      : 1
+# RAMs                                                 : 3
+ 1280x8-bit single-port block Read Only RAM            : 1
  195x8-bit dual-port distributed RAM                   : 1
-# Adders/Subtractors                                   : 3
+ 512x8-bit single-port block Read Only RAM             : 1
+# MACs                                                 : 1
+ 5x4-to-10-bit MAC                                     : 1
+# Adders/Subtractors                                   : 2
  11-bit adder                                          : 1
- 15-bit adder                                          : 1
- 8-bit adder                                           : 1
-# Counters                                             : 3
+ 9-bit adder                                           : 1
+# Counters                                             : 5
  10-bit up counter                                     : 2
  2-bit up counter                                      : 1
-# Comparators                                          : 6
- 10-bit comparator greater                             : 2
- 10-bit comparator lessequal                           : 4
-# Multiplexers                                         : 1
- 8-bit 2-to-1 multiplexer                              : 1
+ 32-bit up counter                                     : 2
+# Registers                                            : 22
+ Flip-Flops                                            : 22
+# Comparators                                          : 12
+ 10-bit comparator greater                             : 4
+ 10-bit comparator lessequal                           : 6
+ 32-bit comparator greater                             : 2
+# Multiplexers                                         : 2
+ 8-bit 2-to-1 multiplexer                              : 2
 
 =========================================================================
 
 =========================================================================
 *                         Low Level Synthesis                           *
 =========================================================================
+WARNING:Xst:1293 - FF/Latch <U2/tilePixelIndex_9> has a constant value of 0 in block <BomberBunnies>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1896 - Due to other FF/Latch trimming, FF/Latch <U2/tilePixelIndex_10> has a constant value of 0 in block <BomberBunnies>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:2677 - Node <U2/Mram_karta4> of sequential type is unconnected in block <BomberBunnies>.
-WARNING:Xst:2677 - Node <U2/Mram_karta5> of sequential type is unconnected in block <BomberBunnies>.
-WARNING:Xst:2677 - Node <U2/Mram_karta8> of sequential type is unconnected in block <BomberBunnies>.
-WARNING:Xst:2677 - Node <U2/Mram_karta6> of sequential type is unconnected in block <BomberBunnies>.
 WARNING:Xst:2677 - Node <U2/Mram_karta7> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/Mram_karta5> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/Mram_karta6> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <U2/Mram_karta8> of sequential type is unconnected in block <BomberBunnies>.
 WARNING:Xst:2677 - Node <U2/Mram_karta12> of sequential type is unconnected in block <BomberBunnies>.
 WARNING:Xst:2677 - Node <U2/Mram_karta13> of sequential type is unconnected in block <BomberBunnies>.
 WARNING:Xst:2677 - Node <U2/Mram_karta14> of sequential type is unconnected in block <BomberBunnies>.
 WARNING:Xst:2677 - Node <U2/Mram_karta15> of sequential type is unconnected in block <BomberBunnies>.
 WARNING:Xst:2677 - Node <U2/Mram_karta16> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:1293 - FF/Latch <U2/tilePixelIndex_8> has a constant value of 0 in block <BomberBunnies>. This FF/Latch will be trimmed during the optimization process.
 
 Optimizing unit <BomberBunnies> ...
 
 Optimizing unit <VGA_MOTOR> ...
-INFO:Xst:2399 - RAMs <U2/Mram_karta3>, <U2/Mram_karta1> are equivalent, second RAM is removed
-INFO:Xst:2399 - RAMs <U2/Mram_karta3>, <U2/Mram_karta2> are equivalent, second RAM is removed
-INFO:Xst:2399 - RAMs <U2/Mram_karta3>, <U2/Mram_karta9> are equivalent, second RAM is removed
-INFO:Xst:2399 - RAMs <U2/Mram_karta3>, <U2/Mram_karta10> are equivalent, second RAM is removed
-INFO:Xst:2399 - RAMs <U2/Mram_karta3>, <U2/Mram_karta11> are equivalent, second RAM is removed
+
+Optimizing unit <SPRITE_MEMORY> ...
+INFO:Xst:2399 - RAMs <U2/Mram_karta2>, <U2/Mram_karta3> are equivalent, second RAM is removed
+INFO:Xst:2399 - RAMs <U2/Mram_karta2>, <U2/Mram_karta10> are equivalent, second RAM is removed
+INFO:Xst:2399 - RAMs <U2/Mram_karta2>, <U2/Mram_karta11> are equivalent, second RAM is removed
 
 Mapping all equations...
 Building and optimizing final netlist ...
-Found area constraint ratio of 100 (+ 0) on block BomberBunnies, actual ratio is 3.
-FlipFlop U1/xPixel_0 has been replicated 2 time(s)
+INFO:Xst:2261 - The FF/Latch <U2/tileIndex_1> in Unit <BomberBunnies> is equivalent to the following FF/Latch, which will be removed : <U2/tileIndex_2> 
+Found area constraint ratio of 100 (+ 0) on block BomberBunnies, actual ratio is 2.
 
 Final Macro Processing ...
 
@@ -272,8 +418,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 24
- Flip-Flops                                            : 24
+# Registers                                            : 104
+ Flip-Flops                                            : 104
 
 =========================================================================
 
@@ -296,24 +442,27 @@ Top Level Output File Name         : design.ngc
 
 Primitive and Black Box Usage:
 ------------------------------
-# BELS                             : 373
+# BELS                             : 495
 #      GND                         : 1
-#      INV                         : 3
-#      LUT1                        : 18
-#      LUT2                        : 19
-#      LUT3                        : 11
-#      LUT4                        : 41
-#      LUT5                        : 35
-#      LUT6                        : 175
-#      MUXCY                       : 18
-#      MUXF7                       : 31
+#      INV                         : 7
+#      LUT1                        : 86
+#      LUT2                        : 21
+#      LUT3                        : 41
+#      LUT4                        : 45
+#      LUT5                        : 20
+#      LUT6                        : 51
+#      MUXCY                       : 113
 #      VCC                         : 1
-#      XORCY                       : 20
-# FlipFlops/Latches                : 24
-#      FD                          : 22
+#      XORCY                       : 109
+# FlipFlops/Latches                : 104
+#      FD                          : 64
+#      FDE                         : 18
 #      FDR                         : 2
-# RAMS                             : 1
-#      RAM128X1D                   : 1
+#      FDRE                        : 20
+# RAMS                             : 5
+#      RAM128X1D                   : 3
+#      RAMB16BWER                  : 1
+#      RAMB8BWER                   : 1
 # Clock Buffers                    : 1
 #      BUFGP                       : 1
 # IO Buffers                       : 11
@@ -327,24 +476,26 @@ Selected Device : 6slx16csg324-3
 
 
 Slice Logic Utilization: 
- Number of Slice Registers:              24  out of  18224     0%  
- Number of Slice LUTs:                  306  out of   9112     3%  
-    Number used as Logic:               302  out of   9112     3%  
-    Number used as Memory:                4  out of   2176     0%  
-       Number used as RAM:                4
+ Number of Slice Registers:             104  out of  18224     0%  
+ Number of Slice LUTs:                  283  out of   9112     3%  
+    Number used as Logic:               271  out of   9112     2%  
+    Number used as Memory:               12  out of   2176     0%  
+       Number used as RAM:               12
 
 Slice Logic Distribution: 
- Number of LUT Flip Flop pairs used:    308
-   Number with an unused Flip Flop:     284  out of    308    92%  
-   Number with an unused LUT:             2  out of    308     0%  
-   Number of fully used LUT-FF pairs:    22  out of    308     7%  
-   Number of unique control sets:         2
+ Number of LUT Flip Flop pairs used:    292
+   Number with an unused Flip Flop:     188  out of    292    64%  
+   Number with an unused LUT:             9  out of    292     3%  
+   Number of fully used LUT-FF pairs:    95  out of    292    32%  
+   Number of unique control sets:         5
 
 IO Utilization: 
  Number of IOs:                          12
  Number of bonded IOBs:                  12  out of    232     5%  
 
 Specific Feature Utilization:
+ Number of Block RAM/FIFO:                2  out of     32     6%  
+    Number using Block RAM only:          2
  Number of BUFG/BUFGCTRLs:                1  out of     16     6%  
 
 ---------------------------
@@ -368,7 +519,7 @@ Clock Information:
 -----------------------------------+------------------------+-------+
 Clock Signal                       | Clock buffer(FF name)  | Load  |
 -----------------------------------+------------------------+-------+
-clk                                | BUFGP                  | 25    |
+clk                                | BUFGP                  | 109   |
 -----------------------------------+------------------------+-------+
 
 Asynchronous Control Signals Information:
@@ -379,9 +530,9 @@ Timing Summary:
 ---------------
 Speed Grade: -3
 
-   Minimum period: 4.738ns (Maximum Frequency: 211.077MHz)
-   Minimum input arrival time before clock: 3.698ns
-   Maximum output required time after clock: 13.389ns
+   Minimum period: 5.847ns (Maximum Frequency: 171.024MHz)
+   Minimum input arrival time before clock: 3.758ns
+   Maximum output required time after clock: 8.212ns
    Maximum combinational path delay: No path found
 
 Timing Details:
@@ -390,76 +541,74 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clk'
-  Clock period: 4.738ns (frequency: 211.077MHz)
-  Total number of paths / destination ports: 648 / 24
+  Clock period: 5.847ns (frequency: 171.024MHz)
+  Total number of paths / destination ports: 15361 / 182
 -------------------------------------------------------------------------
-Delay:               4.738ns (Levels of Logic = 3)
-  Source:            U1/xPixel_3 (FF)
-  Destination:       U1/xPixel_5 (FF)
+Delay:               5.847ns (Levels of Logic = 8)
+  Source:            U4/player2XCount_9 (FF)
+  Destination:       U4/player2Index_31 (FF)
   Source Clock:      clk rising
   Destination Clock: clk rising
 
-  Data Path: U1/xPixel_3 to U1/xPixel_5
+  Data Path: U4/player2XCount_9 to U4/player2Index_31
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FD:C->Q              98   0.447   2.093  U1/xPixel_3 (U1/xPixel_3)
-     LUT4:I1->O            3   0.205   0.651  U1/Mcount_xPixel_val1_SW0 (N10)
-     LUT6:I5->O            9   0.205   0.830  U1/Mcount_xPixel_val1 (U1/Mcount_xPixel_val)
-     LUT4:I3->O            1   0.205   0.000  U1/xPixel_5_rstpot (U1/xPixel_5_rstpot)
-     FD:D                      0.102          U1/xPixel_5
+     FD:C->Q               5   0.447   1.059  U4/player2XCount_9 (U4/player2XCount_9)
+     LUT5:I0->O            1   0.203   0.000  U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_lut<1> (U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_lut<1>)
+     MUXCY:S->O            1   0.172   0.000  U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<1> (U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<1>)
+     MUXCY:CI->O           1   0.019   0.000  U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<2> (U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<2>)
+     MUXCY:CI->O           1   0.019   0.000  U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<3> (U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<3>)
+     MUXCY:CI->O           1   0.019   0.000  U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<4> (U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<4>)
+     MUXCY:CI->O          65   0.213   1.647  U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<5> (U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<5>)
+     LUT5:I4->O           32   0.205   1.539  U4/Reset_OR_DriverANDClockEnable3217 (U4/N01)
+     LUT4:I0->O            1   0.203   0.000  U4/player2Index_31_rstpot (U4/player2Index_31_rstpot)
+     FD:D                      0.102          U4/player2Index_31
     ----------------------------------------
-    Total                      4.738ns (1.164ns logic, 3.574ns route)
-                                       (24.6% logic, 75.4% route)
+    Total                      5.847ns (1.602ns logic, 4.245ns route)
+                                       (27.4% logic, 72.6% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'clk'
-  Total number of paths / destination ports: 27 / 24
+  Total number of paths / destination ports: 22 / 22
 -------------------------------------------------------------------------
-Offset:              3.698ns (Levels of Logic = 3)
+Offset:              3.758ns (Levels of Logic = 2)
   Source:            rst (PAD)
-  Destination:       U1/yPixel_8 (FF)
+  Destination:       U1/yPixel_0 (FF)
   Destination Clock: clk rising
 
-  Data Path: rst to U1/yPixel_8
+  Data Path: rst to U1/yPixel_0
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O             6   1.222   1.109  rst_IBUF (rst_IBUF)
-     LUT6:I0->O           10   0.203   0.857  U1/Mcount_yPixel_val3 (U1/Mcount_yPixel_val)
-     LUT6:I5->O            1   0.205   0.000  U1/yPixel_9_rstpot (U1/yPixel_9_rstpot)
-     FD:D                      0.102          U1/yPixel_9
+     IBUF:I->O             4   1.222   1.048  rst_IBUF (rst_IBUF)
+     LUT6:I0->O           10   0.203   0.856  U1/Mcount_yPixel_val3 (U1/Mcount_yPixel_val)
+     FDRE:R                    0.430          U1/yPixel_0
     ----------------------------------------
-    Total                      3.698ns (1.732ns logic, 1.966ns route)
-                                       (46.8% logic, 53.2% route)
+    Total                      3.758ns (1.855ns logic, 1.903ns route)
+                                       (49.4% logic, 50.6% route)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clk'
-  Total number of paths / destination ports: 2396 / 10
+  Total number of paths / destination ports: 159 / 10
 -------------------------------------------------------------------------
-Offset:              13.389ns (Levels of Logic = 10)
-  Source:            U1/xPixel_2 (FF)
-  Destination:       vgaGreen<0> (PAD)
+Offset:              8.212ns (Levels of Logic = 4)
+  Source:            U4_Mram_PWR_8_o_PWR_8_o_mux_35_OUT (RAM)
+  Destination:       vgaRed<2> (PAD)
   Source Clock:      clk rising
 
-  Data Path: U1/xPixel_2 to vgaGreen<0>
+  Data Path: U4_Mram_PWR_8_o_PWR_8_o_mux_35_OUT to vgaRed<2>
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FD:C->Q             111   0.447   2.251  U1/xPixel_2 (U1/xPixel_2)
-     LUT6:I1->O            1   0.203   0.924  SF1761 (SF1761)
-     LUT6:I1->O            1   0.203   0.944  SF1765 (SF1765)
-     LUT6:I0->O            5   0.203   0.943  SF1768 (SF176)
-     LUT5:I2->O            3   0.205   0.898  U3/Mram_memory331221 (U3/Mram_memory331220)
-     LUT5:I1->O            1   0.203   0.684  U3/Mram_memory331232 (U3/Mram_memory331231)
-     LUT6:I4->O            1   0.203   0.000  U3/Mram_memory331243_F (N131)
-     MUXF7:I0->O           1   0.131   0.808  U3/Mram_memory331243 (U3/Mram_memory331242)
-     LUT4:I1->O            1   0.205   0.580  U3/Mram_memory3312441 (U3/Mram_memory331244)
-     LUT2:I1->O            1   0.205   0.579  U1/Mmux_pixel31 (vgaGreen_0_OBUF)
-     OBUF:I->O                 2.571          vgaGreen_0_OBUF (vgaGreen<0>)
+     RAMB8BWER:CLKAWRCLK->DOADO2    2   1.650   0.845  U4_Mram_PWR_8_o_PWR_8_o_mux_35_OUT (playerPixel<2>)
+     LUT3:I0->O            1   0.205   0.924  U1/PWR_5_o_INV_12_o_SW0 (N50)
+     LUT6:I1->O            8   0.203   1.031  U1/PWR_5_o_INV_12_o (U1/PWR_5_o_INV_12_o)
+     LUT4:I1->O            1   0.205   0.579  U1/Mmux_pixel81 (vgaRed_2_OBUF)
+     OBUF:I->O                 2.571          vgaRed_2_OBUF (vgaRed<2>)
     ----------------------------------------
-    Total                     13.389ns (4.779ns logic, 8.610ns route)
-                                       (35.7% logic, 64.3% route)
+    Total                      8.212ns (4.834ns logic, 3.378ns route)
+                                       (58.9% logic, 41.1% route)
 
 =========================================================================
 
@@ -471,21 +620,21 @@ Clock to Setup on destination clock clk
                | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
 Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
 ---------------+---------+---------+---------+---------+
-clk            |    4.738|         |         |         |
+clk            |    5.847|         |         |         |
 ---------------+---------+---------+---------+---------+
 
 =========================================================================
 
 
-Total REAL time to Xst completion: 6.00 secs
-Total CPU time to Xst completion: 6.43 secs
+Total REAL time to Xst completion: 5.00 secs
+Total CPU time to Xst completion: 4.79 secs
  
 --> 
 
 
-Total memory usage is 461028 kilobytes
+Total memory usage is 462440 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :   18 (   0 filtered)
-Number of infos    :    9 (   0 filtered)
+Number of warnings :   95 (   0 filtered)
+Number of infos    :    8 (   0 filtered)
 

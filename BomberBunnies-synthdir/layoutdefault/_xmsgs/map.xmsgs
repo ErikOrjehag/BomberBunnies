@@ -5,7 +5,13 @@
      behavior or data corruption.  It is strongly advised that
      users do not edit the contents of this file. -->
 <messages>
-<msg type="info" file="LIT" num="243" delta="old" >Logical network <arg fmt="%s" index="1">U2/Mram_karta3/SPO</arg> has no load.
+<msg type="info" file="LIT" num="243" delta="new" >Logical network <arg fmt="%s" index="1">U2/Mram_karta2/SPO</arg> has no load.
+</msg>
+
+<msg type="info" file="LIT" num="243" delta="new" >Logical network <arg fmt="%s" index="1">U2/Mram_karta1/SPO</arg> has no load.
+</msg>
+
+<msg type="info" file="LIT" num="243" delta="new" >Logical network <arg fmt="%s" index="1">U2/Mram_karta9/SPO</arg> has no load.
 </msg>
 
 <msg type="info" file="MapLib" num="562" delta="old" >No environment variables are currently set.
