@@ -41,95 +41,120 @@ architecture behavioral of SPRITE_MEMORY is
   
   signal player2Index : integer := 0;
   signal player2XCount : integer := 0;
+  signal player2YCount : integer := 0;
   signal p2Draw : std_logic := '0';
   
   -- Tile memory type
   type sprite_t is array (0 to 511) of std_logic_vector(7 downto 0);
 
   constant player1 : sprite_t :=
-    (x"90", x"90", x"90", x"90", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"90", x"90", x"90", x"90", x"90", x"FF", x"90", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF",
-     x"90", x"90", x"90", x"90", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"90", x"90", x"90", x"90", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"90", x"90", x"90", x"90", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"CA", x"CA", x"CA", x"FF", x"FF", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"CA", x"90", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"CA", x"CA", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"90", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF");
+     (x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"0B",x"0B",x"90",x"90",x"90",x"90",x"0B",x"0B",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"0B",x"0B",x"0B",x"0B",x"90",x"90",x"0B",x"0B",x"0B",x"0B",x"90",x"90",x"90",
+      x"90",x"90",x"0B",x"0B",x"90",x"00",x"0B",x"90",x"90",x"0B",x"00",x"90",x"0B",x"0B",x"90",x"90",
+      x"90",x"90",x"0B",x"0B",x"90",x"90",x"00",x"2B",x"2B",x"00",x"90",x"90",x"0B",x"0B",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"2B",x"E6",x"2B",x"2B",x"E6",x"2B",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"2B",x"2B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"00",x"00",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"90",x"00",x"2B",x"2B",x"00",x"90",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"0B",x"0B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"0B",x"0B",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"0B",x"0B",x"90",x"90",
+      x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
+      x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
+      x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
+      x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
+      x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
+      x"90",x"90",x"90",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",
+      x"90",x"90",x"90",x"2B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"2B",x"2B",x"2B",x"90",x"90",x"90");
 
   constant player2 : sprite_t :=
-    (x"90", x"90", x"90", x"90", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"90", x"90", x"90", x"90", x"90", x"FF", x"90", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF",
-     x"90", x"90", x"90", x"90", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"90", x"90", x"90", x"90", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"90", x"90", x"90", x"90", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"CA", x"CA", x"CA", x"FF", x"FF", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"CA", x"90", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"CA", x"CA", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"90", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"90", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"CA", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF",
-     x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF", x"FF");
+    (x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"0B",x"0B",x"90",x"90",x"90",x"90",x"0B",x"0B",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"0B",x"0B",x"0B",x"0B",x"90",x"90",x"0B",x"0B",x"0B",x"0B",x"90",x"90",x"90",
+     x"90",x"90",x"0B",x"0B",x"90",x"00",x"0B",x"90",x"90",x"0B",x"00",x"90",x"0B",x"0B",x"90",x"90",
+     x"90",x"90",x"0B",x"0B",x"90",x"90",x"00",x"2B",x"2B",x"00",x"90",x"90",x"0B",x"0B",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"2B",x"E6",x"2B",x"2B",x"E6",x"2B",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"2B",x"2B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"00",x"00",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"90",x"00",x"2B",x"2B",x"00",x"90",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"0B",x"0B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"0B",x"0B",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"0B",x"0B",x"90",x"90",
+     x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
+     x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
+     x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
+     x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
+     x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
+     x"90",x"90",x"90",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",
+     x"90",x"90",x"90",x"2B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"2B",x"2B",x"2B",x"90",x"90",x"90");
   
 begin  -- behavioral
   process(clk)
   begin
     if rising_edge(clk) then
       -- P1
-      if xPixel >= p1x and to_integer(xPixel) < to_integer(p1x) + 16*pixelSize and yPixel >= p1y and to_integer(yPixel) < to_integer(p1y) + 32*pixelSize then
+      if xPixel >= p1x and to_integer(xPixel) < to_integer(p1x) + 16*pixelSize
+        and yPixel >= p1y and to_integer(yPixel) < to_integer(p1y) + 32*pixelSize then
+        
         p1Draw <= '1';
-        player1Index <= player1Index + (to_integer(xPixel) mod pixelSize);
+        if xPixel = p1x then
+          player1XCount <= 0;
+          if yPixel = p1y then
+            player1YCount <= 0;
+          else
+            player1YCount <= player1YCount + 1;
+          end if;
+        else
+          player1XCount <= player1XCount + 1;
+        end if;
+        player1Index <= player1XCount/(pixelSize*4) + (player1YCount/(pixelSize*4)) * 16;
       else
         p1Draw <= '0';
       end if;
 
       -- P2
-      if xPixel >= p2x and to_integer(xPixel) < to_integer(p2x) + 16*pixelSize and yPixel >= p2y and to_integer(yPixel) < to_integer(p2y) + 32*pixelSize then
+      if xPixel >= p2x and to_integer(xPixel) < to_integer(p2x) + 16*pixelSize
+        and yPixel >= p2y and to_integer(yPixel) < to_integer(p2y) + 32*pixelSize then
+        
         p2Draw <= '1';
-        player2Index <= player2Index + (to_integer(xPixel) mod pixelSize);
+        if xPixel = p2x then
+          player2XCount <= 0;
+          if yPixel = p2y then
+            player2YCount <= 0;
+          else
+            player2YCount <= player2YCount + 1;
+          end if;
+        else
+          player2XCount <= player2XCount + 1;
+        end if;
+        player2Index <= player2XCount/(pixelSize*4) + (player2YCount/(pixelSize*4)) * 16;
       else
         p2Draw <= '0';
       end if;
@@ -137,17 +162,17 @@ begin  -- behavioral
       -- Draw closest player ontop
       if p1y > p2y then
         if p1Draw = '1' then
-          playerPixel <= player1(player1Index - 1);
+          playerPixel <= player1(player1Index);
         elsif p2Draw = '1' then
-          playerPixel <= player2(player2Index - 1);
+          playerPixel <= player2(player2Index);
         else
           playerPixel <= transparent;
         end if;
       else
         if p2Draw = '1' then
-          playerPixel <= player2(player2Index - 1);
+          playerPixel <= player2(player2Index);
         elsif p1Draw = '1' then
-          playerPixel <= player1(player1Index - 1);
+          playerPixel <= player1(player1Index);
         else
           playerPixel <= transparent;
         end if;

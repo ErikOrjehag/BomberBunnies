@@ -37,11 +37,9 @@
 <msg type="info" file="Xst" num="3031" delta="old" >HDL ADVISOR - The RAM &lt;<arg fmt="%s" index="1">U2/Mram_karta</arg>&gt; will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
 </msg>
 
-<msg type="info" file="Xst" num="3031" delta="old" >HDL ADVISOR - The RAM &lt;<arg fmt="%s" index="1">Mram_player1Index[31]_PWR_8_o_wide_mux_26_OUT</arg>&gt; will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
-</msg>
+<msg type="info" file="Xst" num="3040" delta="old" >The RAM &lt;<arg fmt="%s" index="1">Mram_player1Index[8]_PWR_8_o_wide_mux_48_OUT</arg>&gt; will be implemented as a BLOCK RAM, absorbing the following register(s):</msg>
 
-<msg type="info" file="Xst" num="3031" delta="old" >HDL ADVISOR - The RAM &lt;<arg fmt="%s" index="1">Mram_player2Index[31]_PWR_8_o_wide_mux_24_OUT</arg>&gt; will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
-</msg>
+<msg type="info" file="Xst" num="3040" delta="old" >The RAM &lt;<arg fmt="%s" index="1">Mram_player2Index[8]_PWR_8_o_wide_mux_47_OUT</arg>&gt; will be implemented as a BLOCK RAM, absorbing the following register(s):</msg>
 
 <msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">U2/tilePixelIndex_11</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">BomberBunnies</arg>&gt;.
 </msg>
@@ -271,6 +269,9 @@
 <msg type="warning" file="Xst" num="1896" delta="old" >Due to other FF/Latch trimming, FF/Latch &lt;<arg fmt="%s" index="1">U2/tilePixelIndex_10</arg>&gt; has a constant value of <arg fmt="%d" index="2">0</arg> in block &lt;<arg fmt="%s" index="3">BomberBunnies</arg>&gt;. This FF/Latch will be trimmed during the optimization process.
 </msg>
 
+<msg type="info" file="Xst" num="2697" delta="old" >Unit &lt;<arg fmt="%s" index="1">MTP_</arg>&gt; : the RAMs &lt;<arg fmt="%s" index="2">Mram_player1Index[8]_PWR_8_o_wide_mux_48_OUT</arg>&gt;, &lt;<arg fmt="%s" index="3">Mram_player2Index[8]_PWR_8_o_wide_mux_47_OUT</arg>&gt; are packed into the single block RAM &lt;<arg fmt="%s" index="4">Mram_player1Index[8]_PWR_8_o_wide_mux_48_OUT1</arg>&gt;
+</msg>
+
 <msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">U2/Mram_karta4</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">BomberBunnies</arg>&gt;.
 </msg>
 
@@ -299,147 +300,6 @@
 </msg>
 
 <msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">U2/Mram_karta16</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">BomberBunnies</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_9</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_10</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_11</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_12</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_13</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_14</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_15</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_16</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_17</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_18</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_19</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_20</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_21</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_22</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_23</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_24</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_25</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_26</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_27</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_28</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_29</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_30</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player2Index_31</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_9</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_10</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_11</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_12</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_13</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_14</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_15</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_16</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_17</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_18</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_19</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_20</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_21</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_22</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_23</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_24</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_25</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_26</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_27</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_28</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_29</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_30</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="2677" delta="old" >Node &lt;<arg fmt="%s" index="1">player1Index_31</arg>&gt; of sequential type is unconnected in block &lt;<arg fmt="%s" index="2">SPRITE_MEMORY</arg>&gt;.
-</msg>
-
-<msg type="warning" file="Xst" num="1710" delta="old" >FF/Latch &lt;<arg fmt="%s" index="1">playerPixel_7</arg>&gt; (without init value) has a constant value of <arg fmt="%d" index="2">1</arg> in block &lt;<arg fmt="%s" index="3">SPRITE_MEMORY</arg>&gt;. This FF/Latch will be trimmed during the optimization process.
 </msg>
 
 <msg type="warning" file="Xst" num="1293" delta="old" >FF/Latch &lt;<arg fmt="%s" index="1">U2/tilePixelIndex_8</arg>&gt; has a constant value of <arg fmt="%d" index="2">0</arg> in block &lt;<arg fmt="%s" index="3">BomberBunnies</arg>&gt;. This FF/Latch will be trimmed during the optimization process.

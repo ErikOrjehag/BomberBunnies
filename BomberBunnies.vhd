@@ -157,8 +157,8 @@ begin
     yPixel      => yPixel,
     p1x         => "0010000000",
     p1y         => "0010000000",
-    p2x         => "0000100010",
-    p2y         => "0000100010",
+    p2x         => "0000100000",
+    p2y         => "0000100000",
     playerPixel => playerPixel);
 	
   -- VGA motor component connection
