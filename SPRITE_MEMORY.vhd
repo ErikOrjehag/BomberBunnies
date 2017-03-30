@@ -20,10 +20,10 @@ entity SPRITE_MEMORY is
     clk         : in std_logic;                         -- system clock (100 MHz)
     xPixel      : in unsigned(9 downto 0);              -- Horizontal pixel counter
     yPixel	: in unsigned(9 downto 0);	        -- Vertical pixel counter
-    p1x         : in unsigned(7 downto 0);              -- Number of pixels on board 16x16x15
-    p1y         : in unsigned(7 downto 0);              -- Number of pixels on board 16x16x13
-    p2x         : in unsigned(7 downto 0);              -- Number of pixels on board 16x16x15
-    p2y         : in unsigned(7 downto 0);              -- Number of pixels on board 16x16x13
+    p1x         : in unsigned(9 downto 0);              -- Number of pixels on board 16x15
+    p1y         : in unsigned(9 downto 0);              -- Number of pixels on board 16x13
+    p2x         : in unsigned(9 downto 0);              -- Number of pixels on board 16x15
+    p2y         : in unsigned(9 downto 0);              -- Number of pixels on board 16x13
     playerPixel : out std_logic_vector(7 downto 0));    -- pixel from player 
 end SPRITE_MEMORY;
 
@@ -32,13 +32,16 @@ architecture behavioral of SPRITE_MEMORY is
 
   constant transparent     : std_logic_vector(7 downto 0) := "10010000";
 
+  signal pixelSize : integer := 2;
+
   signal player1Index : integer := 0;
   signal player1XCount : integer := 0;
-  signal p1Draw : std_logic := '1';
+  signal player1YCount : integer := 0;
+  signal p1Draw : std_logic := '0';
   
   signal player2Index : integer := 0;
   signal player2XCount : integer := 0;
-  signal p2Draw : std_logic := '1';
+  signal p2Draw : std_logic := '0';
   
   -- Tile memory type
   type sprite_t is array (0 to 511) of std_logic_vector(7 downto 0);
@@ -116,53 +119,35 @@ begin  -- behavioral
   begin
     if rising_edge(clk) then
       -- P1
-      if xPixel >= p1x and player1XCount < 16 and yPixel >= p1y and player1Index < 16*32 then
+      if xPixel >= p1x and to_integer(xPixel) < to_integer(p1x) + 16*pixelSize and yPixel >= p1y and to_integer(yPixel) < to_integer(p1y) + 32*pixelSize then
         p1Draw <= '1';
-        if player1Index = 16*32 - 1 then
-          player1Index <= 0;
-          player1XCount <= 0;
-          p1Draw <= '0';
-        else
-          player1Index <= player1Index + 1;
-          player1XCount <= player1XCount + 1;
-          if player1XCount = 16 then
-            player1XCount <= 0;
-            p1Draw <= '0';
-          end if;
-        end if;
+        player1Index <= player1Index + (to_integer(xPixel) mod pixelSize);
+      else
+        p1Draw <= '0';
       end if;
 
       -- P2
-      if xPixel >= p2x and player2XCount < 16 and yPixel >= p2y and player2Index < 16*32 then
+      if xPixel >= p2x and to_integer(xPixel) < to_integer(p2x) + 16*pixelSize and yPixel >= p2y and to_integer(yPixel) < to_integer(p2y) + 32*pixelSize then
         p2Draw <= '1';
-        if player2Index = 16*32 - 1 then
-          player2Index <= 0;
-          player2XCount <= 0;
-          p2Draw <= '0';
-        else
-          player2Index <= player2Index + 1;
-          player2XCount <= player2XCount + 1;
-          if player2XCount = 16 then
-            player2XCount <= 0;
-            p2Draw <= '0';
-          end if;
-        end if;
+        player2Index <= player2Index + (to_integer(xPixel) mod pixelSize);
+      else
+        p2Draw <= '0';
       end if;
       
       -- Draw closest player ontop
       if p1y > p2y then
         if p1Draw = '1' then
-          playerPixel <= player1(player1Index);
+          playerPixel <= player1(player1Index - 1);
         elsif p2Draw = '1' then
-          playerPixel <= player2(player2Index);
+          playerPixel <= player2(player2Index - 1);
         else
           playerPixel <= transparent;
         end if;
       else
         if p2Draw = '1' then
-          playerPixel <= player2(player2Index);
+          playerPixel <= player2(player2Index - 1);
         elsif p1Draw = '1' then
-          playerPixel <= player1(player1Index);
+          playerPixel <= player1(player1Index - 1);
         else
           playerPixel <= transparent;
         end if;

@@ -19,7 +19,8 @@ entity MAP_MEMORY is
     clk                 : in std_logic;                      -- system clock (100 MHz)
     xPixel              : in unsigned(9 downto 0);              -- Horizontal pixel counter
     yPixel	        : in unsigned(9 downto 0);		-- Vertical pixel counter
-    readWrite           : in std_logic;    -- 0 is read, 1 is write
+    readMap             : in std_logic;
+    writeMap            : in std_logic;
     tilePointer         : in integer;
     pixelIn             : in std_logic_vector(7 downto 0);
     writeTile           : in std_logic_vector(7 downto 0);
@@ -55,9 +56,10 @@ begin  -- behavioral
   process(clk)
   begin
     if rising_edge(clk) then
-      if readWrite = '0' then
+      if readMap = '1' then
         readTile <= karta(tilePointer);
-      else
+      end if;
+      if writeMap = '1' then
         karta(tilePointer) <= writeTile;
       end if;
 

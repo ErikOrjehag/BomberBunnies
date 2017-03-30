@@ -5,7 +5,7 @@ Parameter TMPDIR set to tmpdir
 
 
 Total REAL time to Xst completion: 1.00 secs
-Total CPU time to Xst completion: 0.09 secs
+Total CPU time to Xst completion: 0.12 secs
  
 --> 
 
@@ -80,11 +80,12 @@ Elaborating entity <BomberBunnies> (architecture <Behavioral>) from library <wor
 Elaborating entity <VGA_MOTOR> (architecture <behavioral>) from library <work>.
 
 Elaborating entity <MAP_MEMORY> (architecture <behavioral>) from library <work>.
-WARNING:HDLCompiler:871 - "/edu/rolsi701/BomberBunnies/BomberBunnies-synthdir/xst/synth/../../../MAP_MEMORY.vhd" Line 36: Using initial value 2 for pixelsize since it is never assigned
+WARNING:HDLCompiler:871 - "/edu/rolsi701/BomberBunnies/BomberBunnies-synthdir/xst/synth/../../../MAP_MEMORY.vhd" Line 37: Using initial value 2 for pixelsize since it is never assigned
 
 Elaborating entity <TILE_MEMORY> (architecture <behavioral>) from library <work>.
 
 Elaborating entity <SPRITE_MEMORY> (architecture <behavioral>) from library <work>.
+WARNING:HDLCompiler:871 - "/edu/rolsi701/BomberBunnies/BomberBunnies-synthdir/xst/synth/../../../SPRITE_MEMORY.vhd" Line 35: Using initial value 2 for pixelsize since it is never assigned
 
 =========================================================================
 *                           HDL Synthesis                               *
@@ -92,7 +93,7 @@ Elaborating entity <SPRITE_MEMORY> (architecture <behavioral>) from library <wor
 
 Synthesizing Unit <BomberBunnies>.
     Related source file is "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd".
-INFO:Xst:3010 - "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd" line 133: Output port <readTile> of the instance <U2> is unconnected or connected to loadless signal.
+INFO:Xst:3010 - "/edu/rolsi701/BomberBunnies/BomberBunnies.vhd" line 134: Output port <readTile> of the instance <U2> is unconnected or connected to loadless signal.
     Summary:
 	no macro.
 Unit <BomberBunnies> synthesized.
@@ -128,11 +129,11 @@ WARNING:Xst:3035 - Index value(s) does not match array range for signal <karta>,
     Found 32-bit register for signal <tilePixelIndex>.
     Found 8-bit register for signal <pixelOut>.
     Found 8-bit register for signal <readTile>.
-    Found 10-bit adder for signal <n0048[9:0]> created at line 65.
-    Found 9-bit adder for signal <n0051[8:0]> created at line 67.
-    Found 5x4-bit multiplier for signal <yPixel[9]_PWR_6_o_MuLt_5_OUT> created at line 65.
-    Found 10-bit comparator greater for signal <xPixel[9]_GND_6_o_LessThan_4_o> created at line 64
-    Found 10-bit comparator greater for signal <yPixel[9]_GND_6_o_LessThan_5_o> created at line 64
+    Found 10-bit adder for signal <n0048[9:0]> created at line 67.
+    Found 9-bit adder for signal <n0051[8:0]> created at line 69.
+    Found 5x4-bit multiplier for signal <yPixel[9]_PWR_6_o_MuLt_5_OUT> created at line 67.
+    Found 10-bit comparator greater for signal <xPixel[9]_GND_6_o_LessThan_4_o> created at line 66
+    Found 10-bit comparator greater for signal <yPixel[9]_GND_6_o_LessThan_5_o> created at line 66
     Summary:
 	inferred   1 RAM(s).
 	inferred   1 Multiplier(s).
@@ -156,25 +157,35 @@ Unit <TILE_MEMORY> synthesized.
 
 Synthesizing Unit <SPRITE_MEMORY>.
     Related source file is "/edu/rolsi701/BomberBunnies/SPRITE_MEMORY.vhd".
+    Found 32-bit register for signal <player1Index>.
+    Found 1-bit register for signal <p2Draw>.
     Found 32-bit register for signal <player2Index>.
-    Found 32-bit register for signal <player2XCount>.
     Found 8-bit register for signal <playerPixel>.
-    Found 32-bit adder for signal <player2Index[31]_GND_50_o_add_18_OUT> created at line 143.
-    Found 32-bit adder for signal <player2XCount[31]_GND_50_o_add_19_OUT> created at line 144.
-    Found 512x8-bit Read Only RAM for signal <PWR_8_o_PWR_8_o_mux_35_OUT>
-    Found 10-bit comparator lessequal for signal <n0019> created at line 136
-    Found 32-bit comparator greater for signal <GND_50_o_player2XCount[31]_LessThan_15_o> created at line 136
-    Found 10-bit comparator lessequal for signal <n0022> created at line 136
-    Found 32-bit comparator greater for signal <GND_50_o_player2Index[31]_LessThan_17_o> created at line 136
+    Found 1-bit register for signal <p1Draw>.
+    Found 32-bit adder for signal <player1Index[31]_GND_51_o_add_6_OUT> created at line 124.
+    Found 32-bit adder for signal <player2Index[31]_GND_51_o_add_14_OUT> created at line 132.
+    Found 9-bit subtractor for signal <player2Index[31]_GND_51_o_sub_24_OUT<8:0>> created at line 148.
+    Found 9-bit subtractor for signal <player1Index[31]_GND_51_o_sub_26_OUT<8:0>> created at line 150.
+    Found 512x8-bit Read Only RAM for signal <player2Index[31]_PWR_8_o_wide_mux_24_OUT>
+    Found 512x8-bit Read Only RAM for signal <player1Index[31]_PWR_8_o_wide_mux_26_OUT>
+    Found 10-bit comparator lessequal for signal <n0000> created at line 122
+    Found 11-bit comparator greater for signal <GND_51_o_BUS_0001_LessThan_3_o> created at line 122
+    Found 10-bit comparator lessequal for signal <n0004> created at line 122
+    Found 11-bit comparator greater for signal <GND_51_o_BUS_0002_LessThan_6_o> created at line 122
+    Found 10-bit comparator lessequal for signal <n0013> created at line 130
+    Found 11-bit comparator greater for signal <GND_51_o_BUS_0004_LessThan_11_o> created at line 130
+    Found 10-bit comparator lessequal for signal <n0017> created at line 130
+    Found 11-bit comparator greater for signal <GND_51_o_BUS_0005_LessThan_14_o> created at line 130
+    Found 10-bit comparator greater for signal <p2y[9]_p1y[9]_LessThan_17_o> created at line 138
     Summary:
-	inferred   1 RAM(s).
-	inferred   2 Adder/Subtractor(s).
-	inferred  72 D-type flip-flop(s).
-	inferred   4 Comparator(s).
-	inferred   1 Multiplexer(s).
+	inferred   2 RAM(s).
+	inferred   4 Adder/Subtractor(s).
+	inferred  74 D-type flip-flop(s).
+	inferred   9 Comparator(s).
+	inferred   3 Multiplexer(s).
 Unit <SPRITE_MEMORY> synthesized.
-RTL-Simplification CPUSTAT: 0.07 
-RTL-BasicInf CPUSTAT: 0.16 
+RTL-Simplification CPUSTAT: 0.03 
+RTL-BasicInf CPUSTAT: 0.18 
 RTL-BasicOpt CPUSTAT: 0.00 
 RTL-Remain-Bus CPUSTAT: 0.00 
 
@@ -182,29 +193,30 @@ RTL-Remain-Bus CPUSTAT: 0.00
 HDL Synthesis Report
 
 Macro Statistics
-# RAMs                                                 : 3
+# RAMs                                                 : 4
  1280x8-bit single-port Read Only RAM                  : 1
  195x8-bit dual-port RAM                               : 1
- 512x8-bit single-port Read Only RAM                   : 1
+ 512x8-bit single-port Read Only RAM                   : 2
 # Multipliers                                          : 1
  5x4-bit multiplier                                    : 1
-# Adders/Subtractors                                   : 8
+# Adders/Subtractors                                   : 10
  10-bit adder                                          : 3
  2-bit adder                                           : 1
  32-bit adder                                          : 3
  9-bit adder                                           : 1
-# Registers                                            : 11
+ 9-bit subtractor                                      : 2
+# Registers                                            : 13
+ 1-bit register                                        : 2
  10-bit register                                       : 2
  2-bit register                                        : 1
  32-bit register                                       : 5
  8-bit register                                        : 3
-# Comparators                                          : 12
- 10-bit comparator greater                             : 4
- 10-bit comparator lessequal                           : 6
- 32-bit comparator greater                             : 2
-# Multiplexers                                         : 3
- 32-bit 2-to-1 multiplexer                             : 1
- 8-bit 2-to-1 multiplexer                              : 2
+# Comparators                                          : 17
+ 10-bit comparator greater                             : 5
+ 10-bit comparator lessequal                           : 8
+ 11-bit comparator greater                             : 4
+# Multiplexers                                         : 5
+ 8-bit 2-to-1 multiplexer                              : 5
 
 =========================================================================
 
@@ -254,22 +266,29 @@ Synthesizing (advanced) Unit <MAP_MEMORY>.
 Unit <MAP_MEMORY> synthesized (advanced).
 
 Synthesizing (advanced) Unit <SPRITE_MEMORY>.
-The following registers are absorbed into counter <player2Index>: 1 register on signal <player2Index>.
-The following registers are absorbed into counter <player2XCount>: 1 register on signal <player2XCount>.
-INFO:Xst:3040 - The RAM <Mram_PWR_8_o_PWR_8_o_mux_35_OUT> will be implemented as a BLOCK RAM, absorbing the following register(s): <playerPixel>
+The following registers are absorbed into accumulator <player2Index>: 1 register on signal <player2Index>.
+The following registers are absorbed into accumulator <player1Index>: 1 register on signal <player1Index>.
+INFO:Xst:3031 - HDL ADVISOR - The RAM <Mram_player1Index[31]_PWR_8_o_wide_mux_26_OUT> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
     -----------------------------------------------------------------------
-    | ram_type           | Block                               |          |
+    | ram_type           | Distributed                         |          |
     -----------------------------------------------------------------------
     | Port A                                                              |
     |     aspect ratio   | 512-word x 8-bit                    |          |
-    |     mode           | write-first                         |          |
-    |     clkA           | connected to signal <clk>           | rise     |
     |     weA            | connected to signal <GND>           | high     |
-    |     addrA          | connected to signal <player2Index<8:0>> |          |
+    |     addrA          | connected to signal <player1Index[31]_GND_51_o_sub_26_OUT> |          |
     |     diA            | connected to signal <GND>           |          |
-    |     doA            | connected to signal <playerPixel>   |          |
+    |     doA            | connected to internal node          |          |
     -----------------------------------------------------------------------
-    | optimization       | speed                               |          |
+INFO:Xst:3031 - HDL ADVISOR - The RAM <Mram_player2Index[31]_PWR_8_o_wide_mux_24_OUT> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
+    -----------------------------------------------------------------------
+    | ram_type           | Distributed                         |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 512-word x 8-bit                    |          |
+    |     weA            | connected to signal <GND>           | high     |
+    |     addrA          | connected to signal <player2Index[31]_GND_51_o_sub_24_OUT> |          |
+    |     diA            | connected to signal <GND>           |          |
+    |     doA            | connected to internal node          |          |
     -----------------------------------------------------------------------
 Unit <SPRITE_MEMORY> synthesized (advanced).
 
@@ -357,27 +376,29 @@ WARNING:Xst:2677 - Node <U2/tileIndex_31> of sequential type is unconnected in b
 Advanced HDL Synthesis Report
 
 Macro Statistics
-# RAMs                                                 : 3
+# RAMs                                                 : 4
  1280x8-bit single-port block Read Only RAM            : 1
  195x8-bit dual-port distributed RAM                   : 1
- 512x8-bit single-port block Read Only RAM             : 1
+ 512x8-bit single-port distributed Read Only RAM       : 2
 # MACs                                                 : 1
  5x4-to-10-bit MAC                                     : 1
-# Adders/Subtractors                                   : 2
+# Adders/Subtractors                                   : 4
  11-bit adder                                          : 1
  9-bit adder                                           : 1
-# Counters                                             : 5
+ 9-bit subtractor                                      : 2
+# Counters                                             : 3
  10-bit up counter                                     : 2
  2-bit up counter                                      : 1
- 32-bit up counter                                     : 2
-# Registers                                            : 22
- Flip-Flops                                            : 22
-# Comparators                                          : 12
- 10-bit comparator greater                             : 4
- 10-bit comparator lessequal                           : 6
- 32-bit comparator greater                             : 2
-# Multiplexers                                         : 2
- 8-bit 2-to-1 multiplexer                              : 2
+# Accumulators                                         : 2
+ 32-bit up accumulator                                 : 2
+# Registers                                            : 32
+ Flip-Flops                                            : 32
+# Comparators                                          : 17
+ 10-bit comparator greater                             : 5
+ 10-bit comparator lessequal                           : 8
+ 11-bit comparator greater                             : 4
+# Multiplexers                                         : 5
+ 8-bit 2-to-1 multiplexer                              : 5
 
 =========================================================================
 
@@ -396,6 +417,53 @@ WARNING:Xst:2677 - Node <U2/Mram_karta13> of sequential type is unconnected in b
 WARNING:Xst:2677 - Node <U2/Mram_karta14> of sequential type is unconnected in block <BomberBunnies>.
 WARNING:Xst:2677 - Node <U2/Mram_karta15> of sequential type is unconnected in block <BomberBunnies>.
 WARNING:Xst:2677 - Node <U2/Mram_karta16> of sequential type is unconnected in block <BomberBunnies>.
+WARNING:Xst:2677 - Node <player2Index_9> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_10> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_11> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_12> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_13> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_14> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_15> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_16> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_17> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_18> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_19> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_20> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_21> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_22> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_23> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_24> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_25> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_26> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_27> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_28> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_29> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_30> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player2Index_31> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_9> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_10> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_11> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_12> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_13> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_14> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_15> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_16> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_17> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_18> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_19> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_20> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_21> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_22> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_23> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_24> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_25> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_26> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_27> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_28> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_29> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_30> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:2677 - Node <player1Index_31> of sequential type is unconnected in block <SPRITE_MEMORY>.
+WARNING:Xst:1710 - FF/Latch <playerPixel_7> (without init value) has a constant value of 1 in block <SPRITE_MEMORY>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:1293 - FF/Latch <U2/tilePixelIndex_8> has a constant value of 0 in block <BomberBunnies>. This FF/Latch will be trimmed during the optimization process.
 
 Optimizing unit <BomberBunnies> ...
@@ -418,8 +486,8 @@ Final Macro Processing ...
 Final Register Report
 
 Macro Statistics
-# Registers                                            : 104
- Flip-Flops                                            : 104
+# Registers                                            : 67
+ Flip-Flops                                            : 67
 
 =========================================================================
 
@@ -442,27 +510,29 @@ Top Level Output File Name         : design.ngc
 
 Primitive and Black Box Usage:
 ------------------------------
-# BELS                             : 495
+# BELS                             : 305
 #      GND                         : 1
-#      INV                         : 7
-#      LUT1                        : 86
-#      LUT2                        : 21
-#      LUT3                        : 41
-#      LUT4                        : 45
-#      LUT5                        : 20
-#      LUT6                        : 51
-#      MUXCY                       : 113
+#      INV                         : 6
+#      LUT1                        : 40
+#      LUT2                        : 26
+#      LUT3                        : 16
+#      LUT4                        : 21
+#      LUT5                        : 19
+#      LUT6                        : 47
+#      MUXCY                       : 56
+#      MUXF7                       : 7
+#      MUXF8                       : 2
 #      VCC                         : 1
-#      XORCY                       : 109
-# FlipFlops/Latches                : 104
-#      FD                          : 64
-#      FDE                         : 18
-#      FDR                         : 2
+#      XORCY                       : 63
+# FlipFlops/Latches                : 67
+#      FD                          : 2
+#      FDE                         : 36
+#      FDR                         : 8
 #      FDRE                        : 20
-# RAMS                             : 5
+#      FDS                         : 1
+# RAMS                             : 4
 #      RAM128X1D                   : 3
 #      RAMB16BWER                  : 1
-#      RAMB8BWER                   : 1
 # Clock Buffers                    : 1
 #      BUFGP                       : 1
 # IO Buffers                       : 11
@@ -476,26 +546,26 @@ Selected Device : 6slx16csg324-3
 
 
 Slice Logic Utilization: 
- Number of Slice Registers:             104  out of  18224     0%  
- Number of Slice LUTs:                  283  out of   9112     3%  
-    Number used as Logic:               271  out of   9112     2%  
+ Number of Slice Registers:              67  out of  18224     0%  
+ Number of Slice LUTs:                  187  out of   9112     2%  
+    Number used as Logic:               175  out of   9112     1%  
     Number used as Memory:               12  out of   2176     0%  
        Number used as RAM:               12
 
 Slice Logic Distribution: 
- Number of LUT Flip Flop pairs used:    292
-   Number with an unused Flip Flop:     188  out of    292    64%  
-   Number with an unused LUT:             9  out of    292     3%  
-   Number of fully used LUT-FF pairs:    95  out of    292    32%  
-   Number of unique control sets:         5
+ Number of LUT Flip Flop pairs used:    196
+   Number with an unused Flip Flop:     129  out of    196    65%  
+   Number with an unused LUT:             9  out of    196     4%  
+   Number of fully used LUT-FF pairs:    58  out of    196    29%  
+   Number of unique control sets:         8
 
 IO Utilization: 
  Number of IOs:                          12
  Number of bonded IOBs:                  12  out of    232     5%  
 
 Specific Feature Utilization:
- Number of Block RAM/FIFO:                2  out of     32     6%  
-    Number using Block RAM only:          2
+ Number of Block RAM/FIFO:                1  out of     32     3%  
+    Number using Block RAM only:          1
  Number of BUFG/BUFGCTRLs:                1  out of     16     6%  
 
 ---------------------------
@@ -519,7 +589,7 @@ Clock Information:
 -----------------------------------+------------------------+-------+
 Clock Signal                       | Clock buffer(FF name)  | Load  |
 -----------------------------------+------------------------+-------+
-clk                                | BUFGP                  | 109   |
+clk                                | BUFGP                  | 71    |
 -----------------------------------+------------------------+-------+
 
 Asynchronous Control Signals Information:
@@ -530,9 +600,9 @@ Timing Summary:
 ---------------
 Speed Grade: -3
 
-   Minimum period: 5.847ns (Maximum Frequency: 171.024MHz)
+   Minimum period: 6.000ns (Maximum Frequency: 166.678MHz)
    Minimum input arrival time before clock: 3.758ns
-   Maximum output required time after clock: 8.212ns
+   Maximum output required time after clock: 7.026ns
    Maximum combinational path delay: No path found
 
 Timing Details:
@@ -541,32 +611,29 @@ All values displayed in nanoseconds (ns)
 
 =========================================================================
 Timing constraint: Default period analysis for Clock 'clk'
-  Clock period: 5.847ns (frequency: 171.024MHz)
-  Total number of paths / destination ports: 15361 / 182
+  Clock period: 6.000ns (frequency: 166.678MHz)
+  Total number of paths / destination ports: 4531 / 161
 -------------------------------------------------------------------------
-Delay:               5.847ns (Levels of Logic = 8)
-  Source:            U4/player2XCount_9 (FF)
-  Destination:       U4/player2Index_31 (FF)
+Delay:               6.000ns (Levels of Logic = 5)
+  Source:            U4/player2Index_2 (FF)
+  Destination:       U4/playerPixel_5 (FF)
   Source Clock:      clk rising
   Destination Clock: clk rising
 
-  Data Path: U4/player2XCount_9 to U4/player2Index_31
+  Data Path: U4/player2Index_2 to U4/playerPixel_5
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     FD:C->Q               5   0.447   1.059  U4/player2XCount_9 (U4/player2XCount_9)
-     LUT5:I0->O            1   0.203   0.000  U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_lut<1> (U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_lut<1>)
-     MUXCY:S->O            1   0.172   0.000  U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<1> (U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<1>)
-     MUXCY:CI->O           1   0.019   0.000  U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<2> (U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<2>)
-     MUXCY:CI->O           1   0.019   0.000  U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<3> (U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<3>)
-     MUXCY:CI->O           1   0.019   0.000  U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<4> (U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<4>)
-     MUXCY:CI->O          65   0.213   1.647  U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<5> (U4/Mcompar_GND_50_o_player2XCount[31]_LessThan_15_o_cy<5>)
-     LUT5:I4->O           32   0.205   1.539  U4/Reset_OR_DriverANDClockEnable3217 (U4/N01)
-     LUT4:I0->O            1   0.203   0.000  U4/player2Index_31_rstpot (U4/player2Index_31_rstpot)
-     FD:D                      0.102          U4/player2Index_31
+     FDE:C->Q              6   0.447   0.992  U4/player2Index_2 (U4/player2Index_2)
+     LUT4:I0->O           18   0.203   1.278  U4/player2Index[31]_GND_51_o_sub_24_OUT<3>1 (U4/player2Index[31]_GND_51_o_sub_24_OUT<3>)
+     LUT6:I3->O            1   0.205   0.827  U4_Mram_player2Index[31]_PWR_8_o_wide_mux_24_OUT1_f8_SW0_SW0 (U4_N81)
+     LUT6:I2->O            1   0.203   0.580  U4_Mram_player2Index[31]_PWR_8_o_wide_mux_24_OUT1_f8_SW0 (U4_N28)
+     LUT5:I4->O            3   0.205   0.755  U4_Mram_player2Index[31]_PWR_8_o_wide_mux_24_OUT215 (U4/player2Index[31]_PWR_8_o_wide_mux_24_OUT<0>)
+     LUT3:I1->O            1   0.203   0.000  U4/Mmux_PWR_8_o_PWR_8_o_mux_29_OUT11 (U4/PWR_8_o_PWR_8_o_mux_29_OUT<0>)
+     FDR:D                     0.102          U4/playerPixel_0
     ----------------------------------------
-    Total                      5.847ns (1.602ns logic, 4.245ns route)
-                                       (27.4% logic, 72.6% route)
+    Total                      6.000ns (1.568ns logic, 4.432ns route)
+                                       (26.1% logic, 73.9% route)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'clk'
@@ -590,25 +657,25 @@ Offset:              3.758ns (Levels of Logic = 2)
 
 =========================================================================
 Timing constraint: Default OFFSET OUT AFTER for Clock 'clk'
-  Total number of paths / destination ports: 159 / 10
+  Total number of paths / destination ports: 150 / 10
 -------------------------------------------------------------------------
-Offset:              8.212ns (Levels of Logic = 4)
-  Source:            U4_Mram_PWR_8_o_PWR_8_o_mux_35_OUT (RAM)
-  Destination:       vgaRed<2> (PAD)
+Offset:              7.026ns (Levels of Logic = 4)
+  Source:            U1/yPixel_5 (FF)
+  Destination:       vgaRed<1> (PAD)
   Source Clock:      clk rising
 
-  Data Path: U4_Mram_PWR_8_o_PWR_8_o_mux_35_OUT to vgaRed<2>
+  Data Path: U1/yPixel_5 to vgaRed<1>
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     RAMB8BWER:CLKAWRCLK->DOADO2    2   1.650   0.845  U4_Mram_PWR_8_o_PWR_8_o_mux_35_OUT (playerPixel<2>)
-     LUT3:I0->O            1   0.205   0.924  U1/PWR_5_o_INV_12_o_SW0 (N50)
-     LUT6:I1->O            8   0.203   1.031  U1/PWR_5_o_INV_12_o (U1/PWR_5_o_INV_12_o)
-     LUT4:I1->O            1   0.205   0.579  U1/Mmux_pixel81 (vgaRed_2_OBUF)
-     OBUF:I->O                 2.571          vgaRed_2_OBUF (vgaRed<2>)
+     FDRE:C->Q            10   0.447   1.085  U1/yPixel_5 (U1/yPixel_5)
+     LUT3:I0->O            1   0.205   0.684  U1/blank_SW0 (N52)
+     LUT6:I4->O            8   0.203   1.050  U1/blank (U1/blank)
+     LUT4:I0->O            1   0.203   0.579  U1/Mmux_pixel71 (vgaRed_1_OBUF)
+     OBUF:I->O                 2.571          vgaRed_1_OBUF (vgaRed<1>)
     ----------------------------------------
-    Total                      8.212ns (4.834ns logic, 3.378ns route)
-                                       (58.9% logic, 41.1% route)
+    Total                      7.026ns (3.629ns logic, 3.397ns route)
+                                       (51.6% logic, 48.4% route)
 
 =========================================================================
 
@@ -620,21 +687,21 @@ Clock to Setup on destination clock clk
                | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
 Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
 ---------------+---------+---------+---------+---------+
-clk            |    5.847|         |         |         |
+clk            |    6.000|         |         |         |
 ---------------+---------+---------+---------+---------+
 
 =========================================================================
 
 
-Total REAL time to Xst completion: 5.00 secs
-Total CPU time to Xst completion: 4.79 secs
+Total REAL time to Xst completion: 6.00 secs
+Total CPU time to Xst completion: 5.16 secs
  
 --> 
 
 
-Total memory usage is 462440 kilobytes
+Total memory usage is 462684 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :   95 (   0 filtered)
-Number of infos    :    8 (   0 filtered)
+Number of warnings :  143 (   0 filtered)
+Number of infos    :    9 (   0 filtered)
 

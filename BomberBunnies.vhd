@@ -47,7 +47,8 @@ architecture Behavioral of BomberBunnies is
       clk               : in std_logic;                         -- system clock (100 MHz)
       xPixel            : in unsigned(9 downto 0);      -- Horizontal pixel counter
       yPixel	        : in unsigned(9 downto 0);      -- Vertical pixel counter
-      readWrite         : in std_logic;                         -- 0 is read, 1 is write
+      readMap           : in std_logic;
+      writeMap          : in std_logic;
       tilePointer       : in integer;
       pixelIn           : in std_logic_vector(7 downto 0);
       writeTile         : in std_logic_vector(7 downto 0);
@@ -72,10 +73,10 @@ architecture Behavioral of BomberBunnies is
       clk		: in std_logic;                 -- system clock
       xPixel            : in unsigned(9 downto 0);               -- Horizontal pixel counter
       yPixel	        : in unsigned(9 downto 0);	        -- Vertical pixel counter
-      p1x               : in unsigned(7 downto 0);               -- Number of pixels on board 16x16x15
-      p1y               : in unsigned(7 downto 0);               -- Number of pixels on board 16x16x13
-      p2x               : in unsigned(7 downto 0);               -- Number of pixels on board 16x16x15
-      p2y               : in unsigned(7 downto 0);               -- Number of pixels on board 16x16x13
+      p1x               : in unsigned(9 downto 0);               -- Number of pixels on board 16x16x15
+      p1y               : in unsigned(9 downto 0);               -- Number of pixels on board 16x16x13
+      p2x               : in unsigned(9 downto 0);               -- Number of pixels on board 16x16x15
+      p2y               : in unsigned(9 downto 0);               -- Number of pixels on board 16x16x13
       playerPixel       : out std_logic_vector(7 downto 0));     -- pixel from player
            
   end component;
@@ -134,7 +135,8 @@ begin
     clk => clk,
     xPixel => xPixel,
     yPixel => yPixel,
-    readWrite => '0',
+    readMap => '0',
+    writeMap => '0',
     tilePointer => 0,
     pixelIn => tilePixel,
     writeTile => "00000000",
@@ -153,10 +155,10 @@ begin
     clk         => clk,
     xPixel      => xPixel,
     yPixel      => yPixel,
-    p1x         => "00000000",
-    p1y         => "00000000",
-    p2x         => "00000000",
-    p2y         => "00000000",
+    p1x         => "0010000000",
+    p1y         => "0010000000",
+    p2x         => "0000100010",
+    p2y         => "0000100010",
     playerPixel => playerPixel);
 	
   -- VGA motor component connection
