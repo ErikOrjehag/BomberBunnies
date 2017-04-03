@@ -47,11 +47,24 @@ architecture behavioral of CPU is
 
   -- Micro memory
   type upm_t is array (0 to 511) of std_logic_vector(28 downto 0);
-  signal uPM : upm_t;
+  signal uPM : upm_t := (
+    "00000000000000000000000000000",
+    "00000000000000000000000000000",
+    "00000000000000000000000000000",
+    "00000000000000000000000000000",
+    "00000000000000000000000000000",
+    "00000000000000000000000000000",
+    "00000000000000000000000000000",
+    "00000000000000000000000000000",
+    "00000000000000000000000000000",
+    "00000000000000000000000000000",
+    "00000000000000000000000000000"
+  );
 
   -- GRx
   type grx_t is array (0 to 15) of std_logic_vector(21 downto 0);
   signal GRx : grx_t;
+  signal GRx_x  : std_logic_vector(2 downto 0);
 
   -- k1
   type k1_t is array (0 to 31) of std_logic_vector(9 downto 0);
@@ -60,6 +73,24 @@ architecture behavioral of CPU is
   -- k2
   type k2_t is array (0 to 3) of std_logic_vector(9 downto 0);
   signal k2 : k2_t;
+
+  -- uPM signals
+  signal upm_instr : std_logic_vector(28 downto 0);
+  
+  signal upm_alu : std_logic_vector(3 downto 0);
+  signal upm_tb : std_logic_vector(3 downto 0);
+  signal upm_fb : std_logic_vector(3 downto 0);
+  signal upm_s : std_logic_vector(0 downto 0);
+  signal upm_p : std_logic_vector(0 downto 0);
+  signal upm_lc : std_logic_vector(1 downto 0);
+  signal upm_seq : std_logic_vector(3 downto 0);
+  signal upm_uaddr : std_logic_vector(8 downto 0);
+
+  -- IR signals
+  signal ir_addr : std_logic_vector(11 downto 0);
+  signal ir_m : std_logic_vector(1 downto 0);
+  signal ir_grx : std_logic_vector(2 downto 0);
+  signal ir_op : std_logic_vector(4 downto 0);
   
   -- Registers
   signal IR : std_logic_vector(21 downto 0) := (others => '0');
@@ -82,37 +113,79 @@ begin  -- behavioral
   p2x <= GRx(14);
   p2y <= GRx(15);
 
+  -- uPM signals
+  upm_instr <= uPM(uPC);
+  
+  upm_alu   <= upm_instr(28 downto 25);
+  upm_tb    <= upm_instr(24 downto 21);
+  upm_fb    <= upm_instr(20 downto 17);
+  upm_s     <= upm_instr(16 downto 16);
+  upm_p     <= upm_instr(15 downto 15);
+  upm_lc    <= upm_instr(14 downto 13);
+  upm_seq   <= upm_instr(12 downto 9);
+  upm_uaddr <= upm_instr(8  downto 0);
+  
+  -- IR signals
+  ir_addr   <= IR(11 downto 0);
+  ir_m      <= IR(13 downto 12);
+  ir_grx    <= IR(16 downto 14);
+  ir_op     <= IR(21 downto 17);
+  
+  -- TB
+  GRx_x <= ir_grx when upm_s = '1' else "0" & ir_m;
+  
+  buss <= buss                    when tb = "0000" else (others => 'Z');
+  buss <= PM(to_unsigned(ASR))    when tb = "0001" else (others => 'Z');
+  buss <= IR                      when tb = "0010" else (others => 'Z');
+  buss <= "0000000000" & PC       when tb = "0011" else (others => 'Z');
+  buss <= AR                      when tb = "0100" else (others => 'Z');
+  buss <= buss                           when tb = "0101" else (others => 'Z');  --ledig
+  buss <= GRx(to_unsigned(GRx_x))        when tb = "0110" else (others => 'Z');
+  buss <= buss                           when tb = "0111" else (others => 'Z');  --ledig
+  buss <= x"000" & "00" & tileIndex      when tb = "1000" else (others => 'Z');
+  buss <= x"000" & "00" & tilePointer    when tb = "1001" else (others => 'Z');
+  buss <= x"00000" & joy1x when tb = "1010" else (others => 'Z');
+  buss <= x"00000" & joy1y when tb = "1011" else (others => 'Z');
+  buss <= "000000000000000000000" & btn1 when tb = "1100" else (others => 'Z');
+  buss <= "00000000000000000000" & joy2x when tb = "1101" else (others => 'Z');
+  buss <= "00000000000000000000" & joy2y when tb = "1110" else (others => 'Z');
+  buss <= "000000000000000000000" & btn1 when tb = "1111" else (others => 'Z');
+  
+  
   process(clk)
   begin
+
+    -- TB
+    case uPM(24 downto 21) is
+      when "0000" => null;
+      when "0001" => ;
+      when "0010" => ;
+      when "0011" => ;
+      when "0100" => ;
+      when "0101" => null;
+      when "0110" => buss <= GRx(to_unsigned(IR(16 downto 14) when uPM(uPC)(16) = '1' else IR(13 downto 12)));  -- GRx(IR(GRx/M))------(S-flag)
+      when "0111" => null;
+      when "1000" => buss ;
+      when "1001" => 
+      when "1010" => ;
+      when "1011" => buss <= ;
+      when "1100" => buss <= ;
+      when "1101" => buss <= ;
+      when "1110" => buss <= ;
+      when "1111" => buss <= ;
+      when others => null;
+    end case;
+
+
+    
     if rising_edge(clk) then
-
-      -- TB
-      case uPM(24 downto 21) is
-        when "0001" => buss <= "0000000000" & ASR;
-        when "0010" => buss <= IR;
-        when "0011" => buss <= PM(to_unsigned(ASR));
-        when "0100" => buss <= "0000000000" & PC;
-        when "0101" => buss <= GRx(to_unsigned(IR(16 downto 14) when uPM(uPC)(16) = '1' else IR(13 downto 12)));  -- GRx(IR(GRx/M))
-        when "0110" => null;
-        when "0111" => null;
-        when "1000" => buss <= "00000000000000" & tileIndex;
-        when "1001" => buss <= "00000000000000" & tilePointer;
-        when "1010" => buss <= "00000000000000000000" & joy1x;
-        when "1011" => buss <= "00000000000000000000" & joy1y;
-        when "1100" => buss <= "000000000000000000000" & btn1;
-        when "1101" => buss <= "00000000000000000000" & joy2x;
-        when "1110" => buss <= "00000000000000000000" & joy2y;
-        when "1111" => buss <= "000000000000000000000" & btn1;
-        when others => null;
-      end case;
-
       -- FB
       case uPM(20 downto 17) is
         when "0001" => ASR <= buss(11 downto 0);
         when "0010" => IR <= buss;
         when "0011" => PM(to_unsigned(ASR)) <= buss;
         when "0100" => PC <= buss(11 downto 0);
-        when "0101" => GRx(to_unsigned(IR(16 downto 14) when uPM(uPC)(16) = '1' else IR(13 downto 12))) <= buss;  -- GRx(IR(GRx/M))
+        when "0101" => GRx(to_unsigned(IR(16 downto 14) when uPM(uPC)(16) = '1' else IR(13 downto 12))) <= buss;  -- GRx(IR(GRx/M))------(S-flag)
         when "0110" => null;
         when "0111" => null;
         when "1000" => tileIndex <= buss(7 downto 0);
@@ -126,13 +199,37 @@ begin  -- behavioral
         when others => null;
       end case;
 
+      -- ALU
+      case uPM(uPC)(28 downto 25) is
+        when "0000" => null;
+        when "0001" => AR <= buss;
+        when "0010" => AR <= not buss;
+        when "0011" => AR <= (others => '0');
+        when "0100" => AR <= AR + buss;
+        when "0101" => AR <= AR - buss;
+        when "0110" => null;
+        when "0111" => null;
+        when "1000" => null;
+        when "1001" => null;
+        when "1010" => null;
+        when "1011" => null;
+        when "1100" => null;
+        when "1101" => null;
+        when "1110" => null;
+        when "1111" => null;
+        when others => null;
+      end case;
+      
       -- P
-      if uPM(uPC)(15) = '1' then
-        PC = PC + 1;
+      case uPM(uPC)(15) is
+        when "0" => null;
+        when "1" => PC = PC + 1;
+        when others => null;
       end if;
 
       -- LC
       case uPM(uPC)(14 downto 13) is
+        when "00" => null;
         when "01" => LC <= LC - 1;
         when "10" => LC <= buss(7 downto 0);
         when "11" => LC <= uPC(8 downto 0);  -- uAddr
@@ -143,6 +240,7 @@ begin  -- behavioral
       case uPM(uPC)(12 downto 9) is
         when "0000" => uPC = uPC + 1;
 --        when "0001" => uPC = ;          -- k1...
+        when others => null;
       end case;
 
     end if;
