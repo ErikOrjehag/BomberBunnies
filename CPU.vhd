@@ -134,73 +134,54 @@ begin  -- behavioral
   -- TB
   GRx_x <= ir_grx when upm_s = '1' else "0" & ir_m;
   
-  buss <= buss                    when tb = "0000" else (others => 'Z');
-  buss <= PM(to_unsigned(ASR))    when tb = "0001" else (others => 'Z');
-  buss <= IR                      when tb = "0010" else (others => 'Z');
-  buss <= "0000000000" & PC       when tb = "0011" else (others => 'Z');
-  buss <= AR                      when tb = "0100" else (others => 'Z');
-  buss <= buss                           when tb = "0101" else (others => 'Z');  --ledig
-  buss <= GRx(to_unsigned(GRx_x))        when tb = "0110" else (others => 'Z');
-  buss <= buss                           when tb = "0111" else (others => 'Z');  --ledig
-  buss <= x"000" & "00" & tileIndex      when tb = "1000" else (others => 'Z');
-  buss <= x"000" & "00" & tilePointer    when tb = "1001" else (others => 'Z');
-  buss <= x"00000" & joy1x when tb = "1010" else (others => 'Z');
-  buss <= x"00000" & joy1y when tb = "1011" else (others => 'Z');
-  buss <= "000000000000000000000" & btn1 when tb = "1100" else (others => 'Z');
-  buss <= "00000000000000000000" & joy2x when tb = "1101" else (others => 'Z');
-  buss <= "00000000000000000000" & joy2y when tb = "1110" else (others => 'Z');
-  buss <= "000000000000000000000" & btn1 when tb = "1111" else (others => 'Z');
-  
-  
+  buss <= buss                         when tb = "0000" else (others => 'Z');
+  buss <= ASR                          when tb = "0001" else (others => 'Z');
+  buss <= IR                           when tb = "0010" else (others => 'Z');
+  buss <= PM(to_unsigned(ASR))         when tb = "0011" else (others => 'Z');
+  buss <= PC                           when tb = "0100" else (others => 'Z');
+  buss <= GRx(to_unsigned(GRx_x))      when tb = "0101" else (others => 'Z');
+  buss <= AR                           when tb = "0110" else (others => 'Z');
+  buss <= buss                         when tb = "0111" else (others => 'Z');  --ledig
+  buss <= x"000" & "00" & tileIndex    when tb = "1000" else (others => 'Z');
+  buss <= x"000" & "00" & tilePointer  when tb = "1001" else (others => 'Z');
+  buss <= x"00000" & joy1x             when tb = "1010" else (others => 'Z');
+  buss <= x"00000" & joy1y             when tb = "1011" else (others => 'Z');
+  buss <= x"00000" & "0" & btn1        when tb = "1100" else (others => 'Z');
+  buss <= x"00000" & joy2x             when tb = "1101" else (others => 'Z');
+  buss <= x"00000" & joy2y             when tb = "1110" else (others => 'Z');
+  buss <= x"00000" & "0" & btn1        when tb = "1111" else (others => 'Z');
+
+  -- FB
   process(clk)
   begin
-
-    -- TB
-    case uPM(24 downto 21) is
-      when "0000" => null;
-      when "0001" => ;
-      when "0010" => ;
-      when "0011" => ;
-      when "0100" => ;
-      when "0101" => null;
-      when "0110" => buss <= GRx(to_unsigned(IR(16 downto 14) when uPM(uPC)(16) = '1' else IR(13 downto 12)));  -- GRx(IR(GRx/M))------(S-flag)
-      when "0111" => null;
-      when "1000" => buss ;
-      when "1001" => 
-      when "1010" => ;
-      when "1011" => buss <= ;
-      when "1100" => buss <= ;
-      when "1101" => buss <= ;
-      when "1110" => buss <= ;
-      when "1111" => buss <= ;
-      when others => null;
-    end case;
-
-
-    
     if rising_edge(clk) then
-      -- FB
-      case uPM(20 downto 17) is
+      case upm_fb is
+        when "0000" => null;
         when "0001" => ASR <= buss(11 downto 0);
         when "0010" => IR <= buss;
         when "0011" => PM(to_unsigned(ASR)) <= buss;
         when "0100" => PC <= buss(11 downto 0);
-        when "0101" => GRx(to_unsigned(IR(16 downto 14) when uPM(uPC)(16) = '1' else IR(13 downto 12))) <= buss;  -- GRx(IR(GRx/M))------(S-flag)
-        when "0110" => null;
-        when "0111" => null;
+        when "0101" => GRx(to_unsigned(GRx_x)) <= buss;
+        when "0110" => null;            --AR
+        when "0111" => null;            --ledig
         when "1000" => tileIndex <= buss(7 downto 0);
         when "1001" => tilePointer <= buss(7 downto 0);
-        when "1010" => null;
-        when "1011" => null;
-        when "1100" => null;
-        when "1101" => null;
-        when "1110" => null;
-        when "1111" => null;
+        when "1010" => null;            --joy1x
+        when "1011" => null;            --joy1y
+        when "1100" => null;            --btn1
+        when "1101" => null;            --joy2x
+        when "1110" => null;            --joy2y
+        when "1111" => null;            --btn2
         when others => null;
       end case;
+    end if;
+  end process;
 
-      -- ALU
-      case uPM(uPC)(28 downto 25) is
+  -- ALU
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      case upm_alu is
         when "0000" => null;
         when "0001" => AR <= buss;
         when "0010" => AR <= not buss;
@@ -219,33 +200,45 @@ begin  -- behavioral
         when "1111" => null;
         when others => null;
       end case;
-      
-      -- P
-      case uPM(uPC)(15) is
+    end if;
+  end process;
+  
+  -- P
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      case upm_p is
         when "0" => null;
         when "1" => PC = PC + 1;
         when others => null;
-      end if;
+      end case;
+    end if;
+  end process;
 
-      -- LC
-      case uPM(uPC)(14 downto 13) is
+  -- LC
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      case upm_lc is
         when "00" => null;
         when "01" => LC <= LC - 1;
         when "10" => LC <= buss(7 downto 0);
         when "11" => LC <= uPC(8 downto 0);  -- uAddr
         when others => null;
       end case;
+    end if;
+  end process;
 
-      -- SEQ
-      case uPM(uPC)(12 downto 9) is
+  -- SEQ
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      case upm_seq is
         when "0000" => uPC = uPC + 1;
 --        when "0001" => uPC = ;          -- k1...
         when others => null;
       end case;
-
     end if;
-
   end process;
-  
 
 end behavioral;
