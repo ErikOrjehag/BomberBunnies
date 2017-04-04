@@ -28,10 +28,10 @@ entity CPU is
     joy2x       : in std_logic_vector(1 downto 0) := (others => '0');
     joy2y       : in std_logic_vector(1 downto 0) := (others => '0');
     btn2        : in std_logic;
-    p1x         : out std_logic_vector(7 downto 0);
-    p1y         : out std_logic_vector(7 downto 0);
-    p2x         : out std_logic_vector(7 downto 0);
-    p2y         : out std_logic_vector(7 downto 0);
+    p1x         : out std_logic_vector(9 downto 0);
+    p1y         : out std_logic_vector(9 downto 0);
+    p2x         : out std_logic_vector(9 downto 0);
+    p2y         : out std_logic_vector(9 downto 0);
   );
 end CPU;
 
@@ -43,7 +43,21 @@ architecture behavioral of CPU is
   
   -- Program memory
   type pm_t is array (0 to 4095) of std_logic_vector(21 downto 0);
-  signal PM : pm_t;
+  signal PM : pm_t := (
+    -- OP  GRx M     Addr
+    "00000 100 00 000010001011",
+    "00000 101 00 000010000000",
+    "00000 110 00 000000100000",
+    "00000 111 00 000000100000",
+    "00000 000 00 000000000000",
+    "00000 000 00 000000000000",
+    "00000 000 00 000000000000",
+    "00000 000 00 000000000000",
+    "00000 000 00 000000000000",
+    "00000 000 00 000000000000",
+    "00000 000 00 000000000000",
+    "00000 000 00 000000000000"
+  );
 
   -- Micro memory
   type upm_t is array (0 to 511) of std_logic_vector(28 downto 0);
@@ -82,28 +96,37 @@ architecture behavioral of CPU is
   );
 
   -- GRx
-  type grx_t is array (0 to 15) of std_logic_vector(21 downto 0);
-  signal GRx : grx_t;
+  type grx_t is array (0 to 7) of std_logic_vector(21 downto 0);
+  signal GRx : grx_t := (
+    "0000000000000000000000",
+    "0000000000000000000000",
+    "0000000000000000000000",
+    "0000000000000000000000",
+    "0000000000000000000000",
+    "0000000000000000000000",
+    "0000000000000000000000",
+    "0000000000000000000000"
+  );
   signal GRx_x  : std_logic_vector(2 downto 0);
 
   -- k1
   type k1_t is array (0 to 31) of std_logic_vector(9 downto 0);
   signal k1 : k1_t := (
     
-    "0000000011",                       -- Direktadressering (rad 003)
-    "0000000100",                       -- Immediate (rad 004)
-    "0000000101",                       -- Indirekt adressering (rad 005)
-    "0000000111"                        -- Indexerad adressering (rad 007)
+    "0000000011",                       -- (00) Direktadressering (rad 003)
+    "0000000100",                       -- (01) Immediate (rad 004)
+    "0000000101",                       -- (10) Indirekt adressering (rad 005)
+    "0000000111"                        -- (11) Indexerad adressering (rad 007)
 );
 
   -- k2
   type k2_t is array (0 to 3) of std_logic_vector(9 downto 0);
   signal k2 : k2_t := (
 
-    "0000001010",                       -- LOAD (rad 00A)
-    "0000001011",                       -- STORE (rad 00B)
-    "0000001100",                       -- ADD (rad 00C)
-    "0000001111",                       -- SUB (rad 00F)
+    "0000001010",                       -- (0000) LOAD (rad 00A)
+    "0000001011",                       -- (0001) STORE (rad 00B)
+    "0000001100",                       -- (0010) ADD (rad 00C)
+    "0000001111",                       -- (0011) SUB (rad 00F)
     "0000000000",
     "0000000000",
     "0000000000",
@@ -141,8 +164,10 @@ architecture behavioral of CPU is
   signal AR : std_logic_vector(21 downto 0) := (others => '0');
   signal PC : std_logic_vector(11 downto 0) := (others => '0');
   signal ASR : std_logic_vector(11 downto 0) := (others => '0');
-  signal LC : std_logic_vector(7 downto 0) := (others => '0');
+  signal LC : std_logic_vector(8 downto 0) := (others => '0');  --fit uAddr
   signal uPC : std_logic_vector(9 downto 0) := (others => '0');
+
+  -- Flags
   signal O : std_logic := '0';
   signal C : std_logic := '0';
   signal N : std_logic := '0';
@@ -152,10 +177,10 @@ architecture behavioral of CPU is
 begin  -- behavioral
 
   -- Player positions
-  p1x <= GRx(12);
-  p1y <= GRx(13);
-  p2x <= GRx(14);
-  p2y <= GRx(15);
+  p1x <= GRx(4)(9 downto 0);
+  p1y <= GRx(5)(9 downto 0);
+  p2x <= GRx(6)(9 downto 0);
+  p2y <= GRx(7)(9 downto 0);
 
   -- uPM signals
   upm_instr <= uPM(uPC);
@@ -226,24 +251,32 @@ begin  -- behavioral
   begin
     if rising_edge(clk) then
       case upm_alu is
-        when "0000" => null;
+        when "0000" => null;            --noop
         when "0001" => AR <= buss;
         when "0010" => AR <= not buss;
         when "0011" => AR <= (others => '0');
         when "0100" => AR <= AR + buss;
         when "0101" => AR <= AR - buss;
-        when "0110" => null;
-        when "0111" => null;
-        when "1000" => null;
-        when "1001" => null;
-        when "1010" => null;
-        when "1011" => null;
-        when "1100" => null;
-        when "1101" => null;
-        when "1110" => null;
-        when "1111" => null;
+        when "0110" => AR <= AR and buss;
+        when "0111" => AR <= AR or buss;
+        when "1000" => AR <= AR + buss;  --no flags
+        when "1001" => AR <= AR sll 1;
+        when "1010" => null;            --ledig
+        when "1011" => null;            --ledig
+        when "1100" => null;            --ledig
+        when "1101" => AR <= AR srl 1;
+        when "1110" =>  null;           --ledig
+        when "1111" =>  null;           --ledig
         when others => null;
       end case;
+
+      if upm_alu != "1000" then
+        O <= '0';
+        C <= '0';
+        N <= AR(21);
+        Z <= AR = (x"00000" & "00");
+        L <= '0';
+      end if;
     end if;
   end process;
   
@@ -266,8 +299,8 @@ begin  -- behavioral
       case upm_lc is
         when "00" => null;
         when "01" => LC <= LC - 1;
-        when "10" => LC <= buss(7 downto 0);
-        when "11" => LC <= uPC(8 downto 0);  -- uAddr
+        when "10" => LC <= "0" & buss(7 downto 0);
+        when "11" => LC <= upm_uaddr;
         when others => null;
       end case;
     end if;
@@ -278,8 +311,22 @@ begin  -- behavioral
   begin
     if rising_edge(clk) then
       case upm_seq is
-        when "0000" => uPC = uPC + 1;
---        when "0001" => uPC = ;          -- k1...
+        when "0000" => uPC <= uPC + 1;
+        when "0001" => uPC <= k1(ir_m);
+        when "0010" => uPC <= k2(ir_m;
+        when "0011" => uPC <= (others => '0');
+        when "0100" => uPC <= upm_uaddr;
+        when "0101" => null;            --ledig
+        when "0110" => null;            --ledig
+        when "0111" => null;            --ledig
+        when "1000" => uPC <= upm_uaddr when Z = '1' else uPC;
+        when "1001" => uPC <= upm_uaddr when N = '1' else uPC;
+        when "1010" => uPC <= upm_uaddr when C = '1' else uPC;
+        when "1011" => uPC <= upm_uaddr when O = '1' else uPC;
+        when "1100" => uPC <= upm_uaddr when L = '1' else uPC;
+        when "1101" => null;            --ledig
+        when "1110" => null;            --ledig
+        when "1111" => null;            -- HALT
         when others => null;
       end case;
     end if;
