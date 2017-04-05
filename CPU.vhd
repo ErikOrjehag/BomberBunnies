@@ -16,22 +16,23 @@ use IEEE.NUMERIC_STD.ALL;               -- and various arithmetic operations
 -- entity
 entity CPU is
   port (
-    clk         : in std_logic;                      -- system clock (100 MHz)
-    rst	        : in std_logic;
-    joy1x       : in std_logic_vector(1 downto 0) := (others => '0');
-    joy1y       : in std_logic_vector(1 downto 0) := (others => '0');
-    btn1        : in std_logic;
-    joy2x       : in std_logic_vector(1 downto 0) := (others => '0');
-    joy2y       : in std_logic_vector(1 downto 0) := (others => '0');
-    btn2        : in std_logic;
-    tilePointer : buffer std_logic_vector(7 downto 0) := (others => '0');
-    tileIndex   : buffer std_logic_vector(7 downto 0);
-    readMap     : out std_logic;
-    writeMap    : out std_logic;
-    p1x         : out std_logic_vector(9 downto 0);
-    p1y         : out std_logic_vector(9 downto 0);
-    p2x         : out std_logic_vector(9 downto 0);
-    p2y         : out std_logic_vector(9 downto 0)
+    clk                 : in std_logic;                      -- system clock (100 MHz)
+    rst	                : in std_logic;
+    joy1x               : in std_logic_vector(1 downto 0) := (others => '0');
+    joy1y               : in std_logic_vector(1 downto 0) := (others => '0');
+    btn1                : in std_logic;
+    joy2x               : in std_logic_vector(1 downto 0) := (others => '0');
+    joy2y               : in std_logic_vector(1 downto 0) := (others => '0');
+    btn2                : in std_logic;
+    tilePointer         : buffer std_logic_vector(7 downto 0) := (others => '0');
+    tileTypeRead        : in std_logic_vector(7 downto 0);
+    tileTypeWrite        : out std_logic_vector(7 downto 0);
+    readMap             : out std_logic;
+    writeMap            : out std_logic;
+    p1x                 : out std_logic_vector(9 downto 0);
+    p1y                 : out std_logic_vector(9 downto 0);
+    p2x                 : out std_logic_vector(9 downto 0);
+    p2y                 : out std_logic_vector(9 downto 0)
   );
 end CPU;
 
@@ -42,7 +43,7 @@ architecture behavioral of CPU is
   signal buss : std_logic_vector(21 downto 0) := (others => '0');
   
   -- Program memory
-  type pm_t is array (0 to 4095) of std_logic_vector(21 downto 0);
+  type pm_t is array (0 to 15) of std_logic_vector(21 downto 0);  --4095
   signal PM : pm_t := (
     -- OP  GRx M     Addr
     b"00000_100_00_000010001011",
@@ -56,11 +57,15 @@ architecture behavioral of CPU is
     b"00000_000_00_000000000000",
     b"00000_000_00_000000000000",
     b"00000_000_00_000000000000",
+    b"00000_000_00_000000000000",
+    b"00000_000_00_000000000000",
+    b"00000_000_00_000000000000",
+    b"00000_000_00_000000000000",
     b"00000_000_00_000000000000"
   );
 
   -- Micro memory
-  type upm_t is array (0 to 511) of std_logic_vector(28 downto 0);
+  type upm_t is array (0 to 17) of std_logic_vector(28 downto 0);  --511
   signal uPM : upm_t := (
     -- AR 0110
  --  ALU   TB   FB  S P LC  SEQ  uADR
@@ -109,36 +114,36 @@ architecture behavioral of CPU is
   );
   signal GRx_x  : integer := 0;
 
-  -- k1
-  type k1_t is array (0 to 31) of std_logic_vector(9 downto 0);
-  signal k1 : k1_t := (
+  -- k2
+  type k2_t is array (0 to 3) of std_logic_vector(8 downto 0);
+  signal k2 : k2_t := (
     
-    "0000000011",                       -- (00) Direktadressering (rad 003)
-    "0000000100",                       -- (01) Immediate (rad 004)
-    "0000000101",                       -- (10) Indirekt adressering (rad 005)
-    "0000000111"                        -- (11) Indexerad adressering (rad 007)
+    "000000011",                       -- (00) Direktadressering (rad 003)
+    "000000100",                       -- (01) Immediate (rad 004)
+    "000000101",                       -- (10) Indirekt adressering (rad 005)
+    "000000111"                        -- (11) Indexerad adressering (rad 007)
 );
 
-  -- k2
-  type k2_t is array (0 to 3) of std_logic_vector(9 downto 0);
-  signal k2 : k2_t := (
+  -- k1
+  type k1_t is array (0 to 15) of std_logic_vector(8 downto 0);  --31
+  signal k1 : k1_t := (
 
-    "0000001010",                       -- (0000) LOAD (rad 00A)
-    "0000001011",                       -- (0001) STORE (rad 00B)
-    "0000001100",                       -- (0010) ADD (rad 00C)
-    "0000001111",                       -- (0011) SUB (rad 00F)
-    "0000000000",
-    "0000000000",
-    "0000000000",
-    "0000000000",
-    "0000000000",
-    "0000000000",
-    "0000000000",
-    "0000000000",
-    "0000000000",
-    "0000000000",
-    "0000000000",
-    "0000000000"
+    "000001010",                       -- (0000) LOAD (rad 00A)
+    "000001011",                       -- (0001) STORE (rad 00B)
+    "000001100",                       -- (0010) ADD (rad 00C)
+    "000001111",                       -- (0011) SUB (rad 00F)
+    "000000000",
+    "000000000",
+    "000000000",
+    "000000000",
+    "000000000",
+    "000000000",
+    "000000000",
+    "000000000",
+    "000000000",
+    "000000000",
+    "000000000",
+    "000000000"
 );
 
   -- uPM signals
@@ -204,14 +209,14 @@ begin  -- behavioral
   GRx_x <= to_integer(unsigned(ir_grx)) when (upm_s = "1") else to_integer(unsigned(ir_m));
   
   buss <= buss                          when upm_tb = "0000" else (others => 'Z');
-  buss <= ASR                           when upm_tb = "0001" else (others => 'Z');
+  buss <= "0000000000" & ASR            when upm_tb = "0001" else (others => 'Z');
   buss <= IR                            when upm_tb = "0010" else (others => 'Z');
   buss <= PM(to_integer(unsigned(ASR))) when upm_tb = "0011" else (others => 'Z');
-  buss <= PC                            when upm_tb = "0100" else (others => 'Z');
+  buss <= "0000000000" & PC             when upm_tb = "0100" else (others => 'Z');
   buss <= GRx(GRx_x)                    when upm_tb = "0101" else (others => 'Z');
   buss <= AR                            when upm_tb = "0110" else (others => 'Z');
   buss <= buss                          when upm_tb = "0111" else (others => 'Z');  --ledig
-  buss <= x"000" & "00" & tileIndex     when upm_tb = "1000" else (others => 'Z');
+  buss <= x"000" & "00" & tileTypeRead  when upm_tb = "1000" else (others => 'Z');
   buss <= x"000" & "00" & tilePointer   when upm_tb = "1001" else (others => 'Z');
   buss <= x"00000" & joy1x              when upm_tb = "1010" else (others => 'Z');
   buss <= x"00000" & joy1y              when upm_tb = "1011" else (others => 'Z');
@@ -220,10 +225,11 @@ begin  -- behavioral
   buss <= x"00000" & joy2y              when upm_tb = "1110" else (others => 'Z');
   buss <= x"00000" & "0" & btn1         when upm_tb = "1111" else (others => 'Z');
 
-  -- FB
   process(clk)
   begin
     if rising_edge(clk) then
+
+      -- FB
       case upm_fb is
         when "0000" => null;
         when "0001" => ASR <= buss(11 downto 0);
@@ -233,7 +239,7 @@ begin  -- behavioral
         when "0101" => GRx(GRx_x) <= buss;
         when "0110" => null;            --AR
         when "0111" => null;            --ledig
-        when "1000" => tileIndex <= buss(7 downto 0);
+        when "1000" => tileTypeWrite <= buss(7 downto 0);
         when "1001" => tilePointer <= buss(7 downto 0);
         when "1010" => null;            --joy1x
         when "1011" => null;            --joy1y
@@ -243,13 +249,8 @@ begin  -- behavioral
         when "1111" => null;            --btn2
         when others => null;
       end case;
-    end if;
-  end process;
 
-  -- ALU
-  process(clk)
-  begin
-    if rising_edge(clk) then
+      -- ALU
       case upm_alu is
         when "0000" => null;            --noop
         when "0001" => AR <= buss;
@@ -274,32 +275,22 @@ begin  -- behavioral
         O <= '0';
         C <= '0';
         N <= AR(21);
-        if AR = (others => '0') then
+        if AR = "0000000000000000000000" then
           Z <= '1';
         else
           Z <= '0';
         end if;
         L <= '0';
       end if;
-    end if;
-  end process;
   
-  -- P
-  process(clk)
-  begin
-    if rising_edge(clk) then
+      -- P
       case upm_p is
         when "0" => null;
         when "1" => PC <= std_logic_vector(unsigned(PC) + 1);
         when others => null;
       end case;
-    end if;
-  end process;
 
-  -- LC
-  process(clk)
-  begin
-    if rising_edge(clk) then
+      -- LC
       case upm_lc is
         when "00" => null;
         when "01" => LC <= std_logic_vector(unsigned(LC) - 1);
@@ -307,13 +298,8 @@ begin  -- behavioral
         when "11" => LC <= upm_uaddr;
         when others => null;
       end case;
-    end if;
-  end process;
 
-  -- SEQ
-  process(clk)
-  begin
-    if rising_edge(clk) then
+      -- SEQ
       case upm_seq is
         when "0000" => uPC <= std_logic_vector(unsigned(uPC) + 1);
         when "0001" => uPC <= k1(to_integer(unsigned(ir_op)));
@@ -348,7 +334,8 @@ begin  -- behavioral
         when "1111" => null;            -- HALT
         when others => null;
       end case;
-    end if;
+      
+    end if;                             -- rising_edge(clk)
   end process;
 
 end behavioral;

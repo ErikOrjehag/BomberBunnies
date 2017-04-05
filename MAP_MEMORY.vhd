@@ -23,7 +23,8 @@ entity MAP_MEMORY is
     writeMap            : in std_logic;
     pixelIn             : in std_logic_vector(7 downto 0);
     tilePointer         : in std_logic_vector(7 downto 0);
-    tileType            : inout std_logic_vector(7 downto 0);
+    tileTypeRead        : out std_logic_vector(7 downto 0);
+    tileTypeWrite       : in std_logic_vector(7 downto 0);
     pixelOut            : out std_logic_vector(7 downto 0);
     tilePixelIndex      : out integer := 0;
     tileIndex           : out integer := 0);
@@ -60,10 +61,10 @@ begin  -- behavioral
   begin
     if rising_edge(clk) then
       if readMap = '1' then
-        tileType <= karta(tilePointerInteger);
+        tileTypeRead <= karta(tilePointerInteger);
       end if;
       if writeMap = '1' then
-        karta(tilePointerInteger) <= tileType;
+        karta(tilePointerInteger) <= tileTypeWrite;
       end if;
 
       if xPixel < 16*15*pixelSize and yPixel < 16*13*pixelSize then

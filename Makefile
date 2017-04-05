@@ -34,10 +34,11 @@ PART=xc6slx16-3-csg324
 
 
 BomberBunnies.%: S=BomberBunnies.vhd CPU.vhd VGA_MOTOR.vhd MAP_MEMORY.vhd SPRITE_MEMORY.vhd TILE_MEMORY.vhd
-#VGA_lab.%: S=VGA_lab.vhd KBD_ENC.vhd PICT_MEM.vhd VGA_MOTOR/VGA_MOTOR.vhd
-#VGA_lab.%: T=lab_tb.vhd
-#VGA_lab.%: U=Nexys3.ucf
+BomberBunnies.%: T=CPU_tb.vhd
 BomberBunnies.%: U=Nexys3.ucf
+#VGA_lab.%: U=Nexys3.ucf
+#VGA_lab.%: S=VGA_lab.vhd KBD_ENC.vhd PICT_MEM.vhd VGA_MOTOR/VGA_MOTOR.vhd
+
 
 
 # Det här är ett exempel på hur man kan skriva en testbänk som är

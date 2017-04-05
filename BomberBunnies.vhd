@@ -36,7 +36,8 @@ architecture Behavioral of BomberBunnies is
       joy2y             : in std_logic_vector(1 downto 0);
       btn2              : in std_logic;
       tilePointer       : buffer std_logic_vector(7 downto 0);
-      tileType          : inout std_logic_vector(7 downto 0);
+      tileTypeRead      : in std_logic_vector(7 downto 0);
+      tileTypeWrite     : out std_logic_vector(7 downto 0);
       readMap           : out std_logic;
       writeMap          : out std_logic;
       p1x               : out std_logic_vector(9 downto 0);
@@ -71,7 +72,8 @@ architecture Behavioral of BomberBunnies is
       writeMap          : in std_logic;
       tilePointer       : in std_logic_vector(7 downto 0);
       pixelIn           : in std_logic_vector(7 downto 0);
-      tileType          : inout std_logic_vector(7 downto 0);
+      tileTypeRead      : out std_logic_vector(7 downto 0);
+      tileTypeWrite     : in std_logic_vector(7 downto 0);
       pixelOut          : out std_logic_vector(7 downto 0);
       tilePixelIndex    : out integer;
       tileIndex         : out integer);    
@@ -114,6 +116,13 @@ architecture Behavioral of BomberBunnies is
   signal tilePixelIndexToTILE_MEMORY : integer;
   signal tileIndexToTILE_MEMORY : integer;
 
+  signal tileTypeRead : std_logic_vector(7 downto 0);
+  signal tileTypeWrite : std_logic_vector(7 downto 0);
+  signal tilePointer : std_logic_vector(7 downto 0);
+
+  signal readMap : std_logic;
+  signal writeMap : std_logic;
+  
   signal p1x : std_logic_vector(9 downto 0);
   signal p1y : std_logic_vector(9 downto 0);
   signal p2x : std_logic_vector(9 downto 0);
@@ -142,15 +151,16 @@ begin
     hSync=>hSync,
     vSync=>vSync);
 
-  U2 : MAP_MEMORY port map (
+  U2 : MAP_MEMORY port map (--
     clk => clk,
     xPixel => xPixel,
     yPixel => yPixel,
-    readMap => '0',
-    writeMap => '0',
-    tilePointer => x"00",
+    readMap => readMap,
+    writeMap => writeMap,
+    tilePointer => tilePointer,
     pixelIn => tilePixel,
-    tileType => x"00",
+    tileTypeRead => tileTypeRead,
+    tileTypeWrite => tileTypeWrite,
     pixelOut => tilePixelToVGA,
     tilePixelIndex => tilePixelIndexToTILE_MEMORY,
     tileIndex => tileIndexToTILE_MEMORY);
@@ -171,7 +181,7 @@ begin
     p2y         => unsigned(p2y),
     playerPixel => playerPixel);
 
-  U5 : CPU port map (
+  U5 : CPU port map (--
     clk => clk,
     rst => rst,
     joy1x => joy1x,
@@ -180,10 +190,11 @@ begin
     joy2x => joy2x,
     joy2y => joy2y,
     btn2 => btn2,
-    tilePointer => x"00",
-    tileType => x"00",
-    readMap => '0',
-    writeMap => '0',
+    tilePointer => tilePointer,
+    tileTypeRead => tileTypeRead,
+    tileTypeWrite => tileTypeWrite,
+    readMap => readMap,
+    writeMap => writeMap,
     p1x => p1x,
     p1y => p1y,
     p2x => p2x,
