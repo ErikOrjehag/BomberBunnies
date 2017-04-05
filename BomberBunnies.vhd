@@ -21,9 +21,29 @@ entity BomberBunnies is
     vgaBlue	        : out std_logic_vector(2 downto 1));     -- VGA blue
 end BomberBunnies;
 
-
 -- architecture
 architecture Behavioral of BomberBunnies is
+
+  -- VGA motor component
+  component CPU
+    port (
+      clk               : in std_logic;                      -- system clock (100 MHz)
+      rst	        : in std_logic;
+      joy1x             : in std_logic_vector(1 downto 0);
+      joy1y             : in std_logic_vector(1 downto 0);
+      btn1              : in std_logic;
+      joy2x             : in std_logic_vector(1 downto 0);
+      joy2y             : in std_logic_vector(1 downto 0);
+      btn2              : in std_logic;
+      tilePointer       : buffer std_logic_vector(7 downto 0);
+      tileType          : inout std_logic_vector(7 downto 0);
+      readMap           : out std_logic;
+      writeMap          : out std_logic;
+      p1x               : out std_logic_vector(9 downto 0);
+      p1y               : out std_logic_vector(9 downto 0);
+      p2x               : out std_logic_vector(9 downto 0);
+      p2y               : out std_logic_vector(9 downto 0));
+  end component;
 
 -- VGA motor component
   component VGA_MOTOR
@@ -49,10 +69,9 @@ architecture Behavioral of BomberBunnies is
       yPixel	        : in unsigned(9 downto 0);      -- Vertical pixel counter
       readMap           : in std_logic;
       writeMap          : in std_logic;
-      tilePointer       : in integer;
+      tilePointer       : in std_logic_vector(7 downto 0);
       pixelIn           : in std_logic_vector(7 downto 0);
-      writeTile         : in std_logic_vector(7 downto 0);
-      readTile          : out std_logic_vector(7 downto 0);
+      tileType          : inout std_logic_vector(7 downto 0);
       pixelOut          : out std_logic_vector(7 downto 0);
       tilePixelIndex    : out integer;
       tileIndex         : out integer);    
@@ -79,27 +98,6 @@ architecture Behavioral of BomberBunnies is
       p2y               : in unsigned(9 downto 0);               -- Number of pixels on board 16x16x13
       playerPixel       : out std_logic_vector(7 downto 0));     -- pixel from player
            
-  end component;
-
-  -- VGA motor component
-  component CPU
-    port (
-      clk         : in std_logic;                      -- system clock (100 MHz)
-      rst	  : in std_logic;
-      tilePointer : buffer std_logic_vector(7 downto 0);
-      tileIndex   : buffer std_logic_vector(7 downto 0);
-      readTile    : out std_logic;
-      writeTile   : out std_logic;
-      joy1x       : in std_logic_vector(1 downto 0);
-      joy1y       : in std_logic_vector(1 downto 0);
-      btn1        : in std_logic;
-      joy2x       : in std_logic_vector(1 downto 0);
-      joy2y       : in std_logic_vector(1 downto 0);
-      btn2        : in std_logic;
-      p1x         : out std_logic_vector(9 downto 0);
-      p1y         : out std_logic_vector(9 downto 0);
-      p2x         : out std_logic_vector(9 downto 0);
-      p2y         : out std_logic_vector(9 downto 0));
   end component;
 	
   -- intermediate signals between PICT_MEM and VGA_MOTOR
@@ -150,10 +148,9 @@ begin
     yPixel => yPixel,
     readMap => '0',
     writeMap => '0',
-    tilePointer => 0,
+    tilePointer => x"00",
     pixelIn => tilePixel,
-    writeTile => "00000000",
-    --readTile =>,
+    tileType => x"00",
     pixelOut => tilePixelToVGA,
     tilePixelIndex => tilePixelIndexToTILE_MEMORY,
     tileIndex => tileIndexToTILE_MEMORY);
@@ -177,16 +174,16 @@ begin
   U5 : CPU port map (
     clk => clk,
     rst => rst,
---    tilePointer => ,
---    tileIndex => ,
---    readTile => ,
---    writeTile => ,
     joy1x => joy1x,
     joy1y => joy1y,
     btn1 => btn1,
     joy2x => joy2x,
     joy2y => joy2y,
     btn2 => btn2,
+    tilePointer => x"00",
+    tileType => x"00",
+    readMap => '0',
+    writeMap => '0',
     p1x => p1x,
     p1y => p1y,
     p2x => p2x,
