@@ -161,7 +161,7 @@ begin  -- behavioral
       
       -- Draw closest player ontop
       if p1y > p2y then
-        if p1Draw = '1' then
+        if p1Draw = '1' and not player1(player1Index) = transparent then
           playerPixel <= player1(player1Index);
         elsif p2Draw = '1' then
           playerPixel <= player2(player2Index);
@@ -169,7 +169,7 @@ begin  -- behavioral
           playerPixel <= transparent;
         end if;
       else
-        if p2Draw = '1' then
+        if p2Draw = '1' and not player2(player2Index) = transparent then
           playerPixel <= player2(player2Index);
         elsif p1Draw = '1' then
           playerPixel <= player1(player1Index);

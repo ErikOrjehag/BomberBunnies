@@ -33,7 +33,7 @@ XILINX_INIT = source /sw/xilinx/ise_12.4i/ISE_DS/settings64.sh;
 PART=xc6slx16-3-csg324
 
 
-BomberBunnies.%: S=BomberBunnies.vhd CPU.vhd VGA_MOTOR.vhd MAP_MEMORY.vhd SPRITE_MEMORY.vhd TILE_MEMORY.vhd
+BomberBunnies.%: S=BomberBunnies.vhd CPU.vhd VGA_MOTOR.vhd MAP_MEMORY.vhd SPRITE_MEMORY.vhd TILE_MEMORY.vhd PROGRAM_MEMORY.vhd MICRO_MEMORY.vhd
 BomberBunnies.%: T=CPU_tb.vhd
 BomberBunnies.%: U=Nexys3.ucf
 #VGA_lab.%: U=Nexys3.ucf

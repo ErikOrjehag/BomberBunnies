@@ -7,6 +7,9 @@
 -------------------------------------------------------------------------------
 
 
+-- FIX WRITING TO PM FROM BOTH BUS AND PROGRAM_MEMORY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 -- library declaration
 library IEEE;                           -- basic IEEE library
 use IEEE.STD_LOGIC_1164.ALL;            -- IEEE library for the unsigned type
@@ -39,66 +42,25 @@ end CPU;
 -- architecture
 architecture behavioral of CPU is
 
+  -- program memory component
+  component PROGRAM_MEMORY
+    port (
+      pAddr : in  unsigned(11 downto 0);
+      pData : inout std_logic_vector(21 downto 0));
+  end component;
+
+  -- Micro memory component
+  component MICRO_MEMORY
+    port (
+      uAddr : in  unsigned(8 downto 0);
+      uData : out std_logic_vector(28 downto 0));
+  end component;
+
+  signal PM : std_logic_vector(21 downto 0);
+  signal uPM : std_logic_vector(28 downto 0);
+
   -- Bus
   signal buss : std_logic_vector(21 downto 0) := (others => '0');
-  
-  -- Program memory
-  type pm_t is array (0 to 15) of std_logic_vector(21 downto 0);  --4095
-  signal PM : pm_t := (
-    -- OP  GRx M     Addr
-    b"00000_100_00_000010001011",
-    b"00000_101_00_000010000000",
-    b"00000_110_00_000000100000",
-    b"00000_111_00_000000100000",
-    b"00000_000_00_000000000000",
-    b"00000_000_00_000000000000",
-    b"00000_000_00_000000000000",
-    b"00000_000_00_000000000000",
-    b"00000_000_00_000000000000",
-    b"00000_000_00_000000000000",
-    b"00000_000_00_000000000000",
-    b"00000_000_00_000000000000",
-    b"00000_000_00_000000000000",
-    b"00000_000_00_000000000000",
-    b"00000_000_00_000000000000",
-    b"00000_000_00_000000000000"
-  );
-
-  -- Micro memory
-  type upm_t is array (0 to 17) of std_logic_vector(28 downto 0);  --511
-  signal uPM : upm_t := (
-    -- AR 0110
- --  ALU   TB   FB  S P LC  SEQ  uADR
-    b"0000_0100_0001_0_0_00_0000_000000000",  -- Hämtfas
-    b"0000_0011_0010_0_1_00_0000_000000000",
-    
-    b"0000_0000_0000_0_0_00_0010_000000000",  -- Start
-    
-    b"0000_0010_0001_0_0_00_0001_000000000",  -- Direktadressering
-    
-    b"0000_0100_0001_0_1_00_0001_000000000",  -- Immediate
-    
-    b"0000_0010_0001_0_0_00_0000_000000000",  -- Indirekt adressering
-    b"0000_0011_0001_0_0_00_0001_000000000",
-    
-    b"0000_0110_0000_0_0_00_0000_000000000",  -- Indexerad adressering
-    b"1000_0101_0000_0_0_00_0000_000000000",
-    b"0000_0110_0001_0_0_00_0001_000000000",
-    
-    
-    b"0000_0011_0101_0_0_00_0011_000000000",  -- LOAD (GRx, M, ADR)
-    
-    b"0000_0101_0011_0_0_00_0011_000000000",  -- STORE (GRx, M, ADR)
-    
-    b"0001_0101_0000_0_0_00_0000_000000000",  -- ADD (GRx, M, ADR)
-    b"0100_0011_0000_0_0_00_0000_000000000",
-    b"0000_0110_0101_0_0_00_0011_000000000",
-    
-    b"0001_0101_0000_0_0_00_0000_000000000",  -- SUB (GRx, M, ADR)
-    b"0101_0011_0000_0_0_00_0000_000000000",
-    b"0000_0110_0101_0_0_00_0011_000000000"
-    
-  );
 
   -- GRx
   type grx_t is array (0 to 7) of std_logic_vector(21 downto 0);
@@ -168,9 +130,9 @@ architecture behavioral of CPU is
   signal IR : std_logic_vector(21 downto 0) := (others => '0');
   signal AR : std_logic_vector(21 downto 0) := (others => '0');
   signal PC : std_logic_vector(11 downto 0) := (others => '0');
-  signal ASR : std_logic_vector(11 downto 0) := (others => '0');
+  signal ASR : unsigned(11 downto 0) := (others => '0');
   signal LC : std_logic_vector(8 downto 0) := (others => '0');  --fit uAddr
-  signal uPC : std_logic_vector(8 downto 0) := (others => '0');
+  signal uPC : unsigned(8 downto 0) := (others => '0');
 
   -- Flags
   signal O : std_logic := '0';
@@ -178,6 +140,7 @@ architecture behavioral of CPU is
   signal N : std_logic := '0';
   signal Z : std_logic := '0';
   signal L : std_logic := '0';
+
 
 begin  -- behavioral
 
@@ -188,7 +151,7 @@ begin  -- behavioral
   p2y <= GRx(7)(9 downto 0);
 
   -- uPM signals
-  upm_instr <= uPM(to_integer(unsigned(uPC)));
+  upm_instr <= uPM;
   
   upm_alu   <= upm_instr(28 downto 25);
   upm_tb    <= upm_instr(24 downto 21);
@@ -207,23 +170,24 @@ begin  -- behavioral
   
   -- TB
   GRx_x <= to_integer(unsigned(ir_grx)) when (upm_s = "1") else to_integer(unsigned(ir_m));
-  
-  buss <= buss                          when upm_tb = "0000" else (others => 'Z');
-  buss <= "0000000000" & ASR            when upm_tb = "0001" else (others => 'Z');
-  buss <= IR                            when upm_tb = "0010" else (others => 'Z');
-  buss <= PM(to_integer(unsigned(ASR))) when upm_tb = "0011" else (others => 'Z');
-  buss <= "0000000000" & PC             when upm_tb = "0100" else (others => 'Z');
-  buss <= GRx(GRx_x)                    when upm_tb = "0101" else (others => 'Z');
-  buss <= AR                            when upm_tb = "0110" else (others => 'Z');
-  buss <= buss                          when upm_tb = "0111" else (others => 'Z');  --ledig
-  buss <= x"000" & "00" & tileTypeRead  when upm_tb = "1000" else (others => 'Z');
-  buss <= x"000" & "00" & tilePointer   when upm_tb = "1001" else (others => 'Z');
-  buss <= x"00000" & joy1x              when upm_tb = "1010" else (others => 'Z');
-  buss <= x"00000" & joy1y              when upm_tb = "1011" else (others => 'Z');
-  buss <= x"00000" & "0" & btn1         when upm_tb = "1100" else (others => 'Z');
-  buss <= x"00000" & joy2x              when upm_tb = "1101" else (others => 'Z');
-  buss <= x"00000" & joy2y              when upm_tb = "1110" else (others => 'Z');
-  buss <= x"00000" & "0" & btn1         when upm_tb = "1111" else (others => 'Z');
+
+  -- select when?
+  buss <= buss                                  when upm_tb = "0000" else (others => 'Z');
+  buss <= "0000000000" & std_logic_vector(ASR)  when upm_tb = "0001" else (others => 'Z');
+  buss <= IR                                    when upm_tb = "0010" else (others => 'Z');
+  buss <= PM                                    when upm_tb = "0011" else (others => 'Z');
+  buss <= "0000000000" & PC                     when upm_tb = "0100" else (others => 'Z');
+  buss <= GRx(GRx_x)                            when upm_tb = "0101" else (others => 'Z');
+  buss <= AR                                    when upm_tb = "0110" else (others => 'Z');
+  buss <= buss                                  when upm_tb = "0111" else (others => 'Z');  --ledig
+  buss <= x"000" & "00" & tileTypeRead          when upm_tb = "1000" else (others => 'Z');
+  buss <= x"000" & "00" & tilePointer           when upm_tb = "1001" else (others => 'Z');
+  buss <= x"00000" & joy1x                      when upm_tb = "1010" else (others => 'Z');
+  buss <= x"00000" & joy1y                      when upm_tb = "1011" else (others => 'Z');
+  buss <= x"00000" & "0" & btn1                 when upm_tb = "1100" else (others => 'Z');
+  buss <= x"00000" & joy2x                      when upm_tb = "1101" else (others => 'Z');
+  buss <= x"00000" & joy2y                      when upm_tb = "1110" else (others => 'Z');
+  buss <= x"00000" & "0" & btn1                 when upm_tb = "1111" else (others => 'Z');
 
   process(clk)
   begin
@@ -232,9 +196,9 @@ begin  -- behavioral
       -- FB
       case upm_fb is
         when "0000" => null;
-        when "0001" => ASR <= buss(11 downto 0);
+        when "0001" => ASR <= unsigned(buss(11 downto 0));
         when "0010" => IR <= buss;
-        when "0011" => PM(to_integer(unsigned(ASR))) <= buss;
+        when "0011" => PM <= buss;
         when "0100" => PC <= buss(11 downto 0);
         when "0101" => GRx(GRx_x) <= buss;
         when "0110" => null;            --AR
@@ -301,33 +265,33 @@ begin  -- behavioral
 
       -- SEQ
       case upm_seq is
-        when "0000" => uPC <= std_logic_vector(unsigned(uPC) + 1);
-        when "0001" => uPC <= k1(to_integer(unsigned(ir_op)));
-        when "0010" => uPC <= k2(to_integer(unsigned(ir_m)));
+        when "0000" => uPC <= uPC + 1;
+        when "0001" => uPC <= unsigned(k1(to_integer(unsigned(ir_op))));
+        when "0010" => uPC <= unsigned(k2(to_integer(unsigned(ir_m))));
         when "0011" => uPC <= (others => '0');
-        when "0100" => uPC <= upm_uaddr;
+        when "0100" => uPC <= unsigned(upm_uaddr);
         when "0101" => null;            --ledig
         when "0110" => null;            --ledig
         when "0111" => null;            --ledig
         when "1000" =>
           if Z = '1' then
-            uPC <= upm_uaddr;
+            uPC <= unsigned(upm_uaddr);
           end if;
         when "1001" =>
           if N = '1' then
-            uPC <= upm_uaddr;
+            uPC <= unsigned(upm_uaddr);
           end if;
         when "1010" =>
           if C = '1' then
-            uPC <= upm_uaddr;
+            uPC <= unsigned(upm_uaddr);
           end if;
         when "1011" => 
           if O = '1' then
-            uPC <= upm_uaddr;
+            uPC <= unsigned(upm_uaddr);
           end if;
         when "1100" =>
           if L = '1' then
-            uPC <= upm_uaddr;
+            uPC <= unsigned(upm_uaddr);
           end if;
         when "1101" => null;            --ledig
         when "1110" => null;            --ledig
@@ -337,5 +301,12 @@ begin  -- behavioral
       
     end if;                             -- rising_edge(clk)
   end process;
+
+  -- Program memory component connection (PM)
+  U1 : PROGRAM_MEMORY port map (pAddr => ASR, pData => PM);
+  
+
+  -- Micro memory component connection (uPM)
+  U2 : MICRO_MEMORY port map (uAddr => uPC, uData => uPM);
 
 end behavioral;
