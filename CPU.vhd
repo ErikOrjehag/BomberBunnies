@@ -46,7 +46,7 @@ architecture behavioral of CPU is
   component PROGRAM_MEMORY
     port (
       pAddr : in  unsigned(11 downto 0);
-      pData : inout std_logic_vector(21 downto 0));
+      pData : out std_logic_vector(21 downto 0));
   end component;
 
   -- Micro memory component
@@ -71,8 +71,8 @@ architecture behavioral of CPU is
     "0000000000000000000000",
     "0000000000000000000000",
     "0000000000000000000000",
-    "0000000000000000001000",
-    "0000000000000000001100"
+    "0000000000000000000000",
+    "0000000000000000000000"
   );
   signal GRx_x  : integer := 0;
 
@@ -129,6 +129,7 @@ architecture behavioral of CPU is
   -- Registers
   signal IR : std_logic_vector(21 downto 0) := (others => '0');
   signal AR : std_logic_vector(21 downto 0) := (others => '0');
+--  signal PC : std_logic_vector(11 downto 0) := (0 => '1', 1 => '1', others => '0');
   signal PC : std_logic_vector(11 downto 0) := (others => '0');
   signal ASR : unsigned(11 downto 0) := (others => '0');
   signal LC : std_logic_vector(8 downto 0) := (others => '0');  --fit uAddr
@@ -169,13 +170,13 @@ begin  -- behavioral
   ir_op     <= IR(21 downto 17);
   
   -- TB
-  GRx_x <= to_integer(unsigned(ir_grx)) when (upm_s = "1") else to_integer(unsigned(ir_m));
+  GRx_x <= to_integer(unsigned(ir_grx)) when (upm_s = "0") else to_integer(unsigned(ir_m));
 
   -- select when?
   buss <= buss                                  when upm_tb = "0000" else (others => 'Z');
   buss <= "0000000000" & std_logic_vector(ASR)  when upm_tb = "0001" else (others => 'Z');
   buss <= IR                                    when upm_tb = "0010" else (others => 'Z');
-  --buss <= PM                                    when upm_tb = "0011" else (others => 'Z');
+  buss <= PM                                    when upm_tb = "0011" else (others => 'Z');
   buss <= "0000000000" & PC                     when upm_tb = "0100" else (others => 'Z');
   buss <= GRx(GRx_x)                            when upm_tb = "0101" else (others => 'Z');
   buss <= AR                                    when upm_tb = "0110" else (others => 'Z');
@@ -198,7 +199,7 @@ begin  -- behavioral
         when "0000" => null;
         when "0001" => ASR <= unsigned(buss(11 downto 0));
         when "0010" => IR <= buss;
-        when "0011" => PM <= buss;
+        --when "0011" => PM <= buss;
         when "0100" => PC <= buss(11 downto 0);
         when "0101" => GRx(GRx_x) <= buss;
         when "0110" => null;            --AR

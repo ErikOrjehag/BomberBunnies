@@ -28,7 +28,7 @@ ARCHITECTURE behavior OF CPU_tb IS
     p2x               : out std_logic_vector(9 downto 0);
     p2y               : out std_logic_vector(9 downto 0));
   END COMPONENT;
-
+  
   --Inputs
   signal clk : std_logic:= '0';
   signal rst : std_logic:= '0';
