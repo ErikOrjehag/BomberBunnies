@@ -6,10 +6,6 @@
 -- Gustav Svennas
 -------------------------------------------------------------------------------
 
-
--- FIX WRITING TO PM FROM BOTH BUS AND PROGRAM_MEMORY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
 -- library declaration
 library IEEE;                           -- basic IEEE library
 use IEEE.STD_LOGIC_1164.ALL;            -- IEEE library for the unsigned type
@@ -72,7 +68,7 @@ architecture behavioral of CPU is
     "0000000000000000000000",
     "0000000000000000000000",
     "0000000000000000000000",
-    "0000000000000000000000"
+    "0000000000000000100000"
   );
   signal GRx_x  : integer := 0;
 
@@ -90,12 +86,12 @@ architecture behavioral of CPU is
   type k1_t is array (0 to 15) of std_logic_vector(8 downto 0);  --31
   signal k1 : k1_t := (
 
-    "000001010",                       -- (0000) LOAD (rad 00A)
-    "000001011",                       -- (0001) STORE (rad 00B)
-    "000001100",                       -- (0010) ADD (rad 00C)
-    "000001111",                       -- (0011) SUB (rad 00F)
-    "000000000",
-    "000000000",
+    "000001010",                        -- (00000) LOAD (rad 00A)
+    "000001011",                        -- (00001) STORE (rad 00B)
+    "000001100",                        -- (00010) ADD (rad 00C)
+    "000001111",                        -- (00011) SUB (rad 00F)
+    "000010010",                        -- (00100) JUMP (rad 19)
+    "000010011",                        -- (00101) SLEEP (ITR)
     "000000000",
     "000000000",
     "000000000",
@@ -128,7 +124,7 @@ architecture behavioral of CPU is
   
   -- Registers
   signal IR : std_logic_vector(21 downto 0) := (others => '0');
-  signal AR : std_logic_vector(21 downto 0) := (others => '0');
+  signal AR : std_logic_vector(11 downto 0) := (others => '0');
 --  signal PC : std_logic_vector(11 downto 0) := (0 => '1', 1 => '1', others => '0');
   signal PC : std_logic_vector(11 downto 0) := (others => '0');
   signal ASR : unsigned(11 downto 0) := (others => '0');
@@ -179,7 +175,7 @@ begin  -- behavioral
   buss <= PM                                    when upm_tb = "0011" else (others => 'Z');
   buss <= "0000000000" & PC                     when upm_tb = "0100" else (others => 'Z');
   buss <= GRx(GRx_x)                            when upm_tb = "0101" else (others => 'Z');
-  buss <= AR                                    when upm_tb = "0110" else (others => 'Z');
+  buss <= "0000000000" & AR                     when upm_tb = "0110" else (others => 'Z');
   buss <= buss                                  when upm_tb = "0111" else (others => 'Z');  --ledig
   buss <= x"000" & "00" & tileTypeRead          when upm_tb = "1000" else (others => 'Z');
   buss <= x"000" & "00" & tilePointer           when upm_tb = "1001" else (others => 'Z');
@@ -218,14 +214,14 @@ begin  -- behavioral
       -- ALU
       case upm_alu is
         when "0000" => null;            --noop
-        when "0001" => AR <= buss;
-        when "0010" => AR <= not buss;
+        when "0001" => AR <= buss(11 downto 0);
+        when "0010" => AR <= not buss(11 downto 0);
         when "0011" => AR <= (others => '0');
-        when "0100" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss));
-        when "0101" => AR <= std_logic_vector(unsigned(AR) - unsigned(buss));
-        when "0110" => AR <= AR and buss;
-        when "0111" => AR <= AR or buss;
-        when "1000" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss));  --no flags
+        when "0100" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss(11 downto 0)));
+        when "0101" => AR <= std_logic_vector(unsigned(AR) - unsigned(buss(11 downto 0)));
+        when "0110" => AR <= AR and buss(11 downto 0);
+        when "0111" => AR <= AR or buss(11 downto 0);
+        when "1000" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss(11 downto 0)));  --no flags
         when "1001" => AR <= std_logic_vector(shift_left(unsigned(AR), 1));
         when "1010" => null;            --ledig
         when "1011" => null;            --ledig
@@ -239,13 +235,18 @@ begin  -- behavioral
       if not(upm_alu = "1000") then
         O <= '0';
         C <= '0';
-        N <= AR(21);
+        N <= AR(11);
         if AR = "0000000000000000000000" then
           Z <= '1';
         else
           Z <= '0';
         end if;
+      end if;
+
+      if LC = "000000000" then
         L <= '0';
+      else
+        L <= '1';
       end if;
   
       -- P
