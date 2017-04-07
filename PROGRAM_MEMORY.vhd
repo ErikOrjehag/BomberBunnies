@@ -6,7 +6,7 @@ entity PROGRAM_MEMORY is
   
   port (
     pAddr : in  unsigned(11 downto 0);
-    pData : inout std_logic_vector(21 downto 0)
+    pData : out std_logic_vector(21 downto 0)
     );
   
 end PROGRAM_MEMORY;

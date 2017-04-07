@@ -29,7 +29,7 @@ entity CPU is
     btn2                : in std_logic;
     tilePointer         : buffer std_logic_vector(7 downto 0) := (others => '0');
     tileTypeRead        : in std_logic_vector(7 downto 0);
-    tileTypeWrite        : out std_logic_vector(7 downto 0);
+    tileTypeWrite       : out std_logic_vector(7 downto 0);
     readMap             : out std_logic;
     writeMap            : out std_logic;
     p1x                 : out std_logic_vector(9 downto 0);
@@ -71,8 +71,8 @@ architecture behavioral of CPU is
     "0000000000000000000000",
     "0000000000000000000000",
     "0000000000000000000000",
-    "0000000000000000000000",
-    "0000000000000000000000"
+    "0000000000000000001000",
+    "0000000000000000001100"
   );
   signal GRx_x  : integer := 0;
 
@@ -175,7 +175,7 @@ begin  -- behavioral
   buss <= buss                                  when upm_tb = "0000" else (others => 'Z');
   buss <= "0000000000" & std_logic_vector(ASR)  when upm_tb = "0001" else (others => 'Z');
   buss <= IR                                    when upm_tb = "0010" else (others => 'Z');
-  buss <= PM                                    when upm_tb = "0011" else (others => 'Z');
+  --buss <= PM                                    when upm_tb = "0011" else (others => 'Z');
   buss <= "0000000000" & PC                     when upm_tb = "0100" else (others => 'Z');
   buss <= GRx(GRx_x)                            when upm_tb = "0101" else (others => 'Z');
   buss <= AR                                    when upm_tb = "0110" else (others => 'Z');
