@@ -67,7 +67,7 @@ architecture behavioral of CPU is
     "0000000000000000000000",
     "0000000000000000000000",
     "0000000000000000000000",
-    "0000000000000000000000",
+    "0000000000000000010001",
     "0000000000000000100000"
   );
   signal GRx_x  : integer := 0;
@@ -169,23 +169,43 @@ begin  -- behavioral
   GRx_x <= to_integer(unsigned(ir_grx)) when (upm_s = "0") else to_integer(unsigned(ir_m));
 
   -- select when?
-  buss <= buss                                  when upm_tb = "0000" else (others => 'Z');
-  buss <= "0000000000" & std_logic_vector(ASR)  when upm_tb = "0001" else (others => 'Z');
-  buss <= IR                                    when upm_tb = "0010" else (others => 'Z');
-  buss <= PM                                    when upm_tb = "0011" else (others => 'Z');
-  buss <= "0000000000" & PC                     when upm_tb = "0100" else (others => 'Z');
-  buss <= GRx(GRx_x)                            when upm_tb = "0101" else (others => 'Z');
-  buss <= "0000000000" & AR                     when upm_tb = "0110" else (others => 'Z');
-  buss <= buss                                  when upm_tb = "0111" else (others => 'Z');  --ledig
-  buss <= x"000" & "00" & tileTypeRead          when upm_tb = "1000" else (others => 'Z');
-  buss <= x"000" & "00" & tilePointer           when upm_tb = "1001" else (others => 'Z');
-  buss <= x"00000" & joy1x                      when upm_tb = "1010" else (others => 'Z');
-  buss <= x"00000" & joy1y                      when upm_tb = "1011" else (others => 'Z');
-  buss <= x"00000" & "0" & btn1                 when upm_tb = "1100" else (others => 'Z');
-  buss <= x"00000" & joy2x                      when upm_tb = "1101" else (others => 'Z');
-  buss <= x"00000" & joy2y                      when upm_tb = "1110" else (others => 'Z');
-  buss <= x"00000" & "0" & btn1                 when upm_tb = "1111" else (others => 'Z');
+--  buss <= buss                                  when upm_tb = "0000" else (others => 'Z');
+--  buss <= "0000000000" & std_logic_vector(ASR)  when upm_tb = "0001" else (others => 'Z');
+--  buss <= IR                                    when upm_tb = "0010" else (others => 'Z');
+--  buss <= PM                                    when upm_tb = "0011" else (others => 'Z');
+--  buss <= "0000000000" & PC                     when upm_tb = "0100" else (others => 'Z');
+--  buss <= GRx(GRx_x)                            when upm_tb = "0101" else (others => 'Z');
+--  buss <= "0000000000" & AR                     when upm_tb = "0110" else (others => 'Z');
+--  buss <= buss                                  when upm_tb = "0111" else (others => 'Z');  --ledig
+--  buss <= x"000" & "00" & tileTypeRead          when upm_tb = "1000" else (others => 'Z');
+--  buss <= x"000" & "00" & tilePointer           when upm_tb = "1001" else (others => 'Z');
+--  buss <= x"00000" & joy1x                      when upm_tb = "1010" else (others => 'Z');
+--  buss <= x"00000" & joy1y                      when upm_tb = "1011" else (others => 'Z');
+--  buss <= x"00000" & "0" & btn1                 when upm_tb = "1100" else (others => 'Z');
+--  buss <= x"00000" & joy2x                      when upm_tb = "1101" else (others => 'Z');
+--  buss <= x"00000" & joy2y                      when upm_tb = "1110" else (others => 'Z');
+--  buss <= x"00000" & "0" & btn1                 when upm_tb = "1111" else (others => 'Z');
 
+  with upm_tb select buss <=
+    "0000000000" & std_logic_vector(ASR) when "0001", 
+    IR                                   when "0010",
+    PM                                   when "0011",
+    "0000000000" & PC                    when "0100",
+    GRx(GRx_x)                           when "0101",
+    "0000000000" & AR                    when "0110",
+                                            --"0111" --ledig
+    x"000" & "00" & tileTypeRead         when "1000",
+    x"000" & "00" & tilePointer          when "1001",
+    x"00000" & joy1x                     when "1010",
+    x"00000" & joy1y                     when "1011",
+    x"00000" & "0" & btn1                when "1100",
+    x"00000" & joy2x                     when "1101",
+    x"00000" & joy2y                     when "1110",
+    x"00000" & "0" & btn1                when "1111",
+    buss                                 when others;
+
+  L <= '0' when LC = "000000000" else '1';
+  
   process(clk)
   begin
     if rising_edge(clk) then
@@ -242,12 +262,6 @@ begin  -- behavioral
           Z <= '0';
         end if;
       end if;
-
-      if LC = "000000000" then
-        L <= '0';
-      else
-        L <= '1';
-      end if;
   
       -- P
       case upm_p is
@@ -260,7 +274,7 @@ begin  -- behavioral
       case upm_lc is
         when "00" => null;
         when "01" => LC <= std_logic_vector(unsigned(LC) - 1);
-        when "10" => LC <= "0" & buss(7 downto 0);
+        when "10" => LC <= buss(8 downto 0);
         when "11" => LC <= upm_uaddr;
         when others => null;
       end case;
@@ -294,6 +308,8 @@ begin  -- behavioral
         when "1100" =>
           if L = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "1101" => null;            --ledig
         when "1110" => null;            --ledig
