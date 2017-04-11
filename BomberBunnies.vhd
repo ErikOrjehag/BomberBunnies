@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- VGA lab
+-- BomberBunnies
 -- TEAM REG
 
 
@@ -167,7 +167,7 @@ begin
     hSync=>hSync,
     vSync=>vSync);
 
-  U2 : MAP_MEMORY port map (--
+  U2 : MAP_MEMORY port map (
     clk => clk,
     xPixel => xPixel,
     yPixel => yPixel,
