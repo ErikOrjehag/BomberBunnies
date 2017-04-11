@@ -134,8 +134,24 @@ architecture Behavioral of BomberBunnies is
   signal joy2x : std_logic_vector(1 downto 0);
   signal joy2y : std_logic_vector(1 downto 0);
   signal btn2  : std_logic;
+
+  signal clkDiv : unsigned(20 downto 0) := (others => '0');
+  signal slowClk : std_logic := '0';
 	
 begin
+
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      if rst='1' or clkDiv = 100000 then
+	clkDiv <= (others => '0');
+      else
+	clkDiv <= clkDiv + 1;
+      end if;
+    end if;
+  end process;
+
+  slowClk <= '1' when (clkDiv = 0) else '0';
 
   -- picture memory component connection
   U1 : VGA_MOTOR port map(
@@ -182,7 +198,7 @@ begin
     playerPixel => playerPixel);
 
   U5 : CPU port map (--
-    clk => clk,
+    clk => slowClk,
     rst => rst,
     joy1x => joy1x,
     joy1y => joy1y,

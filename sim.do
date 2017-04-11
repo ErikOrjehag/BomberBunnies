@@ -28,4 +28,4 @@ add wave \
 {sim:/cpu_tb/uut/upc } \
 {sim:/cpu_tb/uut/lc } \
 {sim:/cpu_tb/uut/l } 
-run 1000000
+run 100000000

@@ -67,8 +67,8 @@ architecture behavioral of CPU is
     "0000000000000000000000",
     "0000000000000000000000",
     "0000000000000000000000",
-    "0000000000000000010001",
-    "0000000000000000100000"
+    "0000000000000000000000",
+    "0000000000000001000000"
   );
   signal GRx_x  : integer := 0;
 
@@ -128,7 +128,7 @@ architecture behavioral of CPU is
 --  signal PC : std_logic_vector(11 downto 0) := (0 => '1', 1 => '1', others => '0');
   signal PC : std_logic_vector(11 downto 0) := (others => '0');
   signal ASR : unsigned(11 downto 0) := (others => '0');
-  signal LC : std_logic_vector(8 downto 0) := (others => '0');  --fit uAddr
+  signal LC : std_logic_vector(21 downto 0) := (others => '0');  --fit uAddr
   signal uPC : unsigned(8 downto 0) := (others => '0');
 
   -- Flags
@@ -204,7 +204,7 @@ begin  -- behavioral
     x"00000" & "0" & btn1                when "1111",
     buss                                 when others;
 
-  L <= '0' when LC = "000000000" else '1';
+  L <= '0' when LC = (LC'range => '0') else '1';
   
   process(clk)
   begin
@@ -256,7 +256,7 @@ begin  -- behavioral
         O <= '0';
         C <= '0';
         N <= AR(11);
-        if AR = "0000000000000000000000" then
+        if AR = (AR'range => '0') then
           Z <= '1';
         else
           Z <= '0';
@@ -274,8 +274,8 @@ begin  -- behavioral
       case upm_lc is
         when "00" => null;
         when "01" => LC <= std_logic_vector(unsigned(LC) - 1);
-        when "10" => LC <= buss(8 downto 0);
-        when "11" => LC <= upm_uaddr;
+        when "10" => LC <= buss;
+        when "11" => LC <= "0000000000000" & upm_uaddr;
         when others => null;
       end case;
 
