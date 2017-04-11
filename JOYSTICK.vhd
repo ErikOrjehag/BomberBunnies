@@ -13,24 +13,18 @@ entity JOYSTICK is
   port (
     clk         : in  std_logic;          -- system clock
     rst         : in  std_logic;
-    slowClock   : in  std_logic;          -- 67 kHz clock
-    clkout      : out std_logic;          -- clock to slow clock
-    jstk1x      : out std_logic_vector(9 downto 0) := (others => '0');
-    jstk1y      : out std_logic_vector(9 downto 0) := (others => '0');
-    btn1        : out std_logic;
-    jstk2x      : out std_logic_vector(9 downto 0) := (others => '0');
-    jstk2y      : out std_logic_vector(9 downto 0) := (others => '0');
-    btn2        : out std_logic;
 
-    -- ????? Some ports on joystick, others?
-    sndRec      : in  STD_LOGIC;                        -- Send receive, initializes data read/write
-    DIN         : in  STD_LOGIC_VECTOR (7 downto 0);   	-- Data that is to be sent to the slave
+    -- Outputs
+    joyX      : out std_logic_vector(9 downto 0) := (others => '0');
+    joyY      : out std_logic_vector(9 downto 0) := (others => '0');
+    btn       : out std_logic;
+
+    -- Joystick pins
     MISO        : in  STD_LOGIC;			-- Master input slave output
-    MOSI        : out  STD_LOGIC;			-- Master out slave in
-    SCLK        : out  STD_LOGIC;			-- Serial clock, slowClock??
-    BUSY        : out  STD_LOGIC;			-- Busy if sending/receiving data
-    DOUT        : out  STD_LOGIC_VECTOR (7 downto 0)	-- Data read from the slave
-    );
+    MOSI        : out  STD_LOGIC := '0';			-- Master out slave in
+    SCLK        : out  STD_LOGIC;			-- Serial clock
+    BUSY        : out  STD_LOGIC			-- Busy if sending/receiving data
+  );
 
 end JOYSTICK;
 
@@ -40,7 +34,8 @@ architecture Behavioral of JOYSTICK is
     port (
       clk    : in  std_logic;           -- system clock
       rst    : in  std_logic;           -- rst
-      clkout : out std_logic);          -- 67 kHz clock
+      clkout : buffer std_logic);          -- 67 kHz clock
+  end component;
 
 --===================================================================================
 -- 			Signals and Constants
@@ -52,83 +47,81 @@ architecture Behavioral of JOYSTICK is
   -- Present state, Next State
   signal STATE, NSTATE : state_type;
 
-  signal bitCount : STD_LOGIC_VECTOR(3 downto 0) := X"0";       -- Number bits read/written
-  signal rSR : STD_LOGIC_VECTOR(7 downto 0) := X"00";		-- Read shift register
-  signal wSR : STD_LOGIC_VECTOR(7 downto 0) := X"00";		-- Write shift register
+  signal bitCount : unsigned(3 downto 0) := (others => '0');       -- Number bits read/written
+  signal rSR : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');		-- Read shift register
+  signal wSR : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');		-- Write shift register
 
   signal CE : STD_LOGIC := '0';		       			-- Clock enable, controls serial
                                                                 -- clock signal sent to slave
+  signal slowClock : std_logic;          -- 67 kHz clock
 
+  signal lowX : std_logic_vector(7 downto 0) := (others => '0');
+  signal lowY : std_logic_vector(7 downto 0) := (others => '0');
+  signal byteCount : unsigned(2 downto 0) := (others => '0');
+
+  signal sndRec : STD_LOGIC := '0';                        -- Send receive, initializes data read/write
+  
 --===================================================================================
 --              		Implementation
 --===================================================================================
 begin  -- Behavioral
 
   -- Serial clock output, allow if clock enable asserted
-  SCLK <= CLK when (CE = '1') else '0';
-  -- Master out slave in, value always stored in MSB of write shift register
-  MOSI <= wSR(7);
-  -- Connect data output bus to read shift register
-  DOUT <= rSR;
-	
-  ---------------------------------------
-  -- Write Shift Register
-  -- slave reads on rising edges,
-  -- change output data on falling edges
-  ---------------------------------------
-  process(CLK, RST) begin
-    if(RST = '1') then
-      wSR <= X"00";
-    elsif falling_edge(CLK) then
-      -- Enable shift during RxTx state only
-      case(STATE) is
-        when Idle =>
-          wSR <= DIN;
-      
-        when Init =>
-          wSR <= wSR;
-      
-        when RxTx =>
-          if(CE = '1') then
-            wSR <= wSR(6 downto 0) & '0';
-          end if;
-      
-        when Done =>
-          wSR <= wSR;
-      
-      end case;
-    end if;
-  end process;
-
-
-
+  SCLK <= slowClock when (CE = '1') else '0';
 
   ---------------------------------------
   -- Read Shift Register
   -- master reads on rising edges,
   -- slave changes data on falling edges
   ---------------------------------------
-  process(CLK, RST) begin
-    if(RST = '1') then
+  process (CLK, RST) begin
+    if RST = '1' then
       rSR <= X"00";
     elsif rising_edge(CLK) then
       -- Enable shift during RxTx state only
       case(STATE) is
         when Idle =>
           rSR <= rSR;
-      
         when Init =>
           rSR <= rSR;
-      
         when RxTx =>
-          if(CE = '1') then
+          if CE = '1' then
             rSR <= rSR(6 downto 0) & MISO;
-          end if;
-									
+          end if;									
         when Done =>
           rSR <= rSR;
-      
       end case;
+    end if;
+  end process;
+
+  --------------------------
+  -- When Done send to CPU
+  --------------------------
+  process(CLK, RST) begin
+    if RST = '1' then
+      byteCount <= (others => '0');
+    elsif rising_edge(CLK) then
+      if STATE = Done then
+        case byteCount is
+          when "000" =>
+            lowX <= rSR;
+          when "001" =>
+            joyx <= rSR(1 downto 0) & lowX;
+          when "010" =>
+            lowY <= rSR;
+          when "011" =>
+            joyy <= rSR(1 downto 0) & lowY;
+          when "100" =>
+            btn <= rSR(1);
+          when others => null;
+        end case;
+
+        if byteCount = "100" then
+          byteCount <= (others => '0');
+        else
+          byteCount <= byteCount + 1;
+        end if;
+      end if;
     end if;
   end process;
 
@@ -136,7 +129,7 @@ begin  -- Behavioral
   -- State Register
   --------------------------------
   STATE_REGISTER: process(CLK, RST) begin
-    if (RST = '1') then
+    if RST = '1' then
       STATE <= Idle;
     elsif falling_edge(CLK) then
       STATE <= NSTATE;
@@ -197,7 +190,7 @@ begin  -- Behavioral
     
     case (STATE) is
       when Idle =>
-        if sndRec = '1' then
+        if sndRec= '1' then
           NSTATE <= Init;
         else
           NSTATE <= Idle;
