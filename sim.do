@@ -27,5 +27,9 @@ add wave \
 {sim:/cpu_tb/uut/ar } \
 {sim:/cpu_tb/uut/upc } \
 {sim:/cpu_tb/uut/lc } \
+{sim:/cpu_tb/uut/z } \
+{sim:/cpu_tb/uut/o } \
+{sim:/cpu_tb/uut/n } \
+{sim:/cpu_tb/uut/c } \
 {sim:/cpu_tb/uut/l } 
 run 100000000
