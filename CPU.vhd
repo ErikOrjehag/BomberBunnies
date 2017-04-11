@@ -17,11 +17,11 @@ entity CPU is
   port (
     clk                 : in std_logic;                      -- system clock (100 MHz)
     rst	                : in std_logic;
-    joy1x               : in std_logic_vector(1 downto 0) := (others => '0');
-    joy1y               : in std_logic_vector(1 downto 0) := (others => '0');
+    joy1x               : in std_logic_vector(9 downto 0) := (others => '0');
+    joy1y               : in std_logic_vector(9 downto 0) := (others => '0');
     btn1                : in std_logic;
-    joy2x               : in std_logic_vector(1 downto 0) := (others => '0');
-    joy2y               : in std_logic_vector(1 downto 0) := (others => '0');
+    joy2x               : in std_logic_vector(9 downto 0) := (others => '0');
+    joy2y               : in std_logic_vector(9 downto 0) := (others => '0');
     btn2                : in std_logic;
     tilePointer         : buffer std_logic_vector(7 downto 0) := (others => '0');
     tileTypeRead        : in std_logic_vector(7 downto 0);
@@ -168,24 +168,6 @@ begin  -- behavioral
   -- TB
   GRx_x <= to_integer(unsigned(ir_grx)) when (upm_s = "0") else to_integer(unsigned(ir_m));
 
-  -- select when?
---  buss <= buss                                  when upm_tb = "0000" else (others => 'Z');
---  buss <= "0000000000" & std_logic_vector(ASR)  when upm_tb = "0001" else (others => 'Z');
---  buss <= IR                                    when upm_tb = "0010" else (others => 'Z');
---  buss <= PM                                    when upm_tb = "0011" else (others => 'Z');
---  buss <= "0000000000" & PC                     when upm_tb = "0100" else (others => 'Z');
---  buss <= GRx(GRx_x)                            when upm_tb = "0101" else (others => 'Z');
---  buss <= "0000000000" & AR                     when upm_tb = "0110" else (others => 'Z');
---  buss <= buss                                  when upm_tb = "0111" else (others => 'Z');  --ledig
---  buss <= x"000" & "00" & tileTypeRead          when upm_tb = "1000" else (others => 'Z');
---  buss <= x"000" & "00" & tilePointer           when upm_tb = "1001" else (others => 'Z');
---  buss <= x"00000" & joy1x                      when upm_tb = "1010" else (others => 'Z');
---  buss <= x"00000" & joy1y                      when upm_tb = "1011" else (others => 'Z');
---  buss <= x"00000" & "0" & btn1                 when upm_tb = "1100" else (others => 'Z');
---  buss <= x"00000" & joy2x                      when upm_tb = "1101" else (others => 'Z');
---  buss <= x"00000" & joy2y                      when upm_tb = "1110" else (others => 'Z');
---  buss <= x"00000" & "0" & btn1                 when upm_tb = "1111" else (others => 'Z');
-
   with upm_tb select buss <=
     "0000000000" & std_logic_vector(ASR) when "0001", 
     IR                                   when "0010",
@@ -196,11 +178,11 @@ begin  -- behavioral
                                             --"0111" --ledig
     x"000" & "00" & tileTypeRead         when "1000",
     x"000" & "00" & tilePointer          when "1001",
-    x"00000" & joy1x                     when "1010",
-    x"00000" & joy1y                     when "1011",
+    x"000" & joy1x                       when "1010",
+    x"000" & joy1y                       when "1011",
     x"00000" & "0" & btn1                when "1100",
-    x"00000" & joy2x                     when "1101",
-    x"00000" & joy2y                     when "1110",
+    x"000" & joy2x                       when "1101",
+    x"000" & joy2y                       when "1110",
     x"00000" & "0" & btn1                when "1111",
     buss                                 when others;
 

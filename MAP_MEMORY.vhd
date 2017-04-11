@@ -34,7 +34,7 @@ end MAP_MEMORY;
 -- architecture
 architecture behavioral of MAP_MEMORY is
 
-  signal pixelSize : integer := 2;
+  constant pixelSize : integer := 2;
   signal mapIndex : integer := 0;
   signal tilePointerInteger : integer := 0;
   

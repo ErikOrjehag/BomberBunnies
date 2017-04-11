@@ -21,22 +21,22 @@ use IEEE.NUMERIC_STD.ALL;
 -- ====================================================================================
 -- 				  Define Module
 -- ====================================================================================
-entity ClkDiv_66_67kHz is
+entity SLOW_CLOCK is
   Port ( clk : in  STD_LOGIC;			-- 100MHz onboard clock
          rst : in  STD_LOGIC;			-- Reset
-         clkout : out  STD_LOGIC);		-- New clock output
-end ClkDiv_66_67kHz;
+         clkout : buffer  STD_LOGIC);		-- New clock output
+end SLOW_CLOCK;
 
-architecture Behavioral of ClkDiv_66_67kHz is
+architecture Behavioral of SLOW_CLOCK is
 
 -- ====================================================================================
 -- 			       Signals and Constants
 -- ====================================================================================
 
   -- Value to toggle output clock at
-  constant cntEndVal : STD_LOGIC_VECTOR(9 downto 0) := "1011101110";	-- End count value
+  constant cntEndVal : unsigned(9 downto 0) := "1011101110";	-- End count value
   -- Current count
-  signal clkCount : STD_LOGIC_VECTOR(9 downto 0) := (others => '0');	-- Stores count value
+  signal clkCount : unsigned(9 downto 0) := (others => '0');	-- Stores count value
 
 --  ===================================================================================
 --             			Implementation
@@ -55,9 +55,9 @@ begin
     elsif rising_edge(clk) then
       if(clkCount = cntEndVal) then
         clkout <= not clkout;
-        clkCount <= "0000000000";
+        clkCount <= (others => '0');
       else
-        clkCount <= clkCount + '1';
+        clkCount <= clkCount + 1;
       end if;
     end if;
     

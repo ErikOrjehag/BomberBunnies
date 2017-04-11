@@ -18,7 +18,11 @@ entity BomberBunnies is
     vSync	        : out std_logic;                        -- vertical sync
     vgaRed	        : out std_logic_vector(2 downto 0);   -- VGA red
     vgaGreen            : out std_logic_vector(2 downto 0);     -- VGA green
-    vgaBlue	        : out std_logic_vector(2 downto 1));     -- VGA blue
+    vgaBlue	        : out std_logic_vector(2 downto 1);     -- VGA blue
+    MISO                : in  std_logic;			-- Master input slave output
+    MOSI                : out STD_LOGIC;			-- Master out slave in
+    SCLK                : out STD_LOGIC;			-- Serial clock
+    BUSY                : out STD_LOGIC);
 end BomberBunnies;
 
 -- architecture
@@ -29,11 +33,11 @@ architecture Behavioral of BomberBunnies is
     port (
       clk               : in std_logic;                      -- system clock (100 MHz)
       rst	        : in std_logic;
-      joy1x             : in std_logic_vector(1 downto 0);
-      joy1y             : in std_logic_vector(1 downto 0);
+      joy1x             : in std_logic_vector(9 downto 0);
+      joy1y             : in std_logic_vector(9 downto 0);
       btn1              : in std_logic;
-      joy2x             : in std_logic_vector(1 downto 0);
-      joy2y             : in std_logic_vector(1 downto 0);
+      joy2x             : in std_logic_vector(9 downto 0);
+      joy2y             : in std_logic_vector(9 downto 0);
       btn2              : in std_logic;
       tilePointer       : buffer std_logic_vector(7 downto 0);
       tileTypeRead      : in std_logic_vector(7 downto 0);
@@ -101,6 +105,21 @@ architecture Behavioral of BomberBunnies is
       playerPixel       : out std_logic_vector(7 downto 0));     -- pixel from player
            
   end component;
+
+  component JOYSTICK
+    port (
+      clk         : in  std_logic;          -- system clock
+      rst         : in  std_logic;
+      joyX        : out std_logic_vector(9 downto 0);
+      joyY        : out std_logic_vector(9 downto 0);
+      btn         : out std_logic;
+
+      MISO        : in  STD_LOGIC;			-- Master input slave output
+      MOSI        : out  STD_LOGIC;			-- Master out slave in
+      SCLK        : out  STD_LOGIC;			-- Serial clock
+      BUSY        : out  STD_LOGIC			-- Busy if sending/receiving data
+    );
+  end component;
 	
   -- intermediate signals between PICT_MEM and VGA_MOTOR
   signal	data_out2_s     : std_logic_vector(7 downto 0);         -- data
@@ -128,16 +147,16 @@ architecture Behavioral of BomberBunnies is
   signal p2x : std_logic_vector(9 downto 0);
   signal p2y : std_logic_vector(9 downto 0);
 
-  signal joy1x : std_logic_vector(1 downto 0);
-  signal joy1y : std_logic_vector(1 downto 0);
+  signal joy1x : std_logic_vector(9 downto 0);
+  signal joy1y : std_logic_vector(9 downto 0);
   signal btn1  : std_logic;
-  signal joy2x : std_logic_vector(1 downto 0);
-  signal joy2y : std_logic_vector(1 downto 0);
+  signal joy2x : std_logic_vector(9 downto 0);
+  signal joy2y : std_logic_vector(9 downto 0);
   signal btn2  : std_logic;
 
   signal clkDiv : unsigned(20 downto 0) := (others => '0');
   signal slowClk : std_logic := '0';
-	
+
 begin
 
   process(clk)
@@ -215,6 +234,18 @@ begin
     p1y => p1y,
     p2x => p2x,
     p2y => p2y
+  );
+
+  U6 : JOYSTICK port map (
+    clk => clk,
+    rst => rst,
+    joyX => joy1x,
+    joyY => joy1y,
+    btn => btn1,
+    MISO => MISO,
+    MOSI => MOSI,
+    SCLK => SCLK,
+    BUSY => BUSY
   );
   
   -- VGA motor component connection
