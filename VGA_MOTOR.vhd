@@ -19,7 +19,7 @@ entity VGA_MOTOR is
     clk		        : in std_logic;                         -- system clock
     rst	                : in std_logic;
     playerPixel         : in std_logic_vector(7 downto 0);   -- pixel from player
-    tilePixel            : in std_logic_vector(7 downto 0);   -- Tile pixel data
+    tilePixel           : in std_logic_vector(7 downto 0);   -- Tile pixel data
     xPixel              : buffer unsigned(9 downto 0) := "0000000000";         -- Horizontal pixel counter
     yPixel	        : buffer unsigned(9 downto 0) := "0000000000";		-- Vertical pixel counter
     vgaRed              : out std_logic_vector(2 downto 0) := "000";
@@ -106,24 +106,6 @@ begin
            playerPixel when not(playerPixel = transparent) else
            tilePixel;
   
-  -- Tile memory
---process(clk)
---  begin
---    if rising_edge(clk) then
---      if blank = '0' then
-  --      if playerPixel = "01000110" then -- standard transparent color
-   --       pixel <= mapPixel;
-   --     else
-   --       pixel <= playerPixel;
-   --     end if
-   --   else
-  --      pixel <= (others => '0');
-  --    end if;
-  --  end if;
- -- end process;
-
-
-
   -- VGA generation
   vgaRed(2) 	<= pixel(7);
   vgaRed(1) 	<= pixel(6);
