@@ -9,6 +9,7 @@ use IEEE.STD_LOGIC_1164.ALL;            -- basic IEEE library
 use IEEE.NUMERIC_STD.ALL;               -- IEEE library for the unsigned type
                                         -- and various arithmetic operations
 entity JOYSTICK is
+  
   port (
     clk         : in  std_logic;          -- system clock
     rst         : in  std_logic;
@@ -20,10 +21,9 @@ entity JOYSTICK is
 
     -- Joystick pins
     MISO        : in  STD_LOGIC;			-- Master input slave output
-    MOSI        : out STD_LOGIC := '0';		-- Master out slave in
-    SCLK        : out STD_LOGIC := '0';			-- Serial clock
-    BUSY        : out STD_LOGIC := '1';		-- Busy if sending/receiving data
-    SS          : out std_logic := '1'  -- start sequence
+    MOSI        : out  STD_LOGIC := '0';		-- Master out slave in
+    SCLK        : out  STD_LOGIC := '0';			-- Serial clock
+    SS          : out  STD_LOGIC := '1';		-- Busy if sending/receiving data
   );
 
 end JOYSTICK;
@@ -58,8 +58,6 @@ architecture Behavioral of JOYSTICK is
   signal lowY : std_logic_vector(7 downto 0) := (others => '0');
   signal byteCount : unsigned(2 downto 0) := (others => '0');
 
-  signal forty : std_logic_vector := (others => '0');
-
   signal sndRec : STD_LOGIC := '1';                        -- Send receive, initializes data read/write
   
 --===================================================================================
@@ -91,6 +89,7 @@ begin  -- Behavioral
           end if;									
         when Done =>
           rSR <= rSR;
+          
       end case;
     end if;
   end process;
@@ -132,7 +131,7 @@ begin  -- Behavioral
   STATE_REGISTER: process(clk, rst) begin
     if rst = '1' then
       STATE <= Idle;
-    elsif falling_edge(clk) then         -- Ska vara falling
+    elsif rising_edge(clk) then         -- Ska vara falling
       STATE <= NSTATE;
     end if;
   end process;
@@ -148,7 +147,7 @@ begin  -- Behavioral
       BUSY <= '0';      -- not busy in Idle state
       bitCount <= X"0"; -- Clear #bits read/written
 
-    elsif falling_edge(CLK) then         -- ska vara falling
+    elsif rising_edge(CLK) then         -- ska vara falling
       case (STATE) is
         when Idle =>
           CE <= '0';			-- Disable serial clock
@@ -181,26 +180,6 @@ begin  -- Behavioral
     end if;
   end process;
 
-  -----------------------------------------------------------------------------
-  -- SS Process block
-  -----------------------------------------------------------------------------
-  SS_PROCESS: process (clk, rst, STATE)
-  begin  -- process
-    if rst = '1' then
-      SS <= '1';
-    elsif STATE = Init then
-      if byteCount = "000" then
-        SS <= '0';
-      end if;
-    elsif STATE = Done then
-      if byteCount = "100" then
-        SS <= '1';
-      end if;
-    end if;
-    
-  end process;
-  
-  
   --------------------------------
   --  Next State Logic
   --------------------------------

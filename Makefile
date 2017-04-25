@@ -34,7 +34,7 @@ PART=xc6slx16-3-csg324
 
 
 BomberBunnies.%: S=BomberBunnies.vhd CPU.vhd VGA_MOTOR.vhd MAP_MEMORY.vhd SPRITE_MEMORY.vhd TILE_MEMORY.vhd PROGRAM_MEMORY.vhd MICRO_MEMORY.vhd JOYSTICK.vhd SLOW_CLOCK.vhd
-BomberBunnies.%: T=MAP_MEMORY_tb.vhd
+BomberBunnies.%: T=JOYSTICK_tb.vhd
 BomberBunnies.%: U=Nexys3.ucf
 #VGA_lab.%: U=Nexys3.ucf
 #VGA_lab.%: S=VGA_lab.vhd KBD_ENC.vhd PICT_MEM.vhd VGA_MOTOR/VGA_MOTOR.vhd

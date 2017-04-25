@@ -12,11 +12,11 @@ ARCHITECTURE behavior OF CPU_tb IS
   PORT(
     clk               : in std_logic;                      -- system clock (100 MHz)
     rst	              : in std_logic;
-    joy1x             : in std_logic_vector(1 downto 0);
-    joy1y             : in std_logic_vector(1 downto 0);
+    joy1x             : in std_logic_vector(9 downto 0);
+    joy1y             : in std_logic_vector(9 downto 0);
     btn1              : in std_logic;
-    joy2x             : in std_logic_vector(1 downto 0);
-    joy2y             : in std_logic_vector(1 downto 0);
+    joy2x             : in std_logic_vector(9 downto 0);
+    joy2y             : in std_logic_vector(9 downto 0);
     btn2              : in std_logic;
     tilePointer       : buffer std_logic_vector(7 downto 0);
     tileTypeRead      : in std_logic_vector(7 downto 0);
@@ -41,11 +41,11 @@ BEGIN
   uut: CPU PORT MAP (
     clk => clk,
     rst => rst,
-    joy1x => "00",
-    joy1y => "00",
+    joy1x => "0101010101",
+    joy1y => "0000000000",
     btn1 => '0',
-    joy2x => "00",
-    joy2y => "00",
+    joy2x => "0000000000",
+    joy2y => "0000000000",
     btn2 => '0',
 --    tilePointer => "00000000",
     tileTypeRead => "00000000"
