@@ -148,16 +148,6 @@ architecture behavioral of CPU is
 
 
 begin  -- behavioral
-
-  -- Joystick 1
-  GRx(6)(9 downto 0) <= joy1x;
-  GRx(7)(9 downto 0) <= joy1y;
-  GRx(8)(0) <= btn1;
-
-  -- Joystick 2
-  GRx(9)(9 downto 0) <= joy2x;
-  GRx(10)(9 downto 0) <= joy2y;
-  GRx(11)(0) <= btn2;
   
   -- Player positions
   p1x <= GRx(12)(9 downto 0);
@@ -187,22 +177,22 @@ begin  -- behavioral
   GRx_x <= to_integer(unsigned(ir_grx)) when (upm_s = "0") else to_integer(unsigned(ir_m));
 
   with upm_tb select buss <=
-    "00000000000" & std_logic_vector(ASR) when "0001", 
-    IR                                   when "0010",
-    PM                                   when "0011",
-    "00000000000" & PC                    when "0100",
-    GRx(GRx_x)                           when "0101",
-    "00000000000" & AR                    when "0110",
+    "00000000000" & std_logic_vector(ASR)       when "0001", 
+    IR                                          when "0010",
+    PM                                          when "0011",
+    "00000000000" & PC                          when "0100",
+    GRx(GRx_x)                                  when "0101",
+    "00000000000" & AR                          when "0110",
                                             --"0111" --ledig
-    x"000" & "000" & tileTypeRead         when "1000",
-    x"000" & "000" & tilePointer          when "1001",
---    x"000" & joy1x                       when "1010",
---    x"000" & joy1y                       when "1011",
---    x"00000" & "0" & btn1                when "1100",
---    x"000" & joy2x                       when "1101",
---    x"000" & joy2y                       when "1110",
---    x"00000" & "0" & btn1                when "1111",
-    buss                                 when others;
+    x"000" & "000" & tileTypeRead               when "1000",
+    x"000" & "000" & tilePointer                when "1001",
+    x"000" & "0" & joy1x                        when "1010",
+    x"000" & "0" & joy1y                        when "1011",
+    x"00000" & "00" & btn1                      when "1100",
+    x"000" & "0" & joy2x                        when "1101",
+    x"000" & "0" & joy2y                        when "1110",
+    x"00000" & "00" & btn1                      when "1111",
+    buss                                        when others;
 
   L <= '0' when LC = (LC'range => '0') else '1';
   
