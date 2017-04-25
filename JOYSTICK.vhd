@@ -73,10 +73,10 @@ begin  -- Behavioral
   -- master reads on rising edges,
   -- slave changes data on falling edges
   ---------------------------------------
-  process (CLK, RST) begin
-    if RST = '1' then
+  process (clk, rst) begin
+    if rst   = '1' then
       rSR <= X"00";
-    elsif rising_edge(CLK) then
+    elsif rising_edge(clk) then
       -- Enable shift during RxTx state only
       case(STATE) is
         when Idle =>
@@ -96,10 +96,10 @@ begin  -- Behavioral
   --------------------------
   -- When Done send to CPU
   --------------------------
-  process(CLK, RST) begin
-    if RST = '1' then
+  process(clk, rst) begin
+    if rst = '1' then
       byteCount <= (others => '0');
-    elsif rising_edge(CLK) then
+    elsif rising_edge(clk) then
       if STATE = Done then
         case byteCount is
           when "000" =>
@@ -127,10 +127,10 @@ begin  -- Behavioral
   --------------------------------
   -- State Register
   --------------------------------
-  STATE_REGISTER: process(CLK, RST) begin
-    if RST = '1' then
+  STATE_REGISTER: process(clk, rst) begin
+    if rst = '1' then
       STATE <= Idle;
-    elsif falling_edge(CLK) then
+    elsif rising_edge(clk) then         -- Ska vara falling
       STATE <= NSTATE;
     end if;
   end process;

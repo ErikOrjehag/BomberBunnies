@@ -11,7 +11,7 @@ ARCHITECTURE behavior OF MAP_MEMORY_tb IS
   COMPONENT MAP_MEMORY
   PORT(
     clk               : in std_logic;                      -- system clock (100 MHz)
-    rst	              : in std_logic;
+    rst	              : in std_logic);
 
   END COMPONENT;
   
@@ -26,7 +26,7 @@ BEGIN
   -- Instantiate the Unit Under Test (UUT)
   uut: MAP_MEMORY PORT MAP (
     clk => clk,
-    rst => rst,
+    rst => rst
 
   );
 		
