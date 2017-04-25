@@ -10,8 +10,20 @@ ARCHITECTURE behavior OF MAP_MEMORY_tb IS
   --Component Declaration for the Unit Under Test (UUT)
   COMPONENT MAP_MEMORY
   PORT(
-    clk               : in std_logic;                      -- system clock (100 MHz)
-    rst	              : in std_logic;
+    clk                 : in std_logic;                      -- system clock (100 MHz)
+    rst	                : in std_logic;
+    xPixel              : in unsigned(9 downto 0);              -- Horizontal pixel counter
+    yPixel	        : in unsigned(9 downto 0);		-- Vertical pixel counter
+    readMap             : in std_logic;
+    writeMap            : in std_logic;
+    pixelIn             : in std_logic_vector(7 downto 0);
+    tilePointer         : in std_logic_vector(7 downto 0);
+    tileTypeRead        : out std_logic_vector(7 downto 0);
+    tileTypeWrite       : in std_logic_vector(7 downto 0);
+    pixelOut            : out std_logic_vector(7 downto 0);
+    tilePixelIndex      : out integer := 0;
+    tileIndex           : out integer := 0);
+    
 
   END COMPONENT;
   
@@ -27,7 +39,18 @@ BEGIN
   uut: MAP_MEMORY PORT MAP (
     clk => clk,
     rst => rst,
-
+    xPixel => "0000000000",
+    yPixel => "0000000000",
+    readMap => '1',
+    writeMap => '0',
+    pixelIn => "00000000",
+    tilePointer => "00000010",
+--    tileTypeRead => "00000000",
+    tileTypeWrite => "00000000"
+--    pixelOut => "00000000",
+--    tilePixelIndex => 0,
+--    tileIndex => 0
+    
   );
 		
   -- Clock process definitions
