@@ -15,8 +15,8 @@ entity JOYSTICK is
     rst         : in  std_logic;
 
     -- Outputs
-    joyX      : out std_logic_vector(9 downto 0) := (others => '0');
-    joyY      : out std_logic_vector(9 downto 0) := (others => '0');
+    joyX      : out std_logic_vector(9 downto 0);
+    joyY      : out std_logic_vector(9 downto 0);
     btn       : out std_logic;
 
     -- Joystick pins
@@ -42,24 +42,23 @@ architecture Behavioral of JOYSTICK is
 --===================================================================================
 
   -- FSM States
-  type state_type is (Idle, Init, RxTx, Done);  -- RxTx?
+  type state_type is (Idle, Init, RxTx, Done);  -- RxTx = recieve, transmit
 
   -- Present state, Next State
   signal STATE, NSTATE : state_type;
 
-  signal bitCount : unsigned(3 downto 0) := (others => '0');       -- Number bits read/written
-  signal rSR : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');		-- Read shift register
-  signal wSR : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');		-- Write shift register
+  signal bitCount : unsigned(3 downto 0) := (others => '0');    -- Number bits read/written
+  signal rSR : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');	-- Read shift register
 
   signal CE : STD_LOGIC := '0';		       			-- Clock enable, controls serial
                                                                 -- clock signal sent to slave
-  signal slowClock : std_logic;          -- 67 kHz clock
+  signal slowClock : std_logic:= '0';          -- 67 kHz clock
 
   signal lowX : std_logic_vector(7 downto 0) := (others => '0');
   signal lowY : std_logic_vector(7 downto 0) := (others => '0');
   signal byteCount : unsigned(2 downto 0) := (others => '0');
 
-  signal sndRec : STD_LOGIC := '0';                        -- Send receive, initializes data read/write
+  signal sndRec : STD_LOGIC := '1';                        -- Send receive, initializes data read/write
   
 --===================================================================================
 --              		Implementation
@@ -74,10 +73,10 @@ begin  -- Behavioral
   -- master reads on rising edges,
   -- slave changes data on falling edges
   ---------------------------------------
-  process (CLK, RST) begin
-    if RST = '1' then
+  process (clk, rst) begin
+    if rst   = '1' then
       rSR <= X"00";
-    elsif rising_edge(CLK) then
+    elsif rising_edge(clk) then
       -- Enable shift during RxTx state only
       case(STATE) is
         when Idle =>
@@ -97,20 +96,20 @@ begin  -- Behavioral
   --------------------------
   -- When Done send to CPU
   --------------------------
-  process(CLK, RST) begin
-    if RST = '1' then
+  process(clk, rst) begin
+    if rst = '1' then
       byteCount <= (others => '0');
-    elsif rising_edge(CLK) then
+    elsif rising_edge(clk) then
       if STATE = Done then
         case byteCount is
           when "000" =>
             lowX <= rSR;
           when "001" =>
-            joyx <= rSR(1 downto 0) & lowX;
+            joyX <= rSR(1 downto 0) & lowX;
           when "010" =>
             lowY <= rSR;
           when "011" =>
-            joyy <= rSR(1 downto 0) & lowY;
+            joyY <= rSR(1 downto 0) & lowY;
           when "100" =>
             btn <= rSR(1);
           when others => null;
@@ -128,10 +127,10 @@ begin  -- Behavioral
   --------------------------------
   -- State Register
   --------------------------------
-  STATE_REGISTER: process(CLK, RST) begin
-    if RST = '1' then
+  STATE_REGISTER: process(clk, rst) begin
+    if rst = '1' then
       STATE <= Idle;
-    elsif falling_edge(CLK) then
+    elsif rising_edge(clk) then         -- Ska vara falling
       STATE <= NSTATE;
     end if;
   end process;
