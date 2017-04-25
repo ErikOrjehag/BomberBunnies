@@ -61,8 +61,8 @@ architecture behavioral of CPU is
   -- GRx
   type grx_t is array (0 to 15) of std_logic_vector(22 downto 0);
   signal GRx : grx_t := (
-    "00000000000000000000000", -- 0
-    "00000000000000000000000", -- 1
+    "00000000000000000000001", -- 0    (tillfällig)
+    "00000000000000000001000", -- 1    (tillfällig)
     "00000000000000000000000", -- 2
     "00000000000000000000000", -- 3*
     "00000000000000000000000", -- 4
@@ -103,9 +103,9 @@ architecture behavioral of CPU is
     "000011000",                        -- (00110) BEQ
     "000011010",                        -- (00111) BNE
     "000011100",                        -- (01000) Joy1 X
-    "000000000",
-    "000000000",
-    "000000000",
+    "000011101",                        -- (01001) tileTypeWrite
+    "000011110",                        -- (01010) tileTypeRead
+    "000011111",                        -- (01011) tilePointer
     "000000000",
     "000000000",
     "000000000",
@@ -183,9 +183,9 @@ begin  -- behavioral
     "00000000000" & PC                          when "0100",
     GRx(GRx_x)                                  when "0101",
     "00000000000" & AR                          when "0110",
-                                            --"0111" --ledig
+--    x"000" & "000" & tileTypeWrite              when "0111",
     x"000" & "000" & tileTypeRead               when "1000",
-    x"000" & "000" & tilePointer                when "1001",
+--    x"000" & "000" & tilePointer                when "1001",
     x"000" & "0" & joy1x                        when "1010",
     x"000" & "0" & joy1y                        when "1011",
     x"00000" & "00" & btn1                      when "1100",
@@ -209,7 +209,7 @@ begin  -- behavioral
         when "0100" => PC <= buss(11 downto 0);
         when "0101" => GRx(GRx_x) <= buss;
         when "0110" => null;            --AR
-        when "0111" => null;            --ledig
+--        when "0111" => tileTypeRead <= buss(7 downto 0);
         when "1000" => tileTypeWrite <= buss(7 downto 0);
         when "1001" => tilePointer <= buss(7 downto 0);
 --        when "1010" => null;            --joy1x
@@ -276,8 +276,8 @@ begin  -- behavioral
         when "0010" => uPC <= unsigned(k2(to_integer(unsigned(ir_m))));
         when "0011" => uPC <= (others => '0');
         when "0100" => uPC <= unsigned(upm_uaddr);
-        when "0101" => null;            --ledig
-        when "0110" => null;            --ledig
+        when "0101" => null;            --ledig  (write?)
+        when "0110" => null;            --ledig  (read?)
         when "0111" => null;            --ledig
         when "1000" =>
           if Z = '1' then
