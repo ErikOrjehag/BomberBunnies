@@ -42,7 +42,7 @@ architecture Behavioral of JOYSTICK is
 --===================================================================================
 
   -- FSM States
-  type state_type is (Idle, Init, RxTx, Done);
+  type state_type is (Idle, Init, RxTx, Done);  -- RxTx?
 
   -- Present state, Next State
   signal STATE, NSTATE : state_type;
