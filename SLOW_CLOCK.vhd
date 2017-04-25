@@ -24,7 +24,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity SLOW_CLOCK is
   Port ( clk : in  STD_LOGIC;			-- 100MHz onboard clock
          rst : in  STD_LOGIC;			-- Reset
-         clkout : buffer  STD_LOGIC);		-- New clock output
+         clkout : buffer  STD_LOGIC := '0');		-- New clock output
 end SLOW_CLOCK;
 
 architecture Behavioral of SLOW_CLOCK is
