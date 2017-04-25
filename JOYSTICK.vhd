@@ -42,24 +42,23 @@ architecture Behavioral of JOYSTICK is
 --===================================================================================
 
   -- FSM States
-  type state_type is (Idle, Init, RxTx, Done);  -- RxTx?
+  type state_type is (Idle, Init, RxTx, Done);  -- RxTx = recieve, transmit
 
   -- Present state, Next State
   signal STATE, NSTATE : state_type;
 
-  signal bitCount : unsigned(3 downto 0) := (others => '0');       -- Number bits read/written
-  signal rSR : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');		-- Read shift register
-  signal wSR : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');		-- Write shift register
+  signal bitCount : unsigned(3 downto 0) := (others => '0');    -- Number bits read/written
+  signal rSR : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');	-- Read shift register
 
   signal CE : STD_LOGIC := '0';		       			-- Clock enable, controls serial
                                                                 -- clock signal sent to slave
-  signal slowClock : std_logic;          -- 67 kHz clock
+  signal slowClock : std_logic:= '0';          -- 67 kHz clock
 
-  signal lowX : std_logic_vector(7 downto 0);
-  signal lowY : std_logic_vector(7 downto 0);
+  signal lowX : std_logic_vector(7 downto 0) := (others => '0');
+  signal lowY : std_logic_vector(7 downto 0) := (others => '0');
   signal byteCount : unsigned(2 downto 0) := (others => '0');
 
-  signal sndRec : STD_LOGIC := '0';                        -- Send receive, initializes data read/write
+  signal sndRec : STD_LOGIC := '1';                        -- Send receive, initializes data read/write
   
 --===================================================================================
 --              		Implementation

@@ -16,9 +16,9 @@ architecture Behavioral of PROGRAM_MEMORY is
   -- Program memory
   type pm_t is array (0 to 2047) of std_logic_vector(22 downto 0);  --2047
   constant pm_c : pm_t := (
-          -- OP  GRx M     Addr
+          -- OP   GRx  M     Addr
     0  => b"00101_0000_00_000000010001", -- Sleep
-    1  => b"00010_1110_00_000000010000", -- Add to GR14
+    1  => b"01000_1100_00_000000000000", -- Read joy1 x
     2  => b"00100_0000_00_000000010010", -- Jump
 
     16 => b"00000_0000_00_000000000001",
