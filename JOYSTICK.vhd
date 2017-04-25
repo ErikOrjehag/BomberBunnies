@@ -15,8 +15,8 @@ entity JOYSTICK is
     rst         : in  std_logic;
 
     -- Outputs
-    joyX      : out std_logic_vector(9 downto 0) := (others => '0');
-    joyY      : out std_logic_vector(9 downto 0) := (others => '0');
+    joyX      : out std_logic_vector(9 downto 0);
+    joyY      : out std_logic_vector(9 downto 0);
     btn       : out std_logic;
 
     -- Joystick pins
@@ -55,8 +55,8 @@ architecture Behavioral of JOYSTICK is
                                                                 -- clock signal sent to slave
   signal slowClock : std_logic;          -- 67 kHz clock
 
-  signal lowX : std_logic_vector(7 downto 0) := (others => '0');
-  signal lowY : std_logic_vector(7 downto 0) := (others => '0');
+  signal lowX : std_logic_vector(7 downto 0);
+  signal lowY : std_logic_vector(7 downto 0);
   signal byteCount : unsigned(2 downto 0) := (others => '0');
 
   signal sndRec : STD_LOGIC := '0';                        -- Send receive, initializes data read/write
@@ -106,11 +106,11 @@ begin  -- Behavioral
           when "000" =>
             lowX <= rSR;
           when "001" =>
-            joyx <= rSR(1 downto 0) & lowX;
+            joyX <= rSR(1 downto 0) & lowX;
           when "010" =>
             lowY <= rSR;
           when "011" =>
-            joyy <= rSR(1 downto 0) & lowY;
+            joyY <= rSR(1 downto 0) & lowY;
           when "100" =>
             btn <= rSR(1);
           when others => null;
