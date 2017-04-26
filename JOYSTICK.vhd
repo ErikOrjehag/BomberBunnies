@@ -82,28 +82,28 @@ begin  -- Behavioral
   --------------------------
   -- When Done send to CPU
   --------------------------
+  
+  
   process(STATE) begin
+    --xVal <= unsigned(rSR(25 downto 24) & rSR(39 downto 32));
+    --yVal <= unsigned(rSR(9 downto 8) & rSR(23 downto 16));
+
+    
     if STATE = Done then
+      --case rSR(25 downto 24) is
+      case rSR(39 downto 38) is
+        when "11" => joyX <= "01";
+        when "00" => joyX <= "10";
+        when others => joyX <= "00";
+      end case;
 
-      xVal <= unsigned(rSR(25 downto 24) & rSR(39 downto 32));
-      yVal <= unsigned(rSR(9 downto 8) & rSR(23 downto 16));
-
-      if (xVal > 768) then
-        joyX <= "01";                   -- Moving right
-      elsif (xVal < 255) then
-        joyX <= "10";                   -- Moving left
-      else
-        joyX <= "00";
-      end if;
-
-      if (yVal > 768) then
-        joyY <= "01";                   -- Moving up
-      elsif (yVal < 255) then
-        joyY <= "10";                   -- Moving down
-      else
-        joyY <= "00";
-      end if;
-      
+      --case rSR(9 downto 8) is
+      case rSR(23 downto 22) is
+        when "11" => joyY <= "01";
+        when "00" => joyY <= "10";
+        when others => joyY <= "00";
+      end case;
+            
       btn <= rSR(1);
       
     end if;

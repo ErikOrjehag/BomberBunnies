@@ -14,8 +14,8 @@ ARCHITECTURE behavior OF JOYSTICK_tb IS
     rst         : in  std_logic;
 
     -- Outputs
-    joyX      : out std_logic_vector(9 downto 0);
-    joyY      : out std_logic_vector(9 downto 0);
+    joyX      : out std_logic_vector(1 downto 0);
+    joyY      : out std_logic_vector(1 downto 0);
     btn       : out std_logic;
 
     -- Joystick pins
@@ -32,8 +32,8 @@ ARCHITECTURE behavior OF JOYSTICK_tb IS
   constant clk_period : time:= 1 us;
 
   signal btn : std_logic;
-  signal joyX : std_logic_vector(9 downto 0);
-  signal joyY : std_logic_vector(9 downto 0);
+  signal joyX : std_logic_vector(1 downto 0);
+  signal joyY : std_logic_vector(1 downto 0);
   signal MISO : std_logic := '1';
   signal MOSI : std_logic;
   signal SCLK : std_logic;
