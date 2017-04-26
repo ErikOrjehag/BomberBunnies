@@ -33,11 +33,11 @@ architecture Behavioral of BomberBunnies is
     port (
       clk               : in std_logic;                      -- system clock (100 MHz)
       rst	        : in std_logic;
-      joy1x             : in std_logic_vector(9 downto 0);
-      joy1y             : in std_logic_vector(9 downto 0);
+      joy1x             : in std_logic_vector(1 downto 0);
+      joy1y             : in std_logic_vector(1 downto 0);
       btn1              : in std_logic;
-      joy2x             : in std_logic_vector(9 downto 0);
-      joy2y             : in std_logic_vector(9 downto 0);
+      joy2x             : in std_logic_vector(1 downto 0);
+      joy2y             : in std_logic_vector(1 downto 0);
       btn2              : in std_logic;
       tilePointer       : buffer std_logic_vector(7 downto 0);
       tileTypeRead      : in std_logic_vector(7 downto 0);
@@ -110,8 +110,8 @@ architecture Behavioral of BomberBunnies is
     port (
       clk         : in  std_logic;          -- system clock
       rst         : in  std_logic;
-      joyX        : out std_logic_vector(9 downto 0);
-      joyY        : out std_logic_vector(9 downto 0);
+      joyX        : out std_logic_vector(1 downto 0);
+      joyY        : out std_logic_vector(1 downto 0);
       btn         : out std_logic;
 
       MISO        : in  STD_LOGIC;			-- Master input slave output
@@ -122,8 +122,8 @@ architecture Behavioral of BomberBunnies is
   end component;
 	
   -- intermediate signals between PICT_MEM and VGA_MOTOR
-  signal	data_out2_s     : std_logic_vector(7 downto 0);         -- data
-  signal	addr2_s		: unsigned(10 downto 0);                -- address
+  signal data_out2_s : std_logic_vector(7 downto 0);         -- data
+  signal addr2_s : unsigned(10 downto 0);                -- address
 
   signal xPixel : unsigned(9 downto 0);
   signal yPixel : unsigned(9 downto 0);
@@ -147,11 +147,11 @@ architecture Behavioral of BomberBunnies is
   signal p2x : std_logic_vector(9 downto 0);
   signal p2y : std_logic_vector(9 downto 0);
 
-  signal joy1x : std_logic_vector(9 downto 0);
-  signal joy1y : std_logic_vector(9 downto 0);
+  signal joy1x : std_logic_vector(1 downto 0);
+  signal joy1y : std_logic_vector(1 downto 0);
   signal btn1  : std_logic;
-  signal joy2x : std_logic_vector(9 downto 0);
-  signal joy2y : std_logic_vector(9 downto 0);
+  signal joy2x : std_logic_vector(1 downto 0);
+  signal joy2y : std_logic_vector(1 downto 0);
   signal btn2  : std_logic;
 
   signal CPUClkDiv : unsigned(19 downto 0) := (others => '0');

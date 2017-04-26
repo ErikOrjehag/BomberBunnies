@@ -14,8 +14,8 @@ entity JOYSTICK is
     rst         : in  std_logic;
 
     -- Outputs
-    joyX      : out std_logic_vector(9 downto 0) := (others => '0');
-    joyY      : out std_logic_vector(9 downto 0) := (others => '0');
+    joyX      : out std_logic_vector(1 downto 0) := (others => '0');
+    joyY      : out std_logic_vector(1 downto 0) := (others => '0');
     btn       : out std_logic := '0';
 
     -- Joystick pins
@@ -44,7 +44,9 @@ architecture Behavioral of JOYSTICK is
 
   signal CE : STD_LOGIC := '0';		       			-- Clock enable, controls serial
                                                                 -- clock signal sent to slave
-  
+
+  signal xVal : unsigned(9 downto 0) := (others => '0');
+  signal yVal : unsigned(9 downto 0) := (others => '0');
       
 --===================================================================================
 --              		Implementation
@@ -82,11 +84,28 @@ begin  -- Behavioral
   --------------------------
   process(STATE) begin
     if STATE = Done then
-      joyX <= rSR(25 downto 24) & rSR(39 downto 32);
-      joyY <= rSR(9 downto 8) & rSR(23 downto 16);
-      --joyX <= "00" & rSR(39 downto 32);
-      --joyY <= "00" & rSR(23 downto 16);
+
+      xVal <= unsigned(rSR(25 downto 24) & rSR(39 downto 32));
+      yVal <= unsigned(rSR(9 downto 8) & rSR(23 downto 16));
+
+      if (xVal > 768) then
+        joyX <= "01";                   -- Moving right
+      elsif (xVal < 255) then
+        joyX <= "10";                   -- Moving left
+      else
+        joyX <= "00";
+      end if;
+
+      if (yVal > 768) then
+        joyY <= "01";                   -- Moving up
+      elsif (yVal < 255) then
+        joyY <= "10";                   -- Moving down
+      else
+        joyY <= "00";
+      end if;
+      
       btn <= rSR(1);
+      
     end if;
   end process;
 
