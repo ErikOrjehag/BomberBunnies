@@ -21,8 +21,7 @@ ARCHITECTURE behavior OF JOYSTICK_tb IS
     -- Joystick pins
     MISO        : in  STD_LOGIC;			-- Master input slave output
     MOSI        : out  STD_LOGIC;		-- Master out slave in
-    SCLK        : out  STD_LOGIC;			-- Serial clock
-    BUSY        : out  STD_LOGIC);		-- Busy if sending/receiving data
+    SCLK        : out  STD_LOGIC);			-- Serial clock
   END COMPONENT;
   
   --Inputs
@@ -38,7 +37,6 @@ ARCHITECTURE behavior OF JOYSTICK_tb IS
   signal MISO : std_logic := '1';
   signal MOSI : std_logic;
   signal SCLK : std_logic;
-  signal BUSY : std_logic;
   
 BEGIN
   -- Instantiate the Unit Under Test (UUT)
@@ -50,8 +48,7 @@ BEGIN
     btn => btn,
     MISO => MISO,
     MOSI => MOSI,
-    SCLK => SCLK,
-    BUSY => BUSY
+    SCLK => SCLK
   );
 		
   -- Clock process definitions

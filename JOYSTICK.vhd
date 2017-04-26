@@ -22,7 +22,6 @@ entity JOYSTICK is
     MISO        : in  STD_LOGIC;			-- Master input slave output
     MOSI        : out STD_LOGIC := '0';		-- Master out slave in
     sCLK        : out STD_LOGIC := '0';			-- Serial clock
-    BUSY        : out STD_LOGIC := '1';		-- Busy if sending/receiving data
     SS          : out std_logic := '1'  -- start sequence
   );
 
@@ -52,7 +51,7 @@ architecture Behavioral of JOYSTICK is
 
   signal CE : STD_LOGIC := '0';		       			-- Clock enable, controls serial
                                                                 -- clock signal sent to slave
-  signal slowClock : std_logic:= '0';          -- 67 kHz clock
+  signal slowClk : std_logic:= '0';          -- 67 kHz clock
 
       
 --===================================================================================
@@ -61,17 +60,17 @@ architecture Behavioral of JOYSTICK is
 begin  -- Behavioral
 
   -- Serial clock output, allow if clock enable asserted
-  SCLK <= slowClock when (CE = '1') else '0';
+  SCLK <= slowClk when (CE = '1') else '0';
 
   ---------------------------------------
   -- Read Shift Register
   -- master reads on rising edges,
   -- slave changes data on falling edges
   ---------------------------------------
-  process (slowClock, rst) begin
+  process (slowClk, rst) begin
     if rst = '1' then
       rSR <= (others => '0');
-    elsif rising_edge(slowClock) then
+    elsif rising_edge(slowClk) then
       -- Enable shift during RxTx state only
       case(STATE) is
         when Init =>
@@ -100,8 +99,8 @@ begin  -- Behavioral
   --------------------------------
   -- State Register
   --------------------------------
-  STATE_REGISTER: process(slowClock, rst) begin
-    if falling_edge(slowClock) then         -- Ska vara falling
+  STATE_REGISTER: process(slowClk, rst) begin
+    if falling_edge(slowClk) then         -- Ska vara falling
       STATE <= NSTATE;
     end if;
   end process;
@@ -110,21 +109,19 @@ begin  -- Behavioral
   --------------------------------
   -- Output Logic/Assignment
   --------------------------------
-  OUTPUT_LOGIC: process (CLK, RST)
+  OUTPUT_LOGIC: process (slowClk, rst)
   begin
-    if(RST = '1') then  -- Reset/clear values
+    if (rst = '1') then  -- Reset/clear values
       CE <= '0';        -- Disable serial clock
       bitCount <= (others => '0'); -- Clear #bits read/written
 
-    elsif falling_edge(CLK) then         -- ska vara falling
+    elsif falling_edge(slowClk) then         -- ska vara falling
       case (STATE) is
         when Init =>
-          BUSY <= '1';			-- Output a busy signal
           bitCount <= (others => '0');		-- Have not read/written anything yet
           CE <= '0';			-- Disable serial clock
           
         when RxTx =>
-          BUSY <= '1';			-- Output busy signal
           bitCount <= bitCount + 1;	-- Begin counting bits received/written
                                         -- Have written all bits to slave so prevent another falling edge
           if(bitCount >= X"40") then
@@ -146,7 +143,7 @@ begin  -- Behavioral
   -----------------------------------------------------------------------------
   -- SS Process block
   -----------------------------------------------------------------------------
-  SS_PROCESS: process (clk, rst, STATE)
+  SS_PROCESS: process (slowClk, rst, STATE)
   begin  -- process
     if rst = '1' then
       SS <= '1';
@@ -188,7 +185,7 @@ begin  -- Behavioral
   U1 : SLOW_CLOCK port map (
     clk    => clk,
     rst    => rst,
-    clkout => slowClock);
+    clkout => slowClk);
   
 
 end Behavioral;

@@ -117,7 +117,6 @@ architecture Behavioral of BomberBunnies is
       MISO        : in  STD_LOGIC;			-- Master input slave output
       MOSI        : out STD_LOGIC;			-- Master out slave in
       SCLK        : out STD_LOGIC;			-- Serial clock
-      BUSY        : out STD_LOGIC;			-- Busy if sending/receiving data
       SS          : out std_logic
     );
   end component;
