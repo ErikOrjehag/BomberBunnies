@@ -90,8 +90,10 @@ begin  -- Behavioral
   --------------------------
   process(STATE) begin
     if STATE = Done then
-      joyX <= "00" & rSR(39 downto 32);
-      joyY <= "00" & rSR(23 downto 16);
+      joyX <= rSR(25 downto 24) & rSR(39 downto 32);
+      joyY <= rSR(9 downto 8) & rSR(23 downto 16);
+      --joyX <= "00" & rSR(39 downto 32);
+      --joyY <= "00" & rSR(23 downto 16);
       btn <= rSR(1);
     end if;
   end process;
