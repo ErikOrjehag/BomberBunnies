@@ -61,8 +61,8 @@ architecture behavioral of CPU is
   -- GRx
   type grx_t is array (0 to 15) of std_logic_vector(22 downto 0);
   signal GRx : grx_t := (
-    "00000000000000000000001", -- 0    (tillfällig)
-    "00000000000000000001000", -- 1    (tillfällig)
+    "00000000000000000000101", -- 0    (tillfälligt = 5)
+    "00000000000000000001000", -- 1    (tillfälligt = 8)
     "00000000000000000000000", -- 2
     "00000000000000000000000", -- 3*
     "00000000000000000000000", -- 4
@@ -109,10 +109,10 @@ architecture behavioral of CPU is
     "000100000",  -- (01100) JOY2Y
     "000100001",  -- (01101) BTN2
     "000100010",  -- (01110) tileWrite
-    "000100011",  -- (01111) tileRead
-    "000100100",  -- (10000) tilePointer
-    "000000000",
-    "000000000",
+    "000100100",  -- (01111) tileRead
+    "000100110",  -- (10000) tilePointer
+    "000000000", 
+    "000000000", 
     "000000000",
     "000000000",
     "000000000",
@@ -282,6 +282,12 @@ begin  -- behavioral
         when others => null;
       end case;
 
+      if not (upm_seq = "0101") then
+        writeMap <= '0';
+      elsif not (upm_seq = "0110") then
+        readMap <= '0';
+      end if;
+      
       -- SEQ
       case upm_seq is
         when "0000" => uPC <= uPC + 1;
@@ -289,8 +295,8 @@ begin  -- behavioral
         when "0010" => uPC <= unsigned(k2(to_integer(unsigned(ir_m))));
         when "0011" => uPC <= (others => '0');
         when "0100" => uPC <= unsigned(upm_uaddr);
-        when "0101" => null;            --ledig  (write?)
-        when "0110" => null;            --ledig  (read?)
+        when "0101" => writeMap <= '1';           -- write
+        when "0110" => readMap <= '1';            -- read
         when "0111" => null;            --ledig
         when "1000" =>
           if Z = '1' then
