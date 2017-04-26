@@ -1,0 +1,10 @@
+
+START:
+	sleep	100
+	add		gr1 1
+	add		gr1 1
+	add		gr1 1
+	sleep	50
+	add		gr1 1
+	add		gr1 1
+	jump	START

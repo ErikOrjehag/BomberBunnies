@@ -17,11 +17,11 @@ entity CPU is
   port (
     clk                 : in std_logic;                      -- system clock (100 MHz)
     rst	                : in std_logic;
-    joy1x               : in std_logic_vector(9 downto 0) := (others => '0');
-    joy1y               : in std_logic_vector(9 downto 0) := (others => '0');
+    joy1x               : in std_logic_vector(1 downto 0) := (others => '0');
+    joy1y               : in std_logic_vector(1 downto 0) := (others => '0');
     btn1                : in std_logic;
-    joy2x               : in std_logic_vector(9 downto 0) := (others => '0');
-    joy2y               : in std_logic_vector(9 downto 0) := (others => '0');
+    joy2x               : in std_logic_vector(1 downto 0) := (others => '0');
+    joy2y               : in std_logic_vector(1 downto 0) := (others => '0');
     btn2                : in std_logic;
     tilePointer         : buffer std_logic_vector(7 downto 0) := (others => '0');
     tileTypeRead        : in std_logic_vector(7 downto 0);
@@ -199,11 +199,11 @@ begin  -- behavioral
 --    x"000" & "000" & tileTypeWrite              when "0111",
     x"000" & "000" & tileTypeRead               when "1000",
 --    x"000" & "000" & tilePointer                when "1001",
-    x"000" & "0" & joy1x                        when "1010",
-    x"000" & "0" & joy1y                        when "1011",
+    x"00000" & "0" & joy1x                        when "1010",
+    x"00000" & "0" & joy1y                        when "1011",
     x"00000" & "00" & btn1                      when "1100",
-    x"000" & "0" & joy2x                        when "1101",
-    x"000" & "0" & joy2y                        when "1110",
+    x"00000" & "0" & joy2x                        when "1101",
+    x"00000" & "0" & joy2y                        when "1110",
     x"00000" & "00" & btn1                      when "1111",
     buss                                        when others;
 

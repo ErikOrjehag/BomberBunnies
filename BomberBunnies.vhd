@@ -33,11 +33,11 @@ architecture Behavioral of BomberBunnies is
     port (
       clk               : in std_logic;                      -- system clock (100 MHz)
       rst	        : in std_logic;
-      joy1x             : in std_logic_vector(9 downto 0);
-      joy1y             : in std_logic_vector(9 downto 0);
+      joy1x             : in std_logic_vector(1 downto 0);
+      joy1y             : in std_logic_vector(1 downto 0);
       btn1              : in std_logic;
-      joy2x             : in std_logic_vector(9 downto 0);
-      joy2y             : in std_logic_vector(9 downto 0);
+      joy2x             : in std_logic_vector(1 downto 0);
+      joy2y             : in std_logic_vector(1 downto 0);
       btn2              : in std_logic;
       tilePointer       : buffer std_logic_vector(7 downto 0);
       tileTypeRead      : in std_logic_vector(7 downto 0);
@@ -110,8 +110,8 @@ architecture Behavioral of BomberBunnies is
     port (
       clk         : in  std_logic;          -- system clock
       rst         : in  std_logic;
-      joyX        : out std_logic_vector(9 downto 0);
-      joyY        : out std_logic_vector(9 downto 0);
+      joyX        : out std_logic_vector(1 downto 0);
+      joyY        : out std_logic_vector(1 downto 0);
       btn         : out std_logic;
 
       MISO        : in  STD_LOGIC;			-- Master input slave output
@@ -122,8 +122,8 @@ architecture Behavioral of BomberBunnies is
   end component;
 	
   -- intermediate signals between PICT_MEM and VGA_MOTOR
-  signal	data_out2_s     : std_logic_vector(7 downto 0);         -- data
-  signal	addr2_s		: unsigned(10 downto 0);                -- address
+  signal data_out2_s : std_logic_vector(7 downto 0);         -- data
+  signal addr2_s : unsigned(10 downto 0);                -- address
 
   signal xPixel : unsigned(9 downto 0);
   signal yPixel : unsigned(9 downto 0);
@@ -147,30 +147,48 @@ architecture Behavioral of BomberBunnies is
   signal p2x : std_logic_vector(9 downto 0);
   signal p2y : std_logic_vector(9 downto 0);
 
-  signal joy1x : std_logic_vector(9 downto 0);
-  signal joy1y : std_logic_vector(9 downto 0);
+  signal joy1x : std_logic_vector(1 downto 0);
+  signal joy1y : std_logic_vector(1 downto 0);
   signal btn1  : std_logic;
-  signal joy2x : std_logic_vector(9 downto 0);
-  signal joy2y : std_logic_vector(9 downto 0);
+  signal joy2x : std_logic_vector(1 downto 0);
+  signal joy2y : std_logic_vector(1 downto 0);
   signal btn2  : std_logic;
 
-  signal clkDiv : unsigned(20 downto 0) := (others => '0');
-  signal slowClk : std_logic := '0';
+  signal CPUClkDiv : unsigned(19 downto 0) := (others => '0');
+  constant CPUClkEndVal : unsigned(19 downto 0) := "00011000011010100000";
+  signal CPUClk : std_logic := '0';
+
+  signal JOYClkDiv : unsigned(9 downto 0) := (others => '0');	-- Stores count value
+  constant JOYClkEndVal : unsigned(9 downto 0) := "1011101110";	-- End count value
+  signal JOYClk : std_logic := '0';
 
 begin
 
   process(clk)
   begin
     if rising_edge(clk) then
-      if rst='1' or clkDiv = 100000 then
-	clkDiv <= (others => '0');
+      if rst='1' or CPUClkDiv = CPUClkEndVal then
+	CPUClkDiv <= (others => '0');
       else
-	clkDiv <= clkDiv + 1;
+	CPUClkDiv <= CPUClkDiv + 1;
       end if;
     end if;
   end process;
 
-  slowClk <= '1' when (clkDiv = 0) else '0';
+  CPUClk <= '1' when (CPUClkDiv = 0) else '0';
+
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      if rst='1' or JOYClkDiv = JOYClkEndVal then
+	JOYClkDiv <= (others => '0');
+      else
+	JOYClkDiv <= JOYClkDiv + 1;
+      end if;
+    end if;
+  end process;
+
+  JOYClk <= '1' when (JOYClkDiv = 0) else '0';
 
   -- picture memory component connection
   U1 : VGA_MOTOR port map(
@@ -217,7 +235,7 @@ begin
     playerPixel => playerPixel);
 
   U5 : CPU port map (--
-    clk => slowClk,
+    clk => CPUClk,
     rst => rst,
     joy1x => joy1x,
     joy1y => joy1y,
@@ -237,7 +255,7 @@ begin
   );
 
   U6 : JOYSTICK port map (
-    clk => clk,
+    clk => JOYClk,
     rst => rst,
     joyX => joy1x,
     joyY => joy1y,

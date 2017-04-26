@@ -10,31 +10,24 @@ use IEEE.NUMERIC_STD.ALL;               -- IEEE library for the unsigned type
                                         -- and various arithmetic operations
 entity JOYSTICK is
   port (
-    clk         : in  std_logic;          -- system clock
+    clk         : in  std_logic;          -- 67 kHz clock
     rst         : in  std_logic;
 
     -- Outputs
-    joyX      : out std_logic_vector(9 downto 0) := (others => '0');
-    joyY      : out std_logic_vector(9 downto 0) := (others => '0');
+    joyX      : out std_logic_vector(1 downto 0) := (others => '0');
+    joyY      : out std_logic_vector(1 downto 0) := (others => '0');
     btn       : out std_logic := '0';
 
     -- Joystick pins
     MISO        : in  STD_LOGIC;			-- Master input slave output
     MOSI        : out STD_LOGIC := '0';		-- Master out slave in
-    sCLK        : out STD_LOGIC := '0';			-- Serial clock
+    SCLK        : out STD_LOGIC := '0';			-- Serial clock
     SS          : out std_logic := '1'  -- start sequence
   );
 
 end JOYSTICK;
 
 architecture Behavioral of JOYSTICK is
-
-  component SLOW_CLOCK
-    port (
-      clk    : in  std_logic;           -- system clock
-      rst    : in  std_logic;           -- rst
-      clkout : buffer std_logic);          -- 67 kHz clock
-  end component;
 
 --===================================================================================
 -- 			Signals and Constants
@@ -51,8 +44,9 @@ architecture Behavioral of JOYSTICK is
 
   signal CE : STD_LOGIC := '0';		       			-- Clock enable, controls serial
                                                                 -- clock signal sent to slave
-  signal slowClk : std_logic:= '0';          -- 67 kHz clock
 
+  signal xVal : unsigned(9 downto 0) := (others => '0');
+  signal yVal : unsigned(9 downto 0) := (others => '0');
       
 --===================================================================================
 --              		Implementation
@@ -60,17 +54,17 @@ architecture Behavioral of JOYSTICK is
 begin  -- Behavioral
 
   -- Serial clock output, allow if clock enable asserted
-  SCLK <= slowClk when (CE = '1') else '0';
+  SCLK <= clk when (CE = '1') else '0';
 
   ---------------------------------------
   -- Read Shift Register
   -- master reads on rising edges,
   -- slave changes data on falling edges
   ---------------------------------------
-  process (slowClk, rst) begin
+  process (clk, rst) begin
     if rst = '1' then
       rSR <= (others => '0');
-    elsif rising_edge(slowClk) then
+    elsif rising_edge(clk) then
       -- Enable shift during RxTx state only
       case(STATE) is
         when Init =>
@@ -90,19 +84,36 @@ begin  -- Behavioral
   --------------------------
   process(STATE) begin
     if STATE = Done then
-      joyX <= rSR(25 downto 24) & rSR(39 downto 32);
-      joyY <= rSR(9 downto 8) & rSR(23 downto 16);
-      --joyX <= "00" & rSR(39 downto 32);
-      --joyY <= "00" & rSR(23 downto 16);
+
+      xVal <= unsigned(rSR(25 downto 24) & rSR(39 downto 32));
+      yVal <= unsigned(rSR(9 downto 8) & rSR(23 downto 16));
+
+      if (xVal > 768) then
+        joyX <= "01";                   -- Moving right
+      elsif (xVal < 255) then
+        joyX <= "10";                   -- Moving left
+      else
+        joyX <= "00";
+      end if;
+
+      if (yVal > 768) then
+        joyY <= "01";                   -- Moving up
+      elsif (yVal < 255) then
+        joyY <= "10";                   -- Moving down
+      else
+        joyY <= "00";
+      end if;
+      
       btn <= rSR(1);
+      
     end if;
   end process;
 
   --------------------------------
   -- State Register
   --------------------------------
-  STATE_REGISTER: process(slowClk, rst) begin
-    if falling_edge(slowClk) then         -- Ska vara falling
+  STATE_REGISTER: process(clk, rst) begin
+    if falling_edge(clk) then         -- Ska vara falling
       STATE <= NSTATE;
     end if;
   end process;
@@ -111,13 +122,13 @@ begin  -- Behavioral
   --------------------------------
   -- Output Logic/Assignment
   --------------------------------
-  OUTPUT_LOGIC: process (slowClk, rst)
+  OUTPUT_LOGIC: process (clk, rst)
   begin
     if (rst = '1') then  -- Reset/clear values
       CE <= '0';        -- Disable serial clock
       bitCount <= (others => '0'); -- Clear #bits read/written
 
-    elsif falling_edge(slowClk) then         -- ska vara falling
+    elsif falling_edge(clk) then         -- ska vara falling
       case (STATE) is
         when Init =>
           bitCount <= (others => '0');		-- Have not read/written anything yet
@@ -145,7 +156,7 @@ begin  -- Behavioral
   -----------------------------------------------------------------------------
   -- SS Process block
   -----------------------------------------------------------------------------
-  SS_PROCESS: process (slowClk, rst, STATE)
+  SS_PROCESS: process (clk, rst, STATE)
   begin  -- process
     if rst = '1' then
       SS <= '1';
@@ -183,11 +194,4 @@ begin  -- Behavioral
         NSTATE <= Init;
     end case;      
   end process;
-
-  U1 : SLOW_CLOCK port map (
-    clk    => clk,
-    rst    => rst,
-    clkout => slowClk);
-  
-
 end Behavioral;
