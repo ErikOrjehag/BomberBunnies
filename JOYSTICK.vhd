@@ -19,10 +19,10 @@ entity JOYSTICK is
     btn       : out std_logic := '0';
 
     -- Joystick pins
-    MISO        : in  STD_LOGIC;			-- Master input slave output
+    MISO        : in  STD_LOGIC;		-- Master input slave output
     MOSI        : out STD_LOGIC := '0';		-- Master out slave in
-    SCLK        : out STD_LOGIC := '0';			-- Serial clock
-    SS          : out std_logic := '1'  -- start sequence
+    SS          : out std_logic := '1';          -- start sequence
+    SCLK        : out std_logic := '0'
   );
 
 end JOYSTICK;
@@ -43,10 +43,6 @@ architecture Behavioral of JOYSTICK is
   signal rSR : STD_LOGIC_VECTOR(39 downto 0) := (others => '0');	-- Read shift register
 
   signal CE : STD_LOGIC := '0';		       			-- Clock enable, controls serial
-                                                                -- clock signal sent to slave
-
-  signal xVal : unsigned(9 downto 0) := (others => '0');
-  signal yVal : unsigned(9 downto 0) := (others => '0');
       
 --===================================================================================
 --              		Implementation
@@ -145,8 +141,7 @@ begin  -- Behavioral
           CE <= '0';		      	-- Disable serial clock
           bitCount <= (others => '0');		-- Clear #bits read/written
           
-      end case;
-						
+      end case;					
     end if;
   end process;
 
@@ -162,7 +157,6 @@ begin  -- Behavioral
     elsif STATE = Done then
       SS <= '1';
     end if;
-    
   end process;
   
   
