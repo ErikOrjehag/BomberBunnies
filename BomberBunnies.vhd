@@ -19,10 +19,14 @@ entity BomberBunnies is
     vgaRed	        : out std_logic_vector(2 downto 0);   -- VGA red
     vgaGreen            : out std_logic_vector(2 downto 0);     -- VGA green
     vgaBlue	        : out std_logic_vector(2 downto 1);     -- VGA blue
-    MISO                : in  std_logic;			-- Master input slave output
-    MOSI                : out STD_LOGIC;			-- Master out slave in
-    SCLK                : out STD_LOGIC;			-- Serial clock
-    SS                  : out STD_LOGIC);
+    MISO1               : in  std_logic;			-- Master input slave output
+    MOSI1               : out STD_LOGIC;			-- Master out slave in
+    SCLK1               : buffer STD_LOGIC := '0';			-- Serial clock
+    SS1                 : out STD_LOGIC;
+    MISO2               : in  std_logic;			-- Master input slave output
+    MOSI2               : out STD_LOGIC;			-- Master out slave in
+    SCLK2               : buffer STD_LOGIC := '0';			-- Serial clock
+    SS2                 : out STD_LOGIC);
 end BomberBunnies;
 
 -- architecture
@@ -108,16 +112,15 @@ architecture Behavioral of BomberBunnies is
 
   component JOYSTICK
     port (
-      clk         : in  std_logic;          -- system clock
-      rst         : in  std_logic;
-      joyX        : out std_logic_vector(1 downto 0);
-      joyY        : out std_logic_vector(1 downto 0);
-      btn         : out std_logic;
-
-      MISO        : in  STD_LOGIC;			-- Master input slave output
-      MOSI        : out STD_LOGIC;			-- Master out slave in
-      SCLK        : out STD_LOGIC;			-- Serial clock
-      SS          : out std_logic
+      clk       : in  std_logic;          -- system clock
+      rst       : in  std_logic;
+      SCLK      : out std_logic;
+      MISO      : in  STD_LOGIC;
+      MOSI      : out  STD_LOGIC;
+      joyX      : out std_logic_vector(1 downto 0);
+      joyY      : out std_logic_vector(1 downto 0);
+      btn       : out std_logic;			-- Master input slave output
+      SS        : out std_logic
     );
   end component;
 	
@@ -252,16 +255,28 @@ begin
     p2y => p2y
   );
 
-  U6 : JOYSTICK port map (
+  U6 : JOYSTICK port map (              -- Player 1
     clk => JOYClk,
     rst => rst,
     joyX => joy1x,
     joyY => joy1y,
     btn => btn1,
-    MISO => MISO,
-    MOSI => MOSI,
-    SCLK => SCLK,
-    SS => SS
+    MISO => MISO1,
+    MOSI => MOSI1,
+    SCLK => SCLK1,
+    SS => SS1
+  );
+
+  U7 : JOYSTICK port map (              -- Player 2
+    clk => JOYClk,
+    rst => rst,
+    joyX => joy2x,
+    joyY => joy2y,
+    btn => btn2,
+    MISO => MISO2,
+    MOSI => MOSI2,
+    SCLK => SCLK2,
+    SS => SS2
   );
   
   -- VGA motor component connection
