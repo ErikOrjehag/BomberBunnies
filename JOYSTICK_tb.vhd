@@ -34,11 +34,18 @@ ARCHITECTURE behavior OF JOYSTICK_tb IS
   signal btn : std_logic;
   signal joyX : std_logic_vector(1 downto 0);
   signal joyY : std_logic_vector(1 downto 0);
-  signal MISO : std_logic := '1';
+  signal MISO : std_logic := '0';
   signal MOSI : std_logic;
   signal SCLK : std_logic;
   
 BEGIN
+
+  process(clk)
+  begin
+    if rising_edge(clk) then
+      MISO <= not MISO;
+    end if;
+  end process;
   -- Instantiate the Unit Under Test (UUT)
   uut: JOYSTICK PORT MAP (
     clk => clk,

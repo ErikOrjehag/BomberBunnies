@@ -42,7 +42,7 @@ architecture behavioral of TILE_MEMORY is
                  x"34",x"34",x"34",x"34",x"34",x"14",x"34",x"34",x"54",x"34",x"34",x"34",x"74",x"34",x"34",x"34",
                  x"34",x"54",x"34",x"54",x"34",x"54",x"34",x"34",x"34",x"34",x"34",x"34",x"74",x"74",x"54",x"34",
                  
-                 x"49",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",
+                 x"49",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",     -- Wall
                  x"49",x"6D",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"DA",
                  x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
                  x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",

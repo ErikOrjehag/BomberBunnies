@@ -85,20 +85,17 @@ begin  -- Behavioral
   
   
   process(STATE) begin
-    --xVal <= unsigned(rSR(25 downto 24) & rSR(39 downto 32));
-    --yVal <= unsigned(rSR(9 downto 8) & rSR(23 downto 16));
-
     
     if STATE = Done then
       --case rSR(25 downto 24) is
-      case rSR(39 downto 38) is
+      case rSR(25 downto 24) is
         when "11" => joyX <= "01";
         when "00" => joyX <= "10";
         when others => joyX <= "00";
       end case;
 
       --case rSR(9 downto 8) is
-      case rSR(23 downto 22) is
+      case rSR(9 downto 8) is
         when "11" => joyY <= "01";
         when "00" => joyY <= "10";
         when others => joyY <= "00";
@@ -136,7 +133,7 @@ begin  -- Behavioral
           
         when RxTx =>
           bitCount <= bitCount + 1;	-- Begin counting bits received/written
-                                        -- Have written all bits to slave so prevent another falling edge
+          
           if(bitCount >= X"40") then
             CE <= '0';
                                         -- Have not written all data, normal operation
