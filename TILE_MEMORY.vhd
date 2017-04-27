@@ -25,7 +25,7 @@ architecture behavioral of TILE_MEMORY is
 
   -- Tile memory
   signal memory : ram_t :=
-               ( x"74",x"34",x"74",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"54",x"34",x"34", --grass
+               ( x"74",x"34",x"74",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"54",x"34",x"34",   -- Grass
                  x"34",x"34",x"74",x"34",x"34",x"54",x"34",x"34",x"34",x"34",x"54",x"34",x"34",x"54",x"14",x"54",
                  x"54",x"34",x"14",x"14",x"14",x"54",x"34",x"34",x"34",x"34",x"54",x"14",x"34",x"54",x"34",x"34",
                  x"54",x"14",x"34",x"14",x"34",x"54",x"34",x"34",x"14",x"34",x"34",x"34",x"14",x"34",x"34",x"34",
@@ -42,7 +42,7 @@ architecture behavioral of TILE_MEMORY is
                  x"34",x"34",x"34",x"34",x"34",x"14",x"34",x"34",x"54",x"34",x"34",x"34",x"74",x"34",x"34",x"34",
                  x"34",x"54",x"34",x"54",x"34",x"54",x"34",x"34",x"34",x"34",x"34",x"34",x"74",x"74",x"54",x"34",
                  
-                 x"49",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",     -- Wall
+                 x"49",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",   -- Wall
                  x"49",x"6D",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"DA",
                  x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
                  x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
@@ -58,23 +58,6 @@ architecture behavioral of TILE_MEMORY is
                  x"49",x"6D",x"91",x"91",x"91",x"91",x"91",x"91",x"91",x"91",x"91",x"91",x"91",x"91",x"DA",x"DA",
                  x"49",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"DA",
                  x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",
-                 
-                 --x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",   -- Wall(SteelCross)
-                 --x"6D",x"24",x"6D",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"6D",x"24",x"6D",
-                 --x"6D",x"6D",x"24",x"6D",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"6D",x"24",x"6D",x"6D",
-                 --x"6D",x"B6",x"6D",x"24",x"6D",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"6D",x"24",x"6D",x"B6",x"6D",
-                 --x"6D",x"B6",x"B6",x"6D",x"24",x"6D",x"B6",x"B6",x"B6",x"B6",x"6D",x"24",x"6D",x"B6",x"B6",x"6D",
-                 --x"6D",x"B6",x"B6",x"B6",x"6D",x"24",x"6D",x"B6",x"B6",x"6D",x"24",x"6D",x"B6",x"B6",x"B6",x"6D",
-                 --x"6D",x"B6",x"B6",x"B6",x"B6",x"6D",x"24",x"6D",x"6D",x"24",x"6D",x"B6",x"B6",x"B6",x"B6",x"6D",
-                 --x"6D",x"B6",x"B6",x"B6",x"B6",x"B6",x"6D",x"24",x"24",x"6D",x"B6",x"B6",x"B6",x"B6",x"B6",x"6D",
-                 --x"6D",x"B6",x"B6",x"B6",x"B6",x"B6",x"6D",x"24",x"24",x"6D",x"B6",x"B6",x"B6",x"B6",x"B6",x"6D",
-                 --x"6D",x"B6",x"B6",x"B6",x"B6",x"6D",x"24",x"6D",x"6D",x"24",x"6D",x"B6",x"B6",x"B6",x"B6",x"6D",
-                 --x"6D",x"B6",x"B6",x"B6",x"6D",x"24",x"6D",x"B6",x"B6",x"6D",x"24",x"6D",x"B6",x"B6",x"B6",x"6D",
-                 --x"6D",x"B6",x"B6",x"6D",x"24",x"6D",x"B6",x"B6",x"B6",x"B6",x"6D",x"24",x"6D",x"B6",x"B6",x"6D",
-                 --x"6D",x"B6",x"6D",x"24",x"6D",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"6D",x"24",x"6D",x"B6",x"6D",
-                 --x"6D",x"6D",x"24",x"6D",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"6D",x"24",x"6D",x"6D",
-                 --x"6D",x"24",x"6D",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"6D",x"24",x"6D",
-                 --x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",
 
                  x"D4",x"D4",x"D4",x"D4",x"D4",x"D4",x"D4",x"D4",x"D4",x"D4",x"D4",x"D4",x"D4",x"D4",x"D4",x"D4",   -- DestructiveWall(YellowBrick)
                  x"D4",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"D4",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"D4",
@@ -110,7 +93,7 @@ architecture behavioral of TILE_MEMORY is
                  x"A4",x"E0",x"C4",x"E0",x"E8",x"E8",x"E0",x"E8",x"E8",x"E8",x"E8",x"E0",x"E0",x"E0",x"E0",x"A4",
                  x"A4",x"A4",x"A4",x"C4",x"E0",x"E0",x"E0",x"E0",x"E0",x"C4",x"E0",x"C4",x"E0",x"A4",x"A4",x"A4",
 
-                 x"58",x"58",x"58",x"58",x"58",x"58",x"EF",x"02",x"EF",x"58",x"58",x"58",x"58",x"58",x"54",x"54",   -- Ägg
+                 x"58",x"58",x"58",x"58",x"58",x"58",x"EF",x"02",x"EF",x"58",x"58",x"58",x"58",x"58",x"54",x"54",   -- Egg
                  x"58",x"58",x"58",x"58",x"58",x"02",x"EF",x"EF",x"EF",x"02",x"58",x"58",x"58",x"54",x"54",x"54",
                  x"58",x"58",x"58",x"58",x"0F",x"0F",x"0F",x"0F",x"0F",x"0F",x"0F",x"58",x"54",x"54",x"54",x"58",
                  x"58",x"58",x"58",x"0F",x"E0",x"0F",x"E0",x"0F",x"E0",x"0F",x"E0",x"0F",x"54",x"54",x"58",x"58",
