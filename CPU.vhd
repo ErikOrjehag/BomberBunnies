@@ -49,11 +49,11 @@ architecture behavioral of CPU is
   component MICRO_MEMORY
     port (
       uAddr : in  unsigned(8 downto 0);
-      uData : out std_logic_vector(28 downto 0));
+      uData : out std_logic_vector(29 downto 0));
   end component;
 
   signal PM : std_logic_vector(22 downto 0);
-  signal uPM : std_logic_vector(28 downto 0);
+  signal uPM : std_logic_vector(29 downto 0);
 
   -- Bus
   signal buss : std_logic_vector(22 downto 0) := (others => '0');
@@ -64,7 +64,7 @@ architecture behavioral of CPU is
     "00000000000000000000101", -- 0    (tillfälligt = 5)
     "00000000000000000001000", -- 1    (tillfälligt = 8)
     "00000000000000000000000", -- 2
-    "00000000000000000000000", -- 3*
+    "00000000000000000000000", -- 3
     "00000000000000000000000", -- 4
     "00000000000000000000000", -- 5
     "00000000000000000000000", -- joy1x
@@ -126,7 +126,7 @@ architecture behavioral of CPU is
 );
 
   -- uPM signals
-  signal upm_instr : std_logic_vector(28 downto 0);
+  signal upm_instr : std_logic_vector(29 downto 0);
   
   signal upm_alu : std_logic_vector(3 downto 0);
   signal upm_tb : std_logic_vector(3 downto 0);
@@ -134,7 +134,7 @@ architecture behavioral of CPU is
   signal upm_s : std_logic_vector(0 downto 0);
   signal upm_p : std_logic_vector(0 downto 0);
   signal upm_lc : std_logic_vector(1 downto 0);
-  signal upm_seq : std_logic_vector(3 downto 0);
+  signal upm_seq : std_logic_vector(4 downto 0);
   signal upm_uaddr : std_logic_vector(8 downto 0);
 
   -- IR signals
@@ -159,8 +159,31 @@ architecture behavioral of CPU is
   signal Z : std_logic := '0';
   signal L : std_logic := '0';
 
+  -- Joystick flags
+  signal j1r : std_logic := '0';
+  signal j1u : std_logic := '0';
+  signal j1l : std_logic := '0';
+  signal j1d : std_logic := '0';
+  signal b1 : std_logic := '0';
+  signal j2r : std_logic := '0';
+  signal j2u : std_logic := '0';
+  signal j2l : std_logic := '0';
+  signal j2d : std_logic := '0';
+  signal b2 : std_logic := '0';
 
 begin  -- behavioral
+
+  -- Update joystick flags
+  j1r <= '1' when (joy1x = "01") else '0';
+  j1u <= '1' when (joy1y = "01") else '0';
+  j1l <= '1' when (joy1x = "10") else '0';
+  j1d <= '1' when (joy1y = "10") else '0';
+  b1 <= '1' when (btn1 = '1') else '0';
+  j2r <= '1' when (joy2x = "01") else '0';
+  j2u <= '1' when (joy2y = "01") else '0';
+  j2l <= '1' when (joy2x = "10") else '0';
+  j2d <= '1' when (joy2y = "10") else '0';
+  b2 <= '1' when (btn2 = '1') else '0';
   
   -- Player positions
   p1x <= GRx(12)(9 downto 0);
@@ -171,13 +194,13 @@ begin  -- behavioral
   -- uPM signals
   upm_instr <= uPM;
   
-  upm_alu   <= upm_instr(28 downto 25);
-  upm_tb    <= upm_instr(24 downto 21);
-  upm_fb    <= upm_instr(20 downto 17);
-  upm_s     <= upm_instr(16 downto 16);
-  upm_p     <= upm_instr(15 downto 15);
-  upm_lc    <= upm_instr(14 downto 13);
-  upm_seq   <= upm_instr(12 downto 9);
+  upm_alu   <= upm_instr(29 downto 26);
+  upm_tb    <= upm_instr(25 downto 22);
+  upm_fb    <= upm_instr(21 downto 18);
+  upm_s     <= upm_instr(17 downto 17);
+  upm_p     <= upm_instr(16 downto 16);
+  upm_lc    <= upm_instr(15 downto 14);
+  upm_seq   <= upm_instr(13 downto 9);
   upm_uaddr <= upm_instr(8  downto 0);
   
   -- IR signals
@@ -282,51 +305,90 @@ begin  -- behavioral
         when others => null;
       end case;
 
-      if not (upm_seq = "0101") then
+      if not (upm_seq = "00101") then
         writeMap <= '0';
-      elsif not (upm_seq = "0110") then
+      elsif not (upm_seq = "00110") then
         readMap <= '0';
       end if;
       
       -- SEQ
       case upm_seq is
-        when "0000" => uPC <= uPC + 1;
-        when "0001" => uPC <= unsigned(k1(to_integer(unsigned(ir_op))));
-        when "0010" => uPC <= unsigned(k2(to_integer(unsigned(ir_m))));
-        when "0011" => uPC <= (others => '0');
-        when "0100" => uPC <= unsigned(upm_uaddr);
-        when "0101" => writeMap <= '1';           -- write
-        when "0110" => readMap <= '1';            -- read
-        when "0111" => null;            --ledig
-        when "1000" =>
+        when "00000" => uPC <= uPC + 1;
+        when "00001" => uPC <= unsigned(k1(to_integer(unsigned(ir_op))));
+        when "00010" => uPC <= unsigned(k2(to_integer(unsigned(ir_m))));
+        when "00011" => uPC <= (others => '0');
+        when "00100" => uPC <= unsigned(upm_uaddr);
+        when "00101" => writeMap <= '1';           -- write
+        when "00110" => readMap <= '1';            -- read
+        when "00111" => null;            --ledig
+        when "01000" =>
           if Z = '1' then
             uPC <= unsigned(upm_uaddr);
           end if;
-        when "1001" =>
+        when "01001" =>
           if N = '1' then
             uPC <= unsigned(upm_uaddr);
           end if;
-        when "1010" =>
+        when "01010" =>
           if C = '1' then
             uPC <= unsigned(upm_uaddr);
           end if;
-        when "1011" => 
+        when "01011" => 
           if O = '1' then
             uPC <= unsigned(upm_uaddr);
           end if;
-        when "1100" =>
+        when "01100" =>
           if L = '1' then
             uPC <= unsigned(upm_uaddr);
           else
             uPC <= uPC + 1;
           end if;
-        when "1101" => null;            --ledig
-        when "1110" => null;            --ledig
-        when "1111" => null;            -- HALT
+        when "01101" => null;            --ledig
+        when "01110" => null;            --ledig
+        when "01111" => null;            -- HALT
+        when "10000" =>
+          if j1r = '1' then
+            uPC <= unsigned(upm_uaddr);
+          end if;
+        when "10001" =>
+          if j1u = '1' then
+            uPC <= unsigned(upm_uaddr);
+          end if;
+        when "10010" =>
+          if j1l = '1' then
+            uPC <= unsigned(upm_uaddr);
+          end if;
+        when "10011" =>
+          if j1d = '1' then
+            uPC <= unsigned(upm_uaddr);
+          end if;
+        when "10100" =>
+          if b1 = '1' then
+            uPC <= unsigned(upm_uaddr);
+          end if;
+        when "10101" =>
+          if j2r = '1' then
+            uPC <= unsigned(upm_uaddr);
+          end if;
+        when "10110" =>
+          if j2u = '1' then
+            uPC <= unsigned(upm_uaddr);
+          end if;
+        when "10111" =>
+          if j2l = '1' then
+            uPC <= unsigned(upm_uaddr);
+          end if;
+        when "11000" =>
+          if j2d = '1' then
+            uPC <= unsigned(upm_uaddr);
+          end if;
+        when "11001" =>
+          if b2 = '1' then
+            uPC <= unsigned(upm_uaddr);
+          end if;
         when others => null;
       end case;
-      
-    end if;                             -- rising_edge(clk)
+    end if;
   end process;
 
   -- Program memory component connection (PM)

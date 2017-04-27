@@ -16,16 +16,16 @@ entity BomberBunnies is
     rst                 : in std_logic;                         -- reset
     hSync	        : out std_logic;                        -- horizontal sync
     vSync	        : out std_logic;                        -- vertical sync
-    vgaRed	        : out std_logic_vector(2 downto 0);   -- VGA red
+    vgaRed	        : out std_logic_vector(2 downto 0);     -- VGA red
     vgaGreen            : out std_logic_vector(2 downto 0);     -- VGA green
     vgaBlue	        : out std_logic_vector(2 downto 1);     -- VGA blue
     MISO1               : in  std_logic;			-- Master input slave output
     MOSI1               : out STD_LOGIC;			-- Master out slave in
-    SCLK1               : buffer STD_LOGIC := '0';			-- Serial clock
+    SCLK1               : buffer STD_LOGIC := '0';		-- Serial clock
     SS1                 : out STD_LOGIC;
     MISO2               : in  std_logic;			-- Master input slave output
     MOSI2               : out STD_LOGIC;			-- Master out slave in
-    SCLK2               : buffer STD_LOGIC := '0';			-- Serial clock
+    SCLK2               : buffer STD_LOGIC := '0';		-- Serial clock
     SS2                 : out STD_LOGIC);
 end BomberBunnies;
 
@@ -59,9 +59,9 @@ architecture Behavioral of BomberBunnies is
     port (
       clk		: in std_logic;                         -- system clock
       rst	        : in std_logic;
-      playerPixel       : in std_logic_vector(7 downto 0);   -- pixel from player
-      tilePixel         : in std_logic_vector(7 downto 0);   -- Tile pixel data
-      xPixel            : buffer unsigned(9 downto 0);         -- Horizontal pixel counter
+      playerPixel       : in std_logic_vector(7 downto 0);      -- pixel from player
+      tilePixel         : in std_logic_vector(7 downto 0);      -- Tile pixel data
+      xPixel            : buffer unsigned(9 downto 0);          -- Horizontal pixel counter
       yPixel	        : buffer unsigned(9 downto 0);		-- Vertical pixel counter
       vgaRed            : out std_logic_vector(2 downto 0);
       vgaGreen          : out std_logic_vector(2 downto 0);
@@ -74,8 +74,8 @@ architecture Behavioral of BomberBunnies is
   component MAP_MEMORY
     port (
       clk               : in std_logic;                         -- system clock (100 MHz)
-      xPixel            : in unsigned(9 downto 0);      -- Horizontal pixel counter
-      yPixel	        : in unsigned(9 downto 0);      -- Vertical pixel counter
+      xPixel            : in unsigned(9 downto 0);              -- Horizontal pixel counter
+      yPixel	        : in unsigned(9 downto 0);              -- Vertical pixel counter
       readMap           : in std_logic;
       writeMap          : in std_logic;
       tilePointer       : in std_logic_vector(7 downto 0);
@@ -99,34 +99,34 @@ architecture Behavioral of BomberBunnies is
   -- VGA motor component
   component SPRITE_MEMORY
     port (
-      clk		: in std_logic;                 -- system clock
-      xPixel            : in unsigned(9 downto 0);               -- Horizontal pixel counter
+      clk		: in std_logic;                         -- system clock
+      xPixel            : in unsigned(9 downto 0);              -- Horizontal pixel counter
       yPixel	        : in unsigned(9 downto 0);	        -- Vertical pixel counter
-      p1x               : in unsigned(9 downto 0);               -- Number of pixels on board 16x16x15
-      p1y               : in unsigned(9 downto 0);               -- Number of pixels on board 16x16x13
-      p2x               : in unsigned(9 downto 0);               -- Number of pixels on board 16x16x15
-      p2y               : in unsigned(9 downto 0);               -- Number of pixels on board 16x16x13
-      playerPixel       : out std_logic_vector(7 downto 0));     -- pixel from player
+      p1x               : in unsigned(9 downto 0);              -- Number of pixels on board 16x16x15
+      p1y               : in unsigned(9 downto 0);              -- Number of pixels on board 16x16x13
+      p2x               : in unsigned(9 downto 0);              -- Number of pixels on board 16x16x15
+      p2y               : in unsigned(9 downto 0);              -- Number of pixels on board 16x16x13
+      playerPixel       : out std_logic_vector(7 downto 0));    -- pixel from player
            
   end component;
 
   component JOYSTICK
     port (
-      clk       : in  std_logic;          -- system clock
+      clk       : in  std_logic;                                -- system clock
       rst       : in  std_logic;
       SCLK      : out std_logic;
       MISO      : in  STD_LOGIC;
       MOSI      : out  STD_LOGIC;
       joyX      : out std_logic_vector(1 downto 0);
       joyY      : out std_logic_vector(1 downto 0);
-      btn       : out std_logic;			-- Master input slave output
+      btn       : out std_logic;			        -- Master input slave output
       SS        : out std_logic
     );
   end component;
 	
   -- intermediate signals between PICT_MEM and VGA_MOTOR
-  signal data_out2_s : std_logic_vector(7 downto 0);         -- data
-  signal addr2_s : unsigned(10 downto 0);                -- address
+  signal data_out2_s : std_logic_vector(7 downto 0);            -- data
+  signal addr2_s : unsigned(10 downto 0);                       -- address
 
   signal xPixel : unsigned(9 downto 0);
   signal yPixel : unsigned(9 downto 0);
@@ -161,8 +161,8 @@ architecture Behavioral of BomberBunnies is
   constant CPUClkEndVal : unsigned(19 downto 0) := "00011000011010100000";
   signal CPUClk : std_logic := '0';
 
-  signal JOYClkDiv : unsigned(9 downto 0) := (others => '0');	-- Stores count value
-  constant JOYClkEndVal : unsigned(9 downto 0) := "1011101110";	-- End count value
+  signal JOYClkDiv : unsigned(9 downto 0) := (others => '0');	        -- Stores count value
+  constant JOYClkEndVal : unsigned(9 downto 0) := "1011101110";	        -- End count value
   signal JOYClk : std_logic := '0';
 
 begin
@@ -279,7 +279,4 @@ begin
     SS => SS2
   );
   
-  -- VGA motor component connection
-  --U2 : VGA_MOTOR port map(clk=>clk, rst=>rst, data=>data_out2_s, addr=>addr2_s, vgaRed=>vgaRed, vgaGreen=>vgaGreen, vgaBlue=>vgaBlue, Hsync=>Hsync, Vsync=>Vsync);
-
 end Behavioral;
