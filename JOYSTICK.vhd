@@ -52,7 +52,7 @@ architecture Behavioral of JOYSTICK is
 --              		Implementation
 --===================================================================================
 begin  -- Behavioral
-
+  
   -- Serial clock output, allow if clock enable asserted
   SCLK <= clk when (CE = '1') else '0';
 
