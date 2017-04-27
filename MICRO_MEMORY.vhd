@@ -6,13 +6,13 @@ use IEEE.NUMERIC_STD.all;
 entity MICRO_MEMORY is
   port (
     uAddr : in unsigned(8 downto 0);
-    uData : out std_logic_vector(28 downto 0));
+    uData : out std_logic_vector(29 downto 0));
 end MICRO_MEMORY;
 
 architecture Behavioral of MICRO_MEMORY is
 
 -- micro Memory
-type u_mem_t is array (0 to 511) of std_logic_vector(28 downto 0);
+type u_mem_t is array (0 to 511) of std_logic_vector(29 downto 0);
 constant u_mem_c : u_mem_t := (
   -- AR 0110
        --  ALU   TB   FB  S P LC  SEQ  uADR
