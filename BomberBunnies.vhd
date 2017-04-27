@@ -169,26 +169,24 @@ begin
     if rising_edge(clk) then
       if rst='1' or CPUClkDiv = CPUClkEndVal then
 	CPUClkDiv <= (others => '0');
+        CPUClk <= not CPUClk;
       else
 	CPUClkDiv <= CPUClkDiv + 1;
       end if;
     end if;
   end process;
 
-  CPUClk <= '1' when (CPUClkDiv = 0) else '0';
-
   process(clk)
   begin
     if rising_edge(clk) then
       if rst='1' or JOYClkDiv = JOYClkEndVal then
 	JOYClkDiv <= (others => '0');
+        JOYClk <= not JOYClk;
       else
 	JOYClkDiv <= JOYClkDiv + 1;
       end if;
     end if;
   end process;
-
-  JOYClk <= '1' when (JOYClkDiv = 0) else '0';
 
   -- picture memory component connection
   U1 : VGA_MOTOR port map(
