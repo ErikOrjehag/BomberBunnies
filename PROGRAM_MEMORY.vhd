@@ -33,15 +33,15 @@ architecture Behavioral of PROGRAM_MEMORY is
   constant tileRead : std_logic_vector    := "01111";
   constant tilePointer : std_logic_vector := "10000";
   constant joy1r : std_logic_vector       := "10001";
-  constant joy1u : std_logic_vector       := "10001";
-  constant joy1l : std_logic_vector       := "10001";
-  constant joy1d : std_logic_vector       := "10001";
-  constant btn1 : std_logic_vector       := "10001";
-  constant joy2r : std_logic_vector       := "10001";
-  constant joy2u : std_logic_vector       := "10001";
-  constant joy2l : std_logic_vector       := "10001";
-  constant joy2d : std_logic_vector       := "10001";
-  constant btn2 : std_logic_vector       := "10001";
+  constant joy1u : std_logic_vector       := "10010";
+  constant joy1l : std_logic_vector       := "10011";
+  constant joy1d : std_logic_vector       := "10100";
+  constant press1 : std_logic_vector      := "10101";
+  constant joy2r : std_logic_vector       := "10110";
+  constant joy2u : std_logic_vector       := "10111";
+  constant joy2l : std_logic_vector       := "11000";
+  constant joy2d : std_logic_vector       := "11001";
+  constant press2 : std_logic_vector      := "11010";
 
   -- GRx
   constant gr0 : std_logic_vector  := "0000";
@@ -64,22 +64,30 @@ architecture Behavioral of PROGRAM_MEMORY is
   -- Program memory
   type pm_t is array (0 to 2047) of std_logic_vector(22 downto 0);  --2047
   constant pm_c : pm_t := (
-          -- OP   GRx  M     Addr
-    --0  => sleep & gr0  & b"00_011111111110",  -- Sleep
-    0  => joy1r & gr0  & b"00_011111111101",  -- Jump if right
-    1  => joy1u & gr0  & b"00_011111111101",  -- Jump if up
-    2  => joy1l & gr0  & b"00_011111111101",  -- Jump if left
-    3  => joy1d & gr0  & b"00_011111111101",  -- Jump if down
-    4  => jump  & gr0  & b"00_000000000000",  -- Jump
+    --    OP      GRx      M  Addr
+    0  => joy1r & gr0  & b"00_011111111001",  -- Jump if right
+    1  => joy1u & gr0  & b"00_011111111010",  -- Jump if up
+    2  => joy1l & gr0  & b"00_011111111011",  -- Jump if left
+    3  => joy1d & gr0  & b"00_011111111100",  -- Jump if down
+    4  => jump  & gr0  & b"00_011111111111",  -- Jump
 
     7  => add   & gr12 & b"00_011111111110",  -- Add x with 1
     8  => jump  & gr0  & b"00_011111111111",
 
+    9  => sub   & gr13 & b"00_011111111110",  -- Subtract y with 1
+    10 => jump  & gr0  & b"00_011111111111",
+
+    11 => sub   & gr12 & b"00_011111111110",  -- Subtract x with 1
+    12 => jump  & gr0  & b"00_011111111111",
+
+    13 => add   & gr13 & b"00_011111111110",  -- Add y with 1
+    14 => jump  & gr0  & b"00_011111111111",
+
     -- constants
-    2041 => b"00000_0000_00_000000001111",
-    2042 => b"00000_0000_00_000000111111",
-    2043 => b"00000_0000_00_000000011111",
-    2044 => b"00000_0000_00_000000001111",
+    2041 => b"00000_0000_00_000000000111",  -- right (7)
+    2042 => b"00000_0000_00_000000001001",  -- up (9)
+    2043 => b"00000_0000_00_000000001011",  -- left (11)
+    2044 => b"00000_0000_00_000000001101",  -- down (13)
     2045 => b"00000_0000_00_000000000111",  -- Sleep value
     2046 => b"00000_0000_00_000000000001",  -- "11111111110"
     2047 => b"00000_0000_00_000000000000",  -- "11111111111"
