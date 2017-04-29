@@ -26,8 +26,8 @@ entity CPU is
     tilePointer         : buffer std_logic_vector(7 downto 0) := (others => '0');
     tileTypeRead        : in std_logic_vector(7 downto 0);
     tileTypeWrite       : out std_logic_vector(7 downto 0);
-    readMap             : out std_logic;
-    writeMap            : out std_logic;
+    readMap             : out std_logic := '0';
+    writeMap            : out std_logic := '0';
     p1x                 : out std_logic_vector(9 downto 0);
     p1y                 : out std_logic_vector(9 downto 0);
     p2x                 : out std_logic_vector(9 downto 0);
@@ -91,7 +91,7 @@ architecture behavioral of CPU is
 );
 
   -- k1
-  type k1_t is array (0 to 28) of std_logic_vector(8 downto 0);  --31
+  type k1_t is array (0 to 31) of std_logic_vector(8 downto 0);  --31
   signal k1 : k1_t := (
     
     "000001010",  -- (00000) LOAD (rad 00A)
@@ -111,18 +111,21 @@ architecture behavioral of CPU is
     "000100010",  -- (01110) tileWrite
     "000100100",  -- (01111) tileRead
     "000100110",  -- (10000) tilePointer
-    "000000000", 
-    "000000000", 
-    "000000000",
-    "000000000",
-    "000000000",
-    "000000000",
-    "000000000",
-    "000000000",
-    "000000000",
-    "000000000",
-    "000000000",
-    "000000000"
+    "000100111",  -- (10001) JOY1R
+    "000101001",  -- (10010) JOY1U
+    "000101011",  -- (10011) JOY1L
+    "000101101",  -- (10100) JOY1D
+    "000101111",  -- (10101) BTN1
+    "000110001",  -- (10110) JOY2R
+    "000110011",  -- (10111) JOY2U
+    "000110101",  -- (11000) JOY2L
+    "000110111",  -- (11001) JOY2D
+    "000111001",  -- (11010) BTN2
+    "000000000",  -- (11011) 
+    "000000000",  -- (11100) 
+    "000000000",  -- (11101) 
+    "000000000",  -- (11110) 
+    "000000000"   -- (11111)
 );
 
   -- uPM signals

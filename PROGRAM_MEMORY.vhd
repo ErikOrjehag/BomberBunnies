@@ -32,6 +32,16 @@ architecture Behavioral of PROGRAM_MEMORY is
   constant tileWrite : std_logic_vector   := "01110";
   constant tileRead : std_logic_vector    := "01111";
   constant tilePointer : std_logic_vector := "10000";
+  constant joy1r : std_logic_vector       := "10001";
+  constant joy1u : std_logic_vector       := "10001";
+  constant joy1l : std_logic_vector       := "10001";
+  constant joy1d : std_logic_vector       := "10001";
+  constant btn1 : std_logic_vector       := "10001";
+  constant joy2r : std_logic_vector       := "10001";
+  constant joy2u : std_logic_vector       := "10001";
+  constant joy2l : std_logic_vector       := "10001";
+  constant joy2d : std_logic_vector       := "10001";
+  constant btn2 : std_logic_vector       := "10001";
 
   -- GRx
   constant gr0 : std_logic_vector  := "0000";
@@ -55,34 +65,24 @@ architecture Behavioral of PROGRAM_MEMORY is
   type pm_t is array (0 to 2047) of std_logic_vector(22 downto 0);  --2047
   constant pm_c : pm_t := (
           -- OP   GRx  M     Addr
-    --0  => sleep & gr0  & b"00_000000010001",  -- Sleep
-    --1  => joy1x & gr12 & b"00_000000000000",
-    --4  => jump  & gr0  & b"00_000000010010",  -- Jump
+    --0  => sleep & gr0  & b"00_011111111110",  -- Sleep
+    0  => joy1r & gr0  & b"00_011111111101",  -- Jump if right
+    1  => joy1u & gr0  & b"00_011111111101",  -- Jump if up
+    2  => joy1l & gr0  & b"00_011111111101",  -- Jump if left
+    3  => joy1d & gr0  & b"00_011111111101",  -- Jump if down
+    4  => jump  & gr0  & b"00_000000000000",  -- Jump
 
-    --16 => b"00000_0000_00_000000000001",
-    --17 => b"00000_0000_00_000000000111",
-    --18 => b"00000_0000_00_000000000000",
+    7  => add   & gr12 & b"00_011111111110",  -- Add x with 1
+    8  => jump  & gr0  & b"00_011111111111",
 
-
-    --0  => b"00101_0000_00_000000010001", -- Sleep
-    --1  => b"01000_1100_00_000000000000", -- Read JOY1X
-    --2  => b"01001_1101_00_000000000000", -- Read JOY1Y
-    --3  => b"00100_0000_00_000000010010", -- Jump
-
-    --16 => b"00000_0000_00_000000000001",
-    --17 => b"00000_0000_00_000000000111",
-    --18 => b"00000_0000_00_000000000000",
-
-    
-    0  => sleep & b"0000_00_000000010001",
-    1  => tilePointer & gr1 & b"00_000000000000",
-    2  => tileWrite & gr2 & b"00_000000000000", 
-    3  => jump & b"0000_00_000000000000",
-
-    16 => b"00000_0000_00_000000000001",
-    17 => b"00000_0000_00_000000000111",
-    18 => b"00000_0000_00_000000000000",
-
+    -- constants
+    2041 => b"00000_0000_00_000000001111",
+    2042 => b"00000_0000_00_000000111111",
+    2043 => b"00000_0000_00_000000011111",
+    2044 => b"00000_0000_00_000000001111",
+    2045 => b"00000_0000_00_000000000111",  -- Sleep value
+    2046 => b"00000_0000_00_000000000001",  -- "11111111110"
+    2047 => b"00000_0000_00_000000000000",  -- "11111111111"
     
     others => (others => '0')
   );
