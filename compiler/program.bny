@@ -1,26 +1,39 @@
-
-NUM:
-	20
-
-RES:
-	0
-
 START:
-	load    gr1 NUM
-	
-	sleep	100
-	
-	add		gr1 1
-	add		gr1 1
-	add		gr1 1
-	
-	store   RES gr1
+	joy1r	P1R
+	joy1u	P1U
+	joy1l	P1L
+	joy1d	P1D
 
-	sleep	50
+	joy2r	P2R
+	joy2u	P2U
+	joy2l	P2L
+	joy2d	P2D
 
-	beq     START
-	
-	add		gr1 1
-	add		gr1 1
-	
 	jump	START
+
+P1R:
+	add	gr12 1
+	jump 	START
+P1U:
+	sub	gr13 1
+	jump 	START
+P1L:
+	sub	gr12 1
+	jump 	START
+P1D:
+	add	gr13 1
+	jump 	START
+
+
+P2R:
+	add	gr14 1
+	jump 	START
+P2U:
+	sub	gr15 1
+	jump 	START
+P2L:
+	sub	gr14 1
+	jump 	START
+P2D:
+	add	gr15 1
+	jump 	START
