@@ -5,6 +5,7 @@ ln = 0
 index = 0
 program = ''
 lables = {}
+output = ''
 
 OPS = [
 	"load",   #  0
@@ -41,11 +42,15 @@ MM_IMMEDIATE = 1
 MM_INDIRECT = 2
 MM_INDEXED = 3
 
+def outp(text):
+	global output
+	output += (text + "\n")
+
 def put_line(line, comment=''):
 	global ln
 	if comment:
 		comment = ' -- ' + comment
-	print(str(ln).rjust(4, ' ') + ' => b\"' + split_line(line) + '\",' + comment)
+	outp(str(ln).rjust(4, ' ') + ' => b\"' + line + '\",' + comment)
 	ln += 1
 
 def put_instr(op, grx, mm, addr):
@@ -54,16 +59,17 @@ def put_instr(op, grx, mm, addr):
 	addr_actual = addr if addr != None else 0
 	line = to_bin(OPS.index(op), 5) + to_bin(grx_actual, 4) + to_bin(mm_actual, 2) + to_bin(addr_actual, 12)
 	grx_comment = '' if grx == None else ' gr' + str(grx)
-	put_line(line, op + grx_comment)
+	put_line(split_line(line), op + grx_comment)
 
 def put_data(integer):
 	line = to_bin(integer, 23)
-	put_line(line, str(integer))
+	put_line(split_line(line), str(integer))
 
 def put_label(label):
-	label_ln = get_label_ln(label)
-	line = to_bin(label_ln, 23)
-	put_line(line, label + ' ' + str(label_ln))
+	#label_ln = get_label_ln(label)
+	#line = to_bin(label_ln, 23)
+	#put_line(line, label + ' ' + str(label_ln))
+	put_line(label)
 
 def split_line(line):
 	return line[0:5] + '_' + line[5:9] + '_' + line[9:11] + '_' + line[11:23]
@@ -138,28 +144,13 @@ def math_instr(op):
 with open(file_name) as f:
 	program = ''.join(f.readlines())
 
-# Store all labels
+# Compile program
 while True:
 	token = next_token()
 	if token == '':
 		break
 	elif is_label(token):
 		store_label(token[0:-1])
-	elif is_data(token):
-		ln += 1
-	elif is_op(token):
-		ln += 1
-
-ln = 0
-index = 0
-
-# Compile program
-while True:
-	token = next_token()
-	if token == '':
-		exit()
-	elif is_label(token):
-		continue
 	elif is_data(token):
 		put_data(int(token))
 	elif is_op(token):
@@ -204,6 +195,10 @@ while True:
 	else:
 		unexpected(token)
 
+# Labels
+for label, line_num in lables.iteritems():
+	output = output.replace(label, split_line(to_bin(line_num, 23)))
 
+print(output)
 
 
