@@ -162,7 +162,6 @@ while True:
 		continue
 	elif is_data(token):
 		put_data(int(token))
-		ln += 1
 	elif is_op(token):
 		if token == "load":
 			grx = next_token()
@@ -201,8 +200,6 @@ while True:
 		elif token == "joy2l": branch_instr("joy2l")
 		elif token == "joy2d": branch_instr("joy2d")
 		elif token == "btn2" : branch_instr("btn2")
-
-		ln += 1
 
 	else:
 		unexpected(token)
