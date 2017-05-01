@@ -19,7 +19,7 @@ OPS = [
 	"tread",  #  9
 	"tpoint", # 10
 	"joy1r",  # 11
-	"joy1u"   # 12
+	"joy1u",  # 12
 	"joy1l",  # 13
 	"joy1d",  # 14
 	"btn1",   # 15
