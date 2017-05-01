@@ -57,12 +57,12 @@ def put_instr(op, grx, mm, addr):
 	put_line(line, op + grx_comment)
 
 def put_data(integer):
-	line = to_bin(integer, 22)
+	line = to_bin(integer, 23)
 	put_line(line, str(integer))
 
 def put_label(label):
 	label_ln = get_label_ln(label)
-	line = to_bin(label_ln, 22)
+	line = to_bin(label_ln, 23)
 	put_line(line, label + ' ' + str(label_ln))
 
 def split_line(line):
