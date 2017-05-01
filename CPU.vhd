@@ -102,12 +102,12 @@ architecture behavioral of CPU is
     "000010011",  -- (00101) SLEEP (ITR) (rad 19)
     "000011000",  -- (00110) BEQ
     "000011010",  -- (00111) BNE
-    "000011100",  -- (01000) JOY1X (rad 28)
-    "000011101",  -- (01001) JOY1Y (rad 29)
-    "000011110",  -- (01010) BTN1
-    "000011111",  -- (01011) JOY2X
-    "000100000",  -- (01100) JOY2Y
-    "000100001",  -- (01101) BTN2
+    "000011100",  -- (01000) tom
+    "000011101",  -- (01001) tom
+    "000011110",  -- (01010) tom
+    "000011111",  -- (01011) tom
+    "000100000",  -- (01100) tom
+    "000100001",  -- (01101) tom
     "000100010",  -- (01110) tileWrite
     "000100100",  -- (01111) tileRead
     "000100110",  -- (10000) tilePointer
@@ -352,42 +352,62 @@ begin  -- behavioral
         when "10000" =>
           if j1r = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "10001" =>
           if j1u = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "10010" =>
           if j1l = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "10011" =>
           if j1d = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "10100" =>
           if b1 = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "10101" =>
           if j2r = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "10110" =>
           if j2u = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "10111" =>
           if j2l = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "11000" =>
           if j2d = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "11001" =>
           if b2 = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when others => null;
       end case;
