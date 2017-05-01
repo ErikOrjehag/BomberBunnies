@@ -88,6 +88,9 @@ def next_token():
 		elif character not in [' ', '\t', '\n']:
 			token += character
 
+def is_op(token):
+	return token in OPS
+
 def is_data(token):
 	if token[0] in ('-', '+'):
 		return token[1:].isdigit()
@@ -136,6 +139,10 @@ while True:
 		break
 	elif is_label(token):
 		store_label(token[0:-1])
+	elif is_data(token):
+		ln += 1
+	elif is_op(token):
+		ln += 1
 
 ln = 0
 index = 0
@@ -149,7 +156,8 @@ while True:
 		continue
 	elif is_data(token):
 		put_data(int(token))
-	else:
+		ln += 1
+	elif is_op(token):
 		if token == "load":
 			grx = next_token()
 			put_instr("load", grx_to_int(grx), MM_IMMEDIATE, None)
@@ -188,8 +196,10 @@ while True:
 		elif token == "joy2d": branch_instr("joy2d")
 		elif token == "btn2" : branch_instr("btn2")
 
-		else:
-			unexpected(token)
+		ln += 1
+
+	else:
+		unexpected(token)
 
 
 
