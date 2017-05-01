@@ -158,7 +158,7 @@ architecture Behavioral of BomberBunnies is
   signal btn2  : std_logic;
 
   signal CPUClkDiv : unsigned(19 downto 0) := (others => '0');
-  constant CPUClkEndVal : unsigned(19 downto 0) := "00011000011010100000";
+  constant CPUClkEndVal : unsigned(19 downto 0) := "00001100001101010000";
   signal CPUClk : std_logic := '0';
 
   signal JOYClkDiv : unsigned(9 downto 0) := (others => '0');	        -- Stores count value

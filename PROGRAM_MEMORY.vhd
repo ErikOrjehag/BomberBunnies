@@ -23,25 +23,19 @@ architecture Behavioral of PROGRAM_MEMORY is
   constant sleep : std_logic_vector       := "00101";
   constant beq : std_logic_vector         := "00110";
   constant bne : std_logic_vector         := "00111";
-  constant joy1x : std_logic_vector       := "01000";
-  constant joy1y : std_logic_vector       := "01001";
-  constant btn1 : std_logic_vector        := "01010";
-  constant joy2x : std_logic_vector       := "01011";
-  constant joy2y : std_logic_vector       := "01100";
-  constant btn2 : std_logic_vector        := "01101";
   constant tileWrite : std_logic_vector   := "01110";
   constant tileRead : std_logic_vector    := "01111";
   constant tilePointer : std_logic_vector := "10000";
   constant joy1r : std_logic_vector       := "10001";
-  constant joy1u : std_logic_vector       := "10001";
-  constant joy1l : std_logic_vector       := "10001";
-  constant joy1d : std_logic_vector       := "10001";
-  constant btn1 : std_logic_vector       := "10001";
-  constant joy2r : std_logic_vector       := "10001";
-  constant joy2u : std_logic_vector       := "10001";
-  constant joy2l : std_logic_vector       := "10001";
-  constant joy2d : std_logic_vector       := "10001";
-  constant btn2 : std_logic_vector       := "10001";
+  constant joy1u : std_logic_vector       := "10010";
+  constant joy1l : std_logic_vector       := "10011";
+  constant joy1d : std_logic_vector       := "10100";
+  constant btn1 : std_logic_vector        := "10101";
+  constant joy2r : std_logic_vector       := "10110";
+  constant joy2u : std_logic_vector       := "10111";
+  constant joy2l : std_logic_vector       := "11000";
+  constant joy2d : std_logic_vector       := "11001";
+  constant btn2 : std_logic_vector        := "11010";
 
   -- GRx
   constant gr0 : std_logic_vector  := "0000";
@@ -67,20 +61,51 @@ architecture Behavioral of PROGRAM_MEMORY is
           -- OP   GRx  M     Addr
     --0  => sleep & gr0  & b"00_011111111110",  -- Sleep
     0  => joy1r & gr0  & b"00_011111111101",  -- Jump if right
-    1  => joy1u & gr0  & b"00_011111111101",  -- Jump if up
-    2  => joy1l & gr0  & b"00_011111111101",  -- Jump if left
-    3  => joy1d & gr0  & b"00_011111111101",  -- Jump if down
-    4  => jump  & gr0  & b"00_000000000000",  -- Jump
+    1  => joy1u & gr0  & b"00_011111111100",  -- Jump if up
+    2  => joy1l & gr0  & b"00_011111111011",  -- Jump if left
+    3  => joy1d & gr0  & b"00_011111111010",  -- Jump if down
+    4  => joy2r & gr0  & b"00_011111111001",
+    5  => joy2u & gr0  & b"00_011111111000",
+    6  => joy2l & gr0  & b"00_011111110111",
+    7  => joy2d & gr0  & b"00_011111110110",
+    8  => jump  & gr0  & b"00_000000000000",  -- Jump
+    9  => b"00000_0000_00_000000000100",
 
-    7  => add   & gr12 & b"00_011111111110",  -- Add x with 1
-    8  => jump  & gr0  & b"00_011111111111",
+    15  => add  & gr12 & b"00_011111111110",  -- Add x with 1
+    16  => jump & gr0  & b"00_000000001001",
+
+    17 => sub   & gr13 & b"00_011111111110",
+    18 => jump  & gr0  & b"00_000000001001",
+
+    19 => sub   & gr12 & b"00_011111111110",  -- Add x with 1
+    20 => jump  & gr0  & b"00_000000001001",
+    
+    21 => add   & gr13 & b"00_011111111110",  -- Add x with 1
+    22 => jump  & gr0  & b"00_000000001001",
+    
+    23 => add   & gr14 & b"00_011111111110",  -- Add x with 1
+    24 => jump  & gr0  & b"00_011111111111",
+    
+    25 => sub   & gr15 & b"00_011111111110",  -- Add x with 1
+    26 => jump  & gr0  & b"00_011111111111",
+    
+    27 => sub   & gr14 & b"00_011111111110",  -- Add x with 1
+    28 => jump  & gr0  & b"00_011111111111",
+    
+    29 => add   & gr15 & b"00_011111111110",  -- Add x with 1
+    30 => jump  & gr0  & b"00_011111111111",
+    
 
     -- constants
-    2041 => b"00000_0000_00_000000001111",
-    2042 => b"00000_0000_00_000000111111",
-    2043 => b"00000_0000_00_000000011111",
-    2044 => b"00000_0000_00_000000001111",
-    2045 => b"00000_0000_00_000000000111",  -- Sleep value
+    2038 => b"00000_0000_00_000000011101",
+    2039 => b"00000_0000_00_000000011011",
+    2040 => b"00000_0000_00_000000011001",
+    2041 => b"00000_0000_00_000000010111",
+    
+    2042 => b"00000_0000_00_000000010101",
+    2043 => b"00000_0000_00_000000010011",
+    2044 => b"00000_0000_00_000000010001",
+    2045 => b"00000_0000_00_000000001111",  -- Sleep value
     2046 => b"00000_0000_00_000000000001",  -- "11111111110"
     2047 => b"00000_0000_00_000000000000",  -- "11111111111"
     

@@ -41,8 +41,8 @@ BEGIN
   uut: CPU PORT MAP (
     clk => clk,
     rst => rst,
-    joy1x => "01",
-    joy1y => "00",
+    joy1x => "00",
+    joy1y => "10",
     btn1 => '0',
     joy2x => "00",
     joy2y => "00",
