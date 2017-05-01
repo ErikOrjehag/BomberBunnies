@@ -129,14 +129,26 @@ def math_instr(op):
 with open(file_name) as f:
 	program = ''.join(f.readlines())
 
+# Store all labels
+while True:
+	token = next_token()
+	if token == '':
+		break
+	elif is_label(token):
+		store_label(token[0:-1])
+
+ln = 0
+index = 0
+
+# Compile program
 while True:
 	token = next_token()
 	if token == '':
 		exit()
 	elif is_label(token):
-		store_label(token[0:-1])
-	elif is_data(token):
 		continue
+	elif is_data(token):
+		put_data(int(token))
 	else:
 		if token == "load":
 			grx = next_token()
