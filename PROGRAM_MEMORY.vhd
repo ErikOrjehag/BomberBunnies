@@ -94,8 +94,7 @@ architecture Behavioral of PROGRAM_MEMORY is
     
     29 => add   & gr15 & b"00_011111111110",  -- Add x with 1
     30 => jump  & gr0  & b"00_011111111111",
-    
-
+   
     -- constants
     2038 => b"00000_0000_00_000000011101",
     2039 => b"00000_0000_00_000000011011",
