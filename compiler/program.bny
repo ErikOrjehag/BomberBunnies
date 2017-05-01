@@ -1,26 +1,4 @@
+load    gr13 NUM
 
 NUM:
-	20
-
-RES:
-	0
-
-START:
-	load    gr1 NUM
-	
-	sleep	100
-	
-	add		gr1 1
-	add		gr1 1
-	add		gr1 1
-	
-	store   RES gr1
-
-	sleep	50
-
-	beq     START
-	
-	add		gr1 1
-	add		gr1 1
-	
-	jump	START
+	1

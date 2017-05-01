@@ -15,19 +15,25 @@ OPS = [
 	"sleep",  #  5
 	"beq",    #  6
 	"bne",    #  7
-	"twrite", #  8
-	"tread",  #  9
-	"tpoint", # 10
-	"joy1r",  # 11
-	"joy1u",  # 12
-	"joy1l",  # 13
-	"joy1d",  # 14
-	"btn1",   # 15
-	"joy2r",  # 16
-	"joy2u",  # 17
-	"joy2l",  # 18
-	"joy2d",  # 19
-	"btn2"    # 20
+	"",       #  8
+	"",       #  9
+	"",       # 10
+	"",       # 11
+	"",       # 12
+	"",       # 13
+	"twrite", # 14
+	"tread",  # 15
+	"tpoint", # 16
+	"joy1r",  # 17
+	"joy1u",  # 18
+	"joy1l",  # 19
+	"joy1d",  # 20
+	"btn1",   # 21
+	"joy2r",  # 22
+	"joy2u",  # 23
+	"joy2l",  # 24
+	"joy2d",  # 25
+	"btn2"    # 26
 ]
 
 MM_DIRECT = 0
@@ -39,14 +45,14 @@ def put_line(line, comment=''):
 	global ln
 	if comment:
 		comment = ' -- ' + comment
-	print(str(ln).rjust(4, ' ') + ' => \"' + split_line(line) + '\",' + comment)
+	print(str(ln).rjust(4, ' ') + ' => b\"' + split_line(line) + '\",' + comment)
 	ln += 1
 
 def put_instr(op, grx, mm, addr):
 	grx_actual = grx if grx != None else 0
 	mm_actual = mm if mm != None else 0
 	addr_actual = addr if addr != None else 0
-	line = to_bin(OPS.index(op), 5) + to_bin(grx_actual, 3) + to_bin(mm_actual, 2) + to_bin(addr_actual, 12)
+	line = to_bin(OPS.index(op), 5) + to_bin(grx_actual, 4) + to_bin(mm_actual, 2) + to_bin(addr_actual, 12)
 	grx_comment = '' if grx == None else ' gr' + str(grx)
 	put_line(line, op + grx_comment)
 
@@ -60,7 +66,7 @@ def put_label(label):
 	put_line(line, label + ' ' + str(label_ln))
 
 def split_line(line):
-	return line[0:5] + '_' + line[5:8] + '_' + line[8:10] + '_' + line[10:22]
+	return line[0:5] + '_' + line[5:9] + '_' + line[9:11] + '_' + line[11:23]
 
 def to_bin(integer, fill):
 	return ('{0:b}'.format(integer)).zfill(fill)
@@ -108,7 +114,7 @@ def get_label_ln(label):
 	return lables[label]
 
 def grx_to_int(grx):
-	return int(grx[-1])
+	return int(grx[-1]) if len(grx) == 3 else int(grx[-2:])
 
 def unexpected(token):
 	print("ERROR: Unexpected token `" + token + "` on line " + str(ln))
