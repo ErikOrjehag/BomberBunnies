@@ -90,15 +90,36 @@ def next_char():
 		return ''
 
 def next_token():
+# line comments with /* */
+	comment_val = 0 # increases when '/', '*', '*' and '/' is found
+	found_comment = False
 	token = ''
 	while True:
 		character = next_char()
-		if character == '':
-			return token
-		elif token != '' and character in [' ', '\t','\n']:
-			return token
-		elif character not in [' ', '\t', '\n']:
-			token += character
+
+
+		if comment_val == 0 and character == '/':
+			comment_val += 1
+		elif comment_val == 1 and character == '*':
+			found_comment = True
+			comment_val += 1
+		elif comment_val == 2 and character == '*':
+			comment_val += 1
+		elif comment_val == 3 and character == '/':
+			found_comment = False
+			comment_val = 0
+			token = ''
+                        continue
+		elif comment_val < 2:
+			comment_val = 0
+
+		if  not found_comment:
+			if character == '':
+				return token
+			elif token != '' and character in [' ', '\t','\n']:
+				return token
+			elif character not in [' ', '\t', '\n']:
+				token += character
 
 def is_op(token):
 	return token in OPS

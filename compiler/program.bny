@@ -1,4 +1,7 @@
-	load	gr1 5
+
+
+
+/*	load	gr1 5
 	load	gr2 4
 	tpoint	gr1
 	twrite	gr2
@@ -42,3 +45,4 @@ P2L:
 P2D:
 	add	gr15 1
 	jump 	START
+*/
