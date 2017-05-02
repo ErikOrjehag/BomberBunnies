@@ -157,13 +157,13 @@ while True:
 		if token == "load":
 			grx = next_token()
 			put_instr("load", grx_to_int(grx), MM_IMMEDIATE, None)
-			label = next_token()
-			put_label(label)
+			integer = next_token()
+			put_data(int(integer))
 
 		elif token == "store":
 			label = next_token()
 			grx = next_token()
-			put_instr("load", grx_to_int(grx), MM_IMMEDIATE, None)
+			put_instr("store", grx_to_int(grx), MM_IMMEDIATE, None)
 			put_label(label)
 
 		elif token == "sleep":
