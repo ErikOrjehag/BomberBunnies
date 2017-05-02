@@ -37,7 +37,7 @@ end CPU;
 
 -- architecture
 architecture behavioral of CPU is
-
+  
   -- program memory component
   component PROGRAM_MEMORY
     port (
@@ -64,7 +64,7 @@ architecture behavioral of CPU is
     "00000000000000000001000", -- 0    (tillfälligt = 8)
     "00000000000000010000000", -- 1    (tillfälligt = 128)
     "00000000000000000000010", -- 2    (tillfälligt = 2)
-    "00000000000000010000001", -- 3    (tillfälligt = 129)
+    "00000000000000000000010", -- 3
     "00000000000000000000000", -- 4    
     "00000000000000000000000", -- 5
     "00000000000000000000000", -- joy1x
@@ -108,7 +108,7 @@ architecture behavioral of CPU is
     "000011111",  -- (01011) tom
     "000100000",  -- (01100) tom
     "000100001",  -- (01101) tom
-    "000100010",  -- (01110) tileWrite
+    "000100010",  -- (01110) tileWriter
     "000100100",  -- (01111) tileRead
     "000100110",  -- (10000) tilePointer
     "000100111",  -- (10001) JOY1R
@@ -175,7 +175,7 @@ architecture behavioral of CPU is
   signal b2 : std_logic := '0';
 
 begin  -- behavioral
-
+  
   -- Update joystick flags
   j1r <= '1' when (joy1x = "01") else '0';
   j1u <= '1' when (joy1y = "01") else '0';
@@ -310,7 +310,9 @@ begin  -- behavioral
 
       if not (upm_seq = "00101") then
         writeMap <= '0';
-      elsif not (upm_seq = "00110") then
+      end if;
+
+      if not (upm_seq = "00110") then
         readMap <= '0';
       end if;
       

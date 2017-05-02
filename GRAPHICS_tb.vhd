@@ -28,6 +28,11 @@ ARCHITECTURE behavior OF GRAPHICS_tb IS
     p2x               : out std_logic_vector(9 downto 0);
     p2y               : out std_logic_vector(9 downto 0));
   END COMPONENT;
+
+  component MAP_MEMORY
+    port (
+      clk : <type > );
+  end component;
   
   --Inputs
   signal clk : std_logic:= '0';
