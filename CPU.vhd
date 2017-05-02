@@ -25,7 +25,7 @@ entity CPU is
     btn2                : in std_logic;
     tilePointer         : buffer std_logic_vector(7 downto 0) := (others => '0');
     tileTypeRead        : in std_logic_vector(7 downto 0);
-    tileTypeWrite       : out std_logic_vector(7 downto 0);
+    tileTypeWrite       : out std_logic_vector(7 downto 0) := (others => '0');
     readMap             : out std_logic := '0';
     writeMap            : out std_logic := '0';
     p1x                 : out std_logic_vector(9 downto 0);
@@ -323,8 +323,12 @@ begin  -- behavioral
         when "00010" => uPC <= unsigned(k2(to_integer(unsigned(ir_m))));
         when "00011" => uPC <= (others => '0');
         when "00100" => uPC <= unsigned(upm_uaddr);
-        when "00101" => writeMap <= '1';           -- write
-        when "00110" => readMap <= '1';            -- read
+        when "00101" =>
+          writeMap <= '1';
+          uPC <= uPC + 1;
+        when "00110" =>
+          readMap <= '1';
+          uPC <= uPC + 1;
         when "00111" => null;            --ledig
         when "01000" =>
           if Z = '1' then

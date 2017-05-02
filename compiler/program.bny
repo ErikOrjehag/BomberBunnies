@@ -1,48 +1,60 @@
+	sleep	1
 
-
-
-/*	load	gr1 5
+	load	gr1 18
 	load	gr2 4
 	tpoint	gr1
 	twrite	gr2
 
-START:
-	joy1r	P1R
-	joy1u	P1U
-	joy1l	P1L
-	joy1d	P1D
+MAIN:
+	jump CONTROL
+CONTROL_R:
 
+	jump BUTTON	/* Checks button press and places an egg */
+BUTTON_R:
+
+	jump MAIN
+
+BUTTON:
+	jump BUTTON_R
+
+CONTROL:
+	joy1r	P1R
+	joy1l	P1L
+J1:
+	joy1u	P1U
+	joy1d	P1D
+J2:
 	joy2r	P2R
-	joy2u	P2U
 	joy2l	P2L
+J3:
+	joy2u	P2U
 	joy2d	P2D
 
-	jump	START
+	jump	CONTROL_R
 
 P1R:
 	add	gr12 1
-	jump 	START
+	jump 	J1
 P1U:
 	sub	gr13 1
-	jump 	START
+	jump 	J2
 P1L:
 	sub	gr12 1
-	jump 	START
+	jump 	J1
 P1D:
 	add	gr13 1
-	jump 	START
+	jump 	J2
 
 
 P2R:
 	add	gr14 1
-	jump 	START
+	jump 	J3
 P2U:
 	sub	gr15 1
-	jump 	START
+	jump 	CONTROL_R
 P2L:
 	sub	gr14 1
-	jump 	START
+	jump 	J3
 P2D:
 	add	gr15 1
-	jump 	START
-*/
+	jump 	CONTROL_R
