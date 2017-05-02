@@ -1,0 +1,13 @@
+	load	gr1 NUM
+	load	gr2 NAM
+	tpoint	gr1
+	twrite	gr2
+
+LOOP:
+        jump    LOOP
+
+NUM:
+	47
+NAM:
+	4
+

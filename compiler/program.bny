@@ -1,9 +1,11 @@
 	load	gr1 NUM
-	tpoint	gr1
 	load	gr2 NAM
+	tpoint	gr1
 	twrite	gr2
 
 START:
+        jump    START
+
 	joy1r	P1R
 	joy1u	P1U
 	joy1l	P1L
