@@ -41,8 +41,12 @@ architecture behavioral of CPU is
   -- program memory component
   component PROGRAM_MEMORY
     port (
-      pAddr : in  unsigned(11 downto 0);
-      pData : out std_logic_vector(22 downto 0));
+         pAddr : in unsigned(11 downto 0);
+         PM_out : out std_logic_vector(22 downto 0);
+         PM_in : in std_logic_vector(22 downto 0);
+         PM_write : in std_logic
+         );
+ 
   end component;
 
   -- Micro memory component
@@ -52,7 +56,9 @@ architecture behavioral of CPU is
       uData : out std_logic_vector(29 downto 0));
   end component;
 
-  signal PM : std_logic_vector(22 downto 0);
+  signal PM_in : std_logic_vector(22 downto 0);
+  signal PM_out : std_logic_vector(22 downto 0);
+  signal PM_write : std_logic := '0';
   signal uPM : std_logic_vector(29 downto 0);
 
   -- Bus
@@ -96,12 +102,12 @@ architecture behavioral of CPU is
     
     "000001010",  -- (00000) LOAD (rad 00A)
     "000001011",  -- (00001) STORE (rad 00B)
-    "000001100",  -- (00010) ADD (rad 00C)
-    "000001111",  -- (00011) SUB (rad 00F)
-    "000010010",  -- (00100) JUMP (rad 18)
-    "000010011",  -- (00101) SLEEP (ITR) (rad 19)
-    "000011000",  -- (00110) BEQ
-    "000011010",  -- (00111) BNE
+    "000001101",  -- (00010) ADD (rad 00C)
+    "000010000",  -- (00011) SUB (rad 00F)
+    "000010011",  -- (00100) JUMP (rad 18)
+    "000010100",  -- (00101) SLEEP (ITR) (rad 19)
+    "000011001",  -- (00110) BEQ
+    "000011011",  -- (00111) BNE
     "000011100",  -- (01000) tom
     "000011101",  -- (01001) tom
     "000011110",  -- (01010) tom
@@ -215,10 +221,12 @@ begin  -- behavioral
   -- TB
   GRx_x <= to_integer(unsigned(ir_grx)) when (upm_s = "0") else to_integer(unsigned(ir_m));
 
+  readMap <= '1' when upm_tb = "1000" else '0';
+  
   with upm_tb select buss <=
     "00000000000" & std_logic_vector(ASR)       when "0001", 
     IR                                          when "0010",
-    PM                                          when "0011",
+    PM_out                                      when "0011",
     "00000000000" & PC                          when "0100",
     GRx(GRx_x)                                  when "0101",
     "00000000000" & AR                          when "0110",
@@ -239,17 +247,29 @@ begin  -- behavioral
   begin
     if rising_edge(clk) then
 
+      if not (upm_fb = "0011") then
+        PM_write <= '0';
+      end if;
+
+      if not (upm_fb = "1000") then
+        writeMap <= '0';
+      end if;
+      
       -- FB
       case upm_fb is
         when "0000" => null;
         when "0001" => ASR <= unsigned(buss(11 downto 0));
         when "0010" => IR <= buss;
-        --when "0011" => PM <= buss;
+        when "0011" =>
+          PM_in <= buss;
+          PM_write <= '1';
         when "0100" => PC <= buss(11 downto 0);
         when "0101" => GRx(GRx_x) <= buss;
         when "0110" => null;            --AR
 --        when "0111" => tileTypeRead <= buss(7 downto 0);
-        when "1000" => tileTypeWrite <= buss(7 downto 0);
+        when "1000" =>
+          tileTypeWrite <= buss(7 downto 0);
+          writeMap <= '1';
         when "1001" => tilePointer <= buss(7 downto 0);
 --        when "1010" => null;            --joy1x
 --        when "1011" => null;            --joy1y
@@ -308,13 +328,13 @@ begin  -- behavioral
         when others => null;
       end case;
 
-      if not (upm_seq = "00101") then
-        writeMap <= '0';
-      end if;
+      --if not (upm_seq = "00101") then
+      --  writeMap <= '0';
+      --end if;
 
-      if not (upm_seq = "00110") then
-        readMap <= '0';
-      end if;
+      --if not (upm_seq = "00110") then
+      --  readMap <= '0';
+      --end if;
       
       -- SEQ
       case upm_seq is
@@ -323,12 +343,12 @@ begin  -- behavioral
         when "00010" => uPC <= unsigned(k2(to_integer(unsigned(ir_m))));
         when "00011" => uPC <= (others => '0');
         when "00100" => uPC <= unsigned(upm_uaddr);
-        when "00101" =>
-          writeMap <= '1';
-          uPC <= uPC + 1;
-        when "00110" =>
-          readMap <= '1';
-          uPC <= uPC + 1;
+        --when "00101" =>
+        --  writeMap <= '1';
+        --  uPC <= uPC + 1;
+        --when "00110" =>
+        --  readMap <= '1';
+        --  uPC <= uPC + 1;
         when "00111" => null;            --ledig
         when "01000" =>
           if Z = '1' then
@@ -421,7 +441,7 @@ begin  -- behavioral
   end process;
 
   -- Program memory component connection (PM)
-  U1 : PROGRAM_MEMORY port map (pAddr => ASR, pData => PM);
+  U1 : PROGRAM_MEMORY port map (pAddr => ASR, PM_out => PM_out, PM_in => PM_in, PM_write => PM_write);
   
 
   -- Micro memory component connection (uPM)

@@ -218,7 +218,7 @@ while True:
 
 # Labels
 for label, line_num in lables.iteritems():
-	output = output.replace(label, split_line(to_bin(line_num, 23)))
+	output = output.replace('\"' + label + '\"', '\"' + split_line(to_bin(line_num, 23)) + '\"')
 
 print(output)
 

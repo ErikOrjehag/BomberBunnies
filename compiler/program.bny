@@ -1,4 +1,4 @@
-	sleep	1
+INIT:	sleep	1
 
 	load	gr1 18
 	load	gr2 4
@@ -6,6 +6,11 @@
 	twrite	gr2
 
 MAIN:
+	add	gr13 4
+	load	gr1  19
+	tpoint	gr1
+	twrite	gr2
+
 	jump CONTROL
 CONTROL_R:
 
