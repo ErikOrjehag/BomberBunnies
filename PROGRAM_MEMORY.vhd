@@ -5,6 +5,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity PROGRAM_MEMORY is
   
   port (
+    clk : in std_logic;
     pAddr : in  unsigned(11 downto 0);
     PM_out : out std_logic_vector(22 downto 0);
     PM_in : in std_logic_vector(22 downto 0);
@@ -59,8 +60,9 @@ architecture Behavioral of PROGRAM_MEMORY is
 
   -- Program memory
   type pm_t is array (0 to 2047) of std_logic_vector(22 downto 0);  --2047
-  constant pm_c : pm_t := (
-
+  
+  --constant pm_c : pm_t := (
+  signal PM : pm_t := (
 
 0 => b"00101_0000_01_000000000000", -- sleep
    1 => b"00000_0000_00_000000000001", -- 1
@@ -129,16 +131,29 @@ architecture Behavioral of PROGRAM_MEMORY is
   64 => b"00100_0000_01_000000000000", -- jump
   65 => b"00000_0000_00_000000001010",
 
-     
     others => (others => '0')
   );
 
-  signal PM : pm_t := pm_c;
+  --signal PM : pm_t := pm_c;
 
+  attribute ram_style: string;
+  attribute ram_style of PM : signal is "block";
 
 begin  -- pMem
-  PM_out <= PM(to_integer(pAddr));  
- -- PM(to_integer(pAddr)) <= PM_in when PM_write = '1' else PM(to_integer(pAddr));
+  
+  PM_out <= PM(to_integer(pAddr));
+
+  process (clk)
+  begin
+    if rising_edge(clk) then
+      if PM_write = '1' then
+        PM(to_integer(pAddr)) <= PM_in;
+      end if;
+    end if;
+  end process;
+
+  --PM(to_integer(pAddr)) <= PM_in when PM_write = '1' else PM(to_integer(pAddr));
+    
 
 end Behavioral;
 
