@@ -188,13 +188,13 @@ begin  -- behavioral
   begin
     if rising_edge(clk) then
       -- P1
-      if xPixel >= p1x and to_integer(xPixel) < to_integer(p1x) + 16*pixelSize
-        and yPixel >= p1y and to_integer(yPixel) < to_integer(p1y) + 32*pixelSize then
+      if xPixel >= p1x*16*pixelSize and to_integer(xPixel) < to_integer(p1x)*16*pixelSize + 16*pixelSize
+        and yPixel >= p1y*16*pixelSize and to_integer(yPixel) < to_integer(p1y)*16*pixelSize + 32*pixelSize then
         
         p1Draw <= '1';
-        if xPixel = p1x then
+        if xPixel = p1x*16*pixelSize then
           player1XCount <= 0;
-          if yPixel = p1y then
+          if yPixel = p1y*16*pixelSize then
             player1YCount <= 0;
           else
             player1YCount <= player1YCount + 1;
@@ -208,13 +208,13 @@ begin  -- behavioral
       end if;
 
       -- P2
-      if xPixel >= p2x and to_integer(xPixel) < to_integer(p2x) + 16*pixelSize
-        and yPixel >= p2y and to_integer(yPixel) < to_integer(p2y) + 32*pixelSize then
+      if xPixel >= p2x*16*pixelSize and to_integer(xPixel) < to_integer(p2x)*16*pixelSize + 16*pixelSize
+        and yPixel >= p2y*16*pixelSize and to_integer(yPixel) < to_integer(p2y)*16*pixelSize + 32*pixelSize then
         
         p2Draw <= '1';
-        if xPixel = p2x then
+        if xPixel = p2x*16*pixelSize then
           player2XCount <= 0;
-          if yPixel = p2y then
+          if yPixel = p2y*16*pixelSize then
             player2YCount <= 0;
           else
             player2YCount <= player2YCount + 1;
