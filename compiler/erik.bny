@@ -1,0 +1,12 @@
+INIT:
+	sleep	1
+
+	load	gr1 18
+	load	gr2 4
+	tpoint	gr1
+	twrite	gr2
+MAIN:
+	joy1r	TEST
+	add	gr12 1
+TEST:
+	jump 	MAIN
