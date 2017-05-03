@@ -5,16 +5,9 @@ INIT:	sleep	1
 	tpoint	gr1
 	twrite	gr2
 
+/* -------- START OF MAIN -------- */
+
 MAIN:
-	store	MYSTUFF gr13
-	load	gr1  	MYSTUFF
-	add	gr1 	5
-	store	MYSTUFF gr1
-	load	gr13 	MYSTUFF
-
-	jump MAIN
-
-/*
 
 	jump CONTROL
 CONTROL_R:
@@ -24,8 +17,25 @@ BUTTON_R:
 
 	jump MAIN
 
+/* -------- END OF MAIN -------- */
+
+/* -------- START OF BUTTON -------- */
+
 BUTTON:
+	btn1	BTN1
+BTN1_R:
+
+	btn2	BTN2
+BTN2_R:
+
 	jump BUTTON_R
+
+
+	
+
+/* -------- END OF BUTTON -------- */
+
+/* -------- START OF CONTROL -------- */
 
 CONTROL:
 	joy1r	P1R
@@ -68,9 +78,5 @@ P2L:
 P2D:
 	add	gr15 1
 	jump 	CONTROL_R
-*/
 
-
-
-MYSTUFF:
-	0
+/* -------- END OF CONTROL -------- */

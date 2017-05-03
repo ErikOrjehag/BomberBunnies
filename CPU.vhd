@@ -41,12 +41,12 @@ architecture behavioral of CPU is
   -- program memory component
   component PROGRAM_MEMORY
     port (
-         pAddr : in unsigned(11 downto 0);
-         PM_out : out std_logic_vector(22 downto 0);
-         PM_in : in std_logic_vector(22 downto 0);
-         PM_write : in std_logic
-         );
- 
+      clk : in std_logic;
+      pAddr : in unsigned(11 downto 0);
+      PM_out : out std_logic_vector(22 downto 0);
+      PM_in : in std_logic_vector(22 downto 0);
+      PM_write : in std_logic
+    );
   end component;
 
   -- Micro memory component
@@ -94,7 +94,7 @@ architecture behavioral of CPU is
     "000000100",                       -- (01) Immediate (rad 004)
     "000000101",                       -- (10) Indirekt adressering (rad 005)
     "000000111"                        -- (11) Indexerad adressering (rad 007)
-);
+  );
 
   -- k1
   type k1_t is array (0 to 31) of std_logic_vector(8 downto 0);  --31
@@ -132,7 +132,7 @@ architecture behavioral of CPU is
     "000000000",  -- (11101) 
     "000000000",  -- (11110) 
     "000000000"   -- (11111)
-);
+  );
 
   -- uPM signals
   signal upm_instr : std_logic_vector(29 downto 0);
@@ -180,6 +180,12 @@ architecture behavioral of CPU is
   signal j2d : std_logic := '0';
   signal b2 : std_logic := '0';
 
+  attribute ram_style: string;
+
+  attribute ram_style of GRx : signal is "distributed";
+  attribute ram_style of k2 : signal is "distributed";
+  attribute ram_style of k1 : signal is "distributed";
+  
 begin  -- behavioral
   
   -- Update joystick flags
@@ -286,14 +292,14 @@ begin  -- behavioral
         when "0001" => AR <= buss(11 downto 0);
         when "0010" => AR <= not buss(11 downto 0);
         when "0011" => AR <= (others => '0');
-        when "0100" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss(11 downto 0)));
-        when "0101" => AR <= std_logic_vector(unsigned(AR) - unsigned(buss(11 downto 0)));
+        when "0100" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss(11 downto 0)));      --add
+        when "0101" => AR <= std_logic_vector(unsigned(AR) - unsigned(buss(11 downto 0)));      --sub
         when "0110" => AR <= AR and buss(11 downto 0);
         when "0111" => AR <= AR or buss(11 downto 0);
-        when "1000" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss(11 downto 0)));  --no flags
-        when "1001" => AR <= std_logic_vector(shift_left(unsigned(AR), 1));
-        when "1010" => null;            --ledig
-        when "1011" => null;            --ledig
+        when "1000" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss(11 downto 0)));      --no flags
+        when "1001" => AR <= std_logic_vector(shift_left(unsigned(AR), 1));                     --shift left
+        when "1010" => null; --AR <= std_logic_vector(unsigned(AR) * unsigned(buss(11 downto 0)));      --mul
+        when "1011" => AR <= std_logic_vector(unsigned(AR) / unsigned(buss(11 downto 0)));      --div
         when "1100" => null;            --ledig
         when "1101" => AR <= std_logic_vector(shift_right(unsigned(AR), 1));
         when "1110" =>  null;           --ledig
@@ -441,7 +447,7 @@ begin  -- behavioral
   end process;
 
   -- Program memory component connection (PM)
-  U1 : PROGRAM_MEMORY port map (pAddr => ASR, PM_out => PM_out, PM_in => PM_in, PM_write => PM_write);
+  U1 : PROGRAM_MEMORY port map (clk => clk, pAddr => ASR, PM_out => PM_out, PM_in => PM_in, PM_write => PM_write);
   
 
   -- Micro memory component connection (uPM)
