@@ -57,9 +57,11 @@ def put_instr(op, grx, mm, addr):
 	grx_actual = grx if grx != None else 0
 	mm_actual = mm if mm != None else 0
 	addr_actual = addr if addr != None else 0
-	line = to_bin(OPS.index(op), 5) + to_bin(grx_actual, 4) + to_bin(mm_actual, 2) + to_bin(addr_actual, 12)
-	grx_comment = '' if grx == None else ' gr' + str(grx)
-	put_line(split_line(line), op + grx_comment)
+	addr_str = to_bin(addr_actual, 12) if isinstance(addr_actual, int) else addr_actual;
+	line = to_bin(OPS.index(op), 5) + to_bin(grx_actual, 4) + to_bin(mm_actual, 2) + addr_str
+	grx_comment = '' if grx == None else ', gr' + str(grx)
+	addr_comment = '' if isinstance(addr_actual, int) else ', ' + addr_actual[2:-1]
+	put_line(split_line(line), op + grx_comment + addr_comment)
 
 def put_data(integer):
 	line = to_bin(integer, 23)
@@ -69,7 +71,7 @@ def put_label(label):
 	#label_ln = get_label_ln(label)
 	#line = to_bin(label_ln, 23)
 	#put_line(line, label + ' ' + str(label_ln))
-	put_line(label)
+	put_line(long_label(label), label)
 
 def split_line(line):
 	return line[0:5] + '_' + line[5:9] + '_' + line[9:11] + '_' + line[11:23]
@@ -124,7 +126,7 @@ def next_token():
 def is_op(token):
 	return token in OPS
 
-def is_data(token):
+def is_int(token):
 	if token[0] in ('-', '+'):
 		return token[1:].isdigit()
 	return token.isdigit()
@@ -147,9 +149,15 @@ def unexpected(token):
 	print("ERROR: Unexpected token `" + token + "` on line " + str(ln))
 	exit(1)
 
+def short_label(label):
+	return "S#" + label + '#'
+
+def long_label(label):
+	return "L#" + label + '#'
+
 def branch_instr(op):
-	put_instr(op, None, MM_IMMEDIATE, None)
 	label = next_token()
+	put_instr(op, None, MM_IMMEDIATE, None)
 	put_label(label)
 
 def tile_instr(op):
@@ -172,20 +180,22 @@ while True:
 		break
 	elif is_label(token):
 		store_label(token[0:-1])
-	elif is_data(token):
+	elif is_int(token):
 		put_data(int(token))
 	elif is_op(token):
 		if token == "load":
 			grx = next_token()
-			put_instr("load", grx_to_int(grx), MM_IMMEDIATE, None)
-			integer = next_token()
-			put_data(int(integer))
+			thing = next_token()
+			if is_int(thing):
+				put_instr("load", grx_to_int(grx), MM_IMMEDIATE, None)
+				put_data(int(thing))
+			else:
+				put_instr("load", grx_to_int(grx), MM_DIRECT, short_label(thing))
 
 		elif token == "store":
 			label = next_token()
 			grx = next_token()
-			put_instr("store", grx_to_int(grx), MM_IMMEDIATE, None)
-			put_label(label)
+			put_instr("store", grx_to_int(grx), MM_DIRECT, short_label(label))
 
 		elif token == "sleep":
 			put_instr("sleep", None, MM_IMMEDIATE, None)
@@ -218,7 +228,8 @@ while True:
 
 # Labels
 for label, line_num in lables.iteritems():
-	output = output.replace('\"' + label + '\"', '\"' + split_line(to_bin(line_num, 23)) + '\"')
+	output = output.replace('L#' + label + '#', split_line(to_bin(line_num, 23)))
+	output = output.replace('S#' + label + '#', to_bin(line_num, 12))
 
 print(output)
 
