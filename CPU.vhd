@@ -82,7 +82,7 @@ architecture behavioral of CPU is
     "00000000000000000000000", -- p1x
     "00000000000000000000000", -- p1y
     "00000000000000000000000", -- p2x
-    "00000000000000001000000"  -- p2y
+    "00000000000000000000100"  -- p2y
   );
   signal GRx_x  : integer := 0;
 
@@ -293,7 +293,7 @@ begin  -- behavioral
         when "1000" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss(11 downto 0)));      --no flags
         when "1001" => AR <= std_logic_vector(shift_left(unsigned(AR), 1));                     --shift left
         when "1010" => null; --AR <= std_logic_vector(unsigned(AR) * unsigned(buss(11 downto 0)));      --mul
-        when "1011" => AR <= std_logic_vector(unsigned(AR) / unsigned(buss(11 downto 0)));      --div
+        when "1011" => null; --AR <= std_logic_vector(unsigned(AR) / unsigned(buss(11 downto 0)));      --div
         when "1100" => null;            --ledig
         when "1101" => AR <= std_logic_vector(shift_right(unsigned(AR), 1));
         when "1110" =>  null;           --ledig
