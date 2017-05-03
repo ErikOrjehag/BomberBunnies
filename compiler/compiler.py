@@ -157,7 +157,8 @@ def long_label(label):
 
 def branch_instr(op):
 	label = next_token()
-	put_instr(op, None, MM_DIRECT, short_label(label))
+	put_instr(op, None, MM_IMMEDIATE, None)
+	put_label(label)
 
 def tile_instr(op):
 	grx = next_token()
