@@ -6,15 +6,20 @@ INIT:	sleep	1
 	twrite	gr2
 
 MAIN:
-	add	gr13 4
-	load	gr1  19
-	tpoint	gr1
-	twrite	gr2
+	store	MYSTUFF gr13
+	load	gr1  	MYSTUFF
+	add	gr1 	5
+	store	MYSTUFF gr1
+	load	gr13 	MYSTUFF
+
+	jump MAIN
+
+/*
 
 	jump CONTROL
 CONTROL_R:
 
-	jump BUTTON	/* Checks button press and places an egg */
+	jump BUTTON
 BUTTON_R:
 
 	jump MAIN
@@ -63,3 +68,9 @@ P2L:
 P2D:
 	add	gr15 1
 	jump 	CONTROL_R
+*/
+
+
+
+MYSTUFF:
+	0
