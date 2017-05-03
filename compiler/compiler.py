@@ -60,7 +60,7 @@ def put_instr(op, grx, mm, addr):
 	addr_str = to_bin(addr_actual, 12) if isinstance(addr_actual, int) else addr_actual;
 	line = to_bin(OPS.index(op), 5) + to_bin(grx_actual, 4) + to_bin(mm_actual, 2) + addr_str
 	grx_comment = '' if grx == None else ', gr' + str(grx)
-	addr_comment = '' if isinstance(addr_actual, int) else ', ' + addr_actual[2:]
+	addr_comment = '' if isinstance(addr_actual, int) else ', ' + addr_actual[2:-1]
 	put_line(split_line(line), op + grx_comment + addr_comment)
 
 def put_data(integer):
@@ -150,10 +150,10 @@ def unexpected(token):
 	exit(1)
 
 def short_label(label):
-	return "S#" + label
+	return "S#" + label + '#'
 
 def long_label(label):
-	return "L#" + label
+	return "L#" + label + '#'
 
 def branch_instr(op):
 	label = next_token()
@@ -227,8 +227,8 @@ while True:
 
 # Labels
 for label, line_num in lables.iteritems():
-	output = output.replace('L#' + label, split_line(to_bin(line_num, 23)))
-	output = output.replace('S#' + label, to_bin(line_num, 12))
+	output = output.replace('L#' + label + '#', split_line(to_bin(line_num, 23)))
+	output = output.replace('S#' + label + '#', to_bin(line_num, 12))
 
 print(output)
 
