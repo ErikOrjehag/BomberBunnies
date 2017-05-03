@@ -286,14 +286,14 @@ begin  -- behavioral
         when "0001" => AR <= buss(11 downto 0);
         when "0010" => AR <= not buss(11 downto 0);
         when "0011" => AR <= (others => '0');
-        when "0100" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss(11 downto 0)));
-        when "0101" => AR <= std_logic_vector(unsigned(AR) - unsigned(buss(11 downto 0)));
+        when "0100" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss(11 downto 0)));      --add
+        when "0101" => AR <= std_logic_vector(unsigned(AR) - unsigned(buss(11 downto 0)));      --sub
         when "0110" => AR <= AR and buss(11 downto 0);
         when "0111" => AR <= AR or buss(11 downto 0);
-        when "1000" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss(11 downto 0)));  --no flags
-        when "1001" => AR <= std_logic_vector(shift_left(unsigned(AR), 1));
-        when "1010" => null;            --ledig
-        when "1011" => null;            --ledig
+        when "1000" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss(11 downto 0)));      --no flags
+        when "1001" => AR <= std_logic_vector(shift_left(unsigned(AR), 1));                     --shift left
+        when "1010" => null; --AR <= std_logic_vector(unsigned(AR) * unsigned(buss(11 downto 0)));      --mul
+        when "1011" => AR <= std_logic_vector(unsigned(AR) / unsigned(buss(11 downto 0)));      --div
         when "1100" => null;            --ledig
         when "1101" => AR <= std_logic_vector(shift_right(unsigned(AR), 1));
         when "1110" =>  null;           --ledig
