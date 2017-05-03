@@ -11,9 +11,13 @@ end MICRO_MEMORY;
 
 architecture Behavioral of MICRO_MEMORY is
 
--- micro Memory
-type u_mem_t is array (0 to 511) of std_logic_vector(29 downto 0);
-constant u_mem_c : u_mem_t := (
+  -- micro Memory
+  type u_mem_t is array (0 to 127) of std_logic_vector(29 downto 0);  -- 511
+
+  --constant u_mem_c : u_mem_t := (
+
+  constant uMem : u_mem_t := (
+
   -- AR 0110
        --   ALU   TB   FB  S P LC  SEQ  uADR
     0  => b"0000_0100_0001_0_0_00_00000_000000000",  -- Hämtfas
@@ -103,7 +107,7 @@ constant u_mem_c : u_mem_t := (
     others => (others => '0')
   );
 
-signal uMem : u_mem_t := u_mem_c;
+--signal uMem : u_mem_t := u_mem_c;
 
 begin  -- Behavioral
   uData <= uMem(to_integer(uAddr));
