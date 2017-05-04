@@ -28,13 +28,17 @@ BTN1_R:
 	btn2	BTN2
 BTN2_R:
 
-	jump BUTTON_R
+	jump	BUTTON_R
 
-BTN1:
-	jump BTN1_R
+BTN1:  
+	tpoint 	gr12
+	twrite 	gr2
+	jump	BTN1_R
 
 BTN2:
-	jump BTN2_R
+	tpoint	gr14
+	twrite	gr2
+	jump	BTN2_R
 	
 
 /* -------- END OF BUTTON -------- */
