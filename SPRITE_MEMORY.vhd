@@ -20,10 +20,10 @@ entity SPRITE_MEMORY is
     clk         : in std_logic;                         -- system clock (100 MHz)
     xPixel      : in unsigned(9 downto 0);              -- Horizontal pixel counter
     yPixel	: in unsigned(9 downto 0);	        -- Vertical pixel counter
-    p1x         : in unsigned(9 downto 0);              -- Number of pixels on board 16x15
-    p1y         : in unsigned(9 downto 0);              -- Number of pixels on board 16x13
-    p2x         : in unsigned(9 downto 0);              -- Number of pixels on board 16x15
-    p2y         : in unsigned(9 downto 0);              -- Number of pixels on board 16x13
+    p1x         : in unsigned(3 downto 0);              -- Number of pixels on board 16x15
+    p1y         : in unsigned(3 downto 0);              -- Number of pixels on board 16x13
+    p2x         : in unsigned(3 downto 0);              -- Number of pixels on board 16x15
+    p2y         : in unsigned(3 downto 0);              -- Number of pixels on board 16x13
     playerPixel : out std_logic_vector(7 downto 0));    -- pixel from player 
 end SPRITE_MEMORY;
 
@@ -81,38 +81,6 @@ architecture behavioral of SPRITE_MEMORY is
       x"90",x"90",x"90",x"6D",x"B6",x"90",x"90",x"90",x"90",x"6D",x"B6",x"90",x"90",x"90",x"90",x"90",
       x"90",x"90",x"90",x"B6",x"B6",x"B6",x"90",x"90",x"90",x"B6",x"B6",x"B6",x"90",x"90",x"90",x"90"
 
-      --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"0B",x"0B",x"90",x"90",x"90",x"90",x"0B",x"0B",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"0B",x"0B",x"0B",x"0B",x"90",x"90",x"0B",x"0B",x"0B",x"0B",x"90",x"90",x"90",
-      --x"90",x"90",x"0B",x"0B",x"90",x"00",x"0B",x"90",x"90",x"0B",x"00",x"90",x"0B",x"0B",x"90",x"90",
-      --x"90",x"90",x"0B",x"0B",x"90",x"90",x"00",x"2B",x"2B",x"00",x"90",x"90",x"0B",x"0B",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"2B",x"E6",x"2B",x"2B",x"E6",x"2B",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"2B",x"2B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"00",x"00",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"90",x"00",x"2B",x"2B",x"00",x"90",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"0B",x"0B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"0B",x"0B",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"0B",x"0B",x"90",x"90",
-      --x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
-      --x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
-      --x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
-      --x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
-      --x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
-      --x"90",x"90",x"90",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",
-      --x"90",x"90",x"90",x"2B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"2B",x"2B",x"2B",x"90",x"90",x"90"
   );
 
   constant player2 : sprite_t :=
@@ -149,38 +117,6 @@ architecture behavioral of SPRITE_MEMORY is
      x"90",x"90",x"90",x"E0",x"6D",x"90",x"90",x"90",x"90",x"E0",x"6D",x"90",x"90",x"90",x"90",x"90",
      x"90",x"90",x"90",x"6D",x"6D",x"6D",x"90",x"90",x"90",x"6D",x"6D",x"6D",x"90",x"90",x"90",x"90"
 
-     --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"0B",x"0B",x"90",x"90",x"90",x"90",x"0B",x"0B",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"0B",x"0B",x"0B",x"0B",x"90",x"90",x"0B",x"0B",x"0B",x"0B",x"90",x"90",x"90",
-     --x"90",x"90",x"0B",x"0B",x"90",x"00",x"0B",x"90",x"90",x"0B",x"00",x"90",x"0B",x"0B",x"90",x"90",
-     --x"90",x"90",x"0B",x"0B",x"90",x"90",x"00",x"2B",x"2B",x"00",x"90",x"90",x"0B",x"0B",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"2B",x"E6",x"2B",x"2B",x"E6",x"2B",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"2B",x"2B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"00",x"00",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"90",x"00",x"2B",x"2B",x"00",x"90",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"0B",x"0B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"0B",x"0B",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"0B",x"0B",x"90",x"90",
-     --x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
-     --x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
-     --x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
-     --x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
-     --x"90",x"0B",x"0B",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"0B",x"0B",x"90",
-     --x"90",x"90",x"90",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"2B",x"0B",x"0B",x"0B",x"0B",x"2B",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"2B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",x"90",x"90",x"2B",x"90",x"90",x"90",x"90",
-     --x"90",x"90",x"90",x"2B",x"2B",x"2B",x"90",x"90",x"90",x"90",x"2B",x"2B",x"2B",x"90",x"90",x"90"
      );
   
 begin  -- behavioral
@@ -188,13 +124,13 @@ begin  -- behavioral
   begin
     if rising_edge(clk) then
       -- P1
-      if xPixel >= p1x*16*pixelSize and to_integer(xPixel) < to_integer(p1x)*16*pixelSize + 16*pixelSize
-        and yPixel >= p1y*16*pixelSize and to_integer(yPixel) < to_integer(p1y)*16*pixelSize + 32*pixelSize then
+      if xPixel >= to_integer(p1x)*16*pixelSize and xPixel < to_integer(p1x)*16*pixelSize + 16*pixelSize
+        and yPixel >= to_integer(p1y)*16*pixelSize and yPixel < to_integer(p1y)*16*pixelSize + 32*pixelSize then
         
         p1Draw <= '1';
-        if xPixel = p1x*16*pixelSize then
+        if xPixel = to_integer(p1x)*16*pixelSize then
           player1XCount <= 0;
-          if yPixel = p1y*16*pixelSize then
+          if yPixel = to_integer(p1y)*16*pixelSize then
             player1YCount <= 0;
           else
             player1YCount <= player1YCount + 1;
@@ -208,13 +144,13 @@ begin  -- behavioral
       end if;
 
       -- P2
-      if xPixel >= p2x*16*pixelSize and to_integer(xPixel) < to_integer(p2x)*16*pixelSize + 16*pixelSize
-        and yPixel >= p2y*16*pixelSize and to_integer(yPixel) < to_integer(p2y)*16*pixelSize + 32*pixelSize then
+      if xPixel >= to_integer(p2x)*16*pixelSize and xPixel < to_integer(p2x)*16*pixelSize + 16*pixelSize
+        and yPixel >= to_integer(p2y)*16*pixelSize and yPixel < to_integer(p2y)*16*pixelSize + 32*pixelSize then
         
         p2Draw <= '1';
-        if xPixel = p2x*16*pixelSize then
+        if xPixel = to_integer(p2x)*16*pixelSize then
           player2XCount <= 0;
-          if yPixel = p2y*16*pixelSize then
+          if yPixel = to_integer(p2y)*16*pixelSize then
             player2YCount <= 0;
           else
             player2YCount <= player2YCount + 1;
