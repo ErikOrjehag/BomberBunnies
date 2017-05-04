@@ -34,7 +34,7 @@ ARCHITECTURE behavior OF JOYSTICK_tb IS
   signal btn : std_logic;
   signal joyX : std_logic_vector(1 downto 0);
   signal joyY : std_logic_vector(1 downto 0);
-  signal MISO : std_logic := '0';
+  signal MISO : std_logic := '1';
   signal MOSI : std_logic;
   signal SCLK : std_logic;
   

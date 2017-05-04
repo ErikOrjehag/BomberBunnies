@@ -16,7 +16,7 @@ OPS = [
 	"sleep",  #  5
 	"beq",    #  6
 	"bne",    #  7
-	"",       #  8
+	"mul",    #  8
 	"",       #  9
 	"",       # 10
 	"",       # 11
@@ -212,6 +212,7 @@ while True:
 		elif token == "jump": branch_instr("jump")
 		elif token == "beq"  : branch_instr("beq")
 		elif token == "bne"  : branch_instr("bne")
+		elif token == "mul"  : branch_instr("mul")
 		elif token == "joy1r": branch_instr("joy1r")
 		elif token == "joy1u": branch_instr("joy1u")
 		elif token == "joy1l": branch_instr("joy1l")
@@ -221,7 +222,7 @@ while True:
 		elif token == "joy2u": branch_instr("joy2u")
 		elif token == "joy2l": branch_instr("joy2l")
 		elif token == "joy2d": branch_instr("joy2d")
-		elif token == "btn2" : branch_instr("btn2")
+		elif token == "btn2" : branchinstr("btn2")
 
 	else:
 		unexpected(token)
