@@ -180,6 +180,8 @@ architecture behavioral of CPU is
   signal j2d : std_logic := '0';
   signal b2 : std_logic := '0';
 
+  signal mul : std_logic_vector(23 downto 0);
+
 begin  -- behavioral
   
   -- Update joystick flags
@@ -280,6 +282,9 @@ begin  -- behavioral
         when others => null;
       end case;
 
+      mul <= std_logic_vector(unsigned(AR) * unsigned(buss(11 downto 0)));
+--cannot index after conversion, converts here so it can be indexed in ALU
+      
       -- ALU
       case upm_alu is
         when "0000" => null;            --noop
@@ -292,7 +297,7 @@ begin  -- behavioral
         when "0111" => AR <= AR or buss(11 downto 0);
         when "1000" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss(11 downto 0)));      --no flags
         when "1001" => AR <= std_logic_vector(shift_left(unsigned(AR), 1));                     --shift left
-        when "1010" => null; --AR <= std_logic_vector(unsigned(AR) * unsigned(buss(11 downto 0)));      --mul
+        when "1010" => AR <= mul(11 downto 0);      --mul
         when "1011" => null; --AR <= std_logic_vector(unsigned(AR) / unsigned(buss(11 downto 0)));      --div
         when "1100" => null;            --ledig
         when "1101" => AR <= std_logic_vector(shift_right(unsigned(AR), 1));
