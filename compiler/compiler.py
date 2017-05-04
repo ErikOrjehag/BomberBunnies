@@ -222,7 +222,7 @@ while True:
 		elif token == "joy2u": branch_instr("joy2u")
 		elif token == "joy2l": branch_instr("joy2l")
 		elif token == "joy2d": branch_instr("joy2d")
-		elif token == "btn2" : branchinstr("btn2")
+		elif token == "btn2" : branch_instr("btn2")
 
 	else:
 		unexpected(token)

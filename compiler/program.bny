@@ -30,8 +30,13 @@ BTN2_R:
 
 	jump	BUTTON_R
 
-BTN1:  
-	tpoint 	gr12
+BTN1:
+	store	TMP1 gr12
+	store 	TMP2 gr13
+	load 	gr3 TMP2
+	mul 	gr3 15
+	add 	  
+	tpoint 	gr3
 	twrite 	gr2
 	jump	BTN1_R
 
@@ -96,3 +101,12 @@ P2D:
 	jump 	CONTROL_R
 
 /* -------- END OF CONTROL -------- */
+
+
+
+
+
+/* -------- TEMPORARY LABELS ------ */
+
+TMP1: 0
+TMP2: 0
