@@ -48,10 +48,10 @@ architecture Behavioral of BomberBunnies is
       tileTypeWrite     : out std_logic_vector(7 downto 0);
       readMap           : out std_logic;
       writeMap          : out std_logic;
-      p1x               : out std_logic_vector(9 downto 0);
-      p1y               : out std_logic_vector(9 downto 0);
-      p2x               : out std_logic_vector(9 downto 0);
-      p2y               : out std_logic_vector(9 downto 0));
+      p1x               : out std_logic_vector(3 downto 0);
+      p1y               : out std_logic_vector(3 downto 0);
+      p2x               : out std_logic_vector(3 downto 0);
+      p2y               : out std_logic_vector(3 downto 0));
   end component;
 
 -- VGA motor component
@@ -102,10 +102,10 @@ architecture Behavioral of BomberBunnies is
       clk		: in std_logic;                         -- system clock
       xPixel            : in unsigned(9 downto 0);              -- Horizontal pixel counter
       yPixel	        : in unsigned(9 downto 0);	        -- Vertical pixel counter
-      p1x               : in unsigned(9 downto 0);              -- Number of pixels on board 16x16x15
-      p1y               : in unsigned(9 downto 0);              -- Number of pixels on board 16x16x13
-      p2x               : in unsigned(9 downto 0);              -- Number of pixels on board 16x16x15
-      p2y               : in unsigned(9 downto 0);              -- Number of pixels on board 16x16x13
+      p1x               : in unsigned(3 downto 0);              -- Number of pixels on board 16x16x15
+      p1y               : in unsigned(3 downto 0);              -- Number of pixels on board 16x16x13
+      p2x               : in unsigned(3 downto 0);              -- Number of pixels on board 16x16x15
+      p2y               : in unsigned(3 downto 0);              -- Number of pixels on board 16x16x13
       playerPixel       : out std_logic_vector(7 downto 0));    -- pixel from player
            
   end component;
@@ -145,10 +145,10 @@ architecture Behavioral of BomberBunnies is
   signal readMap : std_logic;
   signal writeMap : std_logic;
   
-  signal p1x : std_logic_vector(9 downto 0);
-  signal p1y : std_logic_vector(9 downto 0);
-  signal p2x : std_logic_vector(9 downto 0);
-  signal p2y : std_logic_vector(9 downto 0);
+  signal p1x : std_logic_vector(3 downto 0);
+  signal p1y : std_logic_vector(3 downto 0);
+  signal p2x : std_logic_vector(3 downto 0);
+  signal p2y : std_logic_vector(3 downto 0);
 
   signal joy1x : std_logic_vector(1 downto 0);
   signal joy1y : std_logic_vector(1 downto 0);

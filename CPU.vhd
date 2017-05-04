@@ -28,10 +28,10 @@ entity CPU is
     tileTypeWrite       : out std_logic_vector(7 downto 0) := (others => '0');
     readMap             : out std_logic := '0';
     writeMap            : out std_logic := '0';
-    p1x                 : out std_logic_vector(9 downto 0);
-    p1y                 : out std_logic_vector(9 downto 0);
-    p2x                 : out std_logic_vector(9 downto 0);
-    p2y                 : out std_logic_vector(9 downto 0)
+    p1x                 : out std_logic_vector(3 downto 0);
+    p1y                 : out std_logic_vector(3 downto 0);
+    p2x                 : out std_logic_vector(3 downto 0);
+    p2y                 : out std_logic_vector(3 downto 0)
   );
 end CPU;
 
@@ -197,10 +197,10 @@ begin  -- behavioral
   b2 <= '1' when (btn2 = '1') else '0';
   
   -- Player positions
-  p1x <= GRx(12)(9 downto 0);
-  p1y <= GRx(13)(9 downto 0);
-  p2x <= GRx(14)(9 downto 0);
-  p2y <= GRx(15)(9 downto 0);
+  p1x <= GRx(12)(3 downto 0);
+  p1y <= GRx(13)(3 downto 0);
+  p2x <= GRx(14)(3 downto 0);
+  p2y <= GRx(15)(3 downto 0);
 
   -- uPM signals
   upm_instr <= uPM;

@@ -31,9 +31,11 @@ BTN2_R:
 	jump BUTTON_R
 
 BTN1:
+
 	jump BTN1_R
 
 BTN2:
+
 	jump BTN2_R
 	
 
