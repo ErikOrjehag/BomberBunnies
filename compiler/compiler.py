@@ -35,7 +35,7 @@ OPS = [
 	"joy2l",  # 24
 	"joy2d",  # 25
 	"btn2",   # 26
-	"addpm",
+	"addgr",
 ]
 
 MM_DIRECT = 0
@@ -148,7 +148,8 @@ def get_label_ln(label):
 	return lables[label]
 
 def grx_to_int(grx):
-	return int(grx[-1]) if len(grx) == 3 else int(grx[-2:])
+	#return int(grx[-1]) if len(grx) == 3 else int(grx[-2:])
+	return int(grx[2:])
 
 def unexpected(token):
 	print("ERROR: Unexpected token `" + token + "` on line " + str(ln))
@@ -171,15 +172,12 @@ def tile_instr(op):
 
 def math_instr(op):
 	grx = next_token()
-	integer = next_token()
-	put_instr(op, grx_to_int(grx), MM_IMMEDIATE, None)
-	put_data(int(integer))
-
-def mathpm_instr(op):
-	grx = next_token()
-	label = next_token()
-	put_instr(op, grx_to_int(grx), MM_IMMEDIATE, None)
-	put_label(label)
+	thing = next_token()
+	if is_int(thing):
+		put_instr(op, grx_to_int(grx), MM_IMMEDIATE, None)
+		put_data(int(thing))
+	else:
+		put_instr(op + "gr", grx_to_int(grx), grx_to_int(thing), None)
 
 with open(file_name) as f:
 	program = ''.join(f.readlines())
@@ -216,8 +214,6 @@ while True:
 		elif token == "add": math_instr("add")
 		elif token == "sub": math_instr("sub")
 		elif token == "mul": math_instr("mul")
-
-		elif token == "addpm": mathpm_instr("addpm")
 
 		elif token == "twrite": tile_instr("twrite")
 		elif token == "tread" : tile_instr("tread")

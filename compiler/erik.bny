@@ -1,8 +1,12 @@
 	load	gr0	0
+	load	gr2	1
 LOOP:
-	add	gr0	1
+	add	gr0	gr2
 	store	DATA	gr0
 	load	gr13	DATA
 	jump	LOOP
 DATA:
 	0
+
+ONE:
+	1
