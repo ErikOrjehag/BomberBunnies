@@ -23,11 +23,11 @@ MAIN:
 
 BUTTON:
 	btn1	BTN1
-	BTN1_R:
 
+BTN1_R:
 	btn2	BTN2
-	BTN2_R:
 
+BTN2_R:
 	jump	BUTTON_R
 
 BTN1:
