@@ -23,10 +23,10 @@ MAIN:
 
 BUTTON:
 	btn1	BTN1
-BTN1_R:
+	BTN1_R:
 
 	btn2	BTN2
-BTN2_R:
+	BTN2_R:
 
 	jump	BUTTON_R
 
@@ -35,9 +35,9 @@ BTN1:
 	store 	YPOS1 gr13
 	load 	gr3 YPOS1
 	load	gr2 EGG
-	load	gr1 XPOS1
+	load	gr0 XPOS1
 	mul 	gr3 15
-	add	gr3 gr1
+	add	gr3 gr0
 	tpoint 	gr3
 	twrite 	gr2
 	jump	BTN1_R
@@ -47,9 +47,9 @@ BTN2:
 	store	YPOS2 gr15
 	load 	gr3 YPOS2
 	load	gr2 EGG
-	load	gr1 XPOS2
+	load	gr0 XPOS2
 	mul 	gr3 15
-	add	gr3 gr1
+	add	gr3 gr0
 	tpoint 	gr3
 	twrite 	gr2
 	jump	BTN2_R
@@ -66,7 +66,7 @@ TMP1:
 /* -------- START OF CONTROL -------- */
 
 CONTROL:
-	jump	COUNT1
+	/* jump	COUNT1 */
 	joy1r	P1R
 	joy1l	P1L
 J1:
@@ -85,9 +85,9 @@ P1R:
 	store	MOVE gr13
 	load	gr2 MOVE
 	store 	MOVE gr12
-	load	gr1 MOVE
+	load	gr0 MOVE
 	mul	gr2 15
-	add	gr2 gr1
+	add	gr2 gr0
 	add	gr2 1
 	tpoint	gr2
 	tread	gr3
