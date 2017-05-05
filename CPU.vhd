@@ -446,7 +446,7 @@ begin  -- behavioral
   end process;
 
   -- Program memory component connection (PM)
-  U1 : PROGRAM_MEMORY port map (pAddr => ASR, PM_out => PM_out, PM_in => PM_in, PM_write => PM_write);
+  U1 : PROGRAM_MEMORY port map (clk => clk, pAddr => ASR, PM_out => PM_out, PM_in => PM_in, PM_write => PM_write);
   
 
   -- Micro memory component connection (uPM)

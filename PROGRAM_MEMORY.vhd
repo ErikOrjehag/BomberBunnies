@@ -5,6 +5,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity PROGRAM_MEMORY is
   
   port (
+    clk : in std_logic;
     pAddr : in  unsigned(11 downto 0);
     PM_out : out std_logic_vector(22 downto 0);
     PM_in : in std_logic_vector(22 downto 0);
@@ -143,7 +144,18 @@ architecture Behavioral of PROGRAM_MEMORY is
 
 
 begin  -- pMem
-  PM_out <= PM(to_integer(pAddr));  
+
+  PM_out <= PM(to_integer(pAddr));
+
+  process (clk)
+  begin
+    if rising_edge(clk) then
+      if PM_write = '1' then
+        PM(to_integer(pAddr)) <= PM_in;
+      end if;
+    end if;
+  end process;
+  
  -- PM(to_integer(pAddr)) <= PM_in when PM_write = '1' else PM(to_integer(pAddr));
 
 end Behavioral;
