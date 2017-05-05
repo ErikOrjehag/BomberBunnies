@@ -178,7 +178,7 @@ def math_instr(op):
 def mathpm_instr(op):
 	grx = next_token()
 	label = next_token()
-	put_intr(op, grx_to_int(grx), MM_IMMEDIATE, None)
+	put_instr(op, grx_to_int(grx), MM_IMMEDIATE, None)
 	put_label(label)
 
 with open(file_name) as f:
@@ -206,8 +206,7 @@ while True:
 		elif token == "store":
 			label = next_token()
 			grx = next_token()
-			put_instr("store", grx_to_int(grx), MM_IMMEDIATE, None)
-			put_label(label)
+			put_instr("store", grx_to_int(grx), MM_INDIRECT, short_label(label))
 
 		elif token == "sleep":
 			put_instr("sleep", None, MM_IMMEDIATE, None)
