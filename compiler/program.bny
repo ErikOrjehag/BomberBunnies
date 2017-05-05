@@ -10,10 +10,10 @@ INIT:	sleep	1
 MAIN:
 
 	jump CONTROL
-CONTROL_R:
+	CONTROL_R:
 
 	jump BUTTON
-BUTTON_R:
+	BUTTON_R:
 
 	jump MAIN
 
@@ -35,8 +35,9 @@ BTN1:
 	store 	YPOS1 gr13
 	load 	gr3 YPOS1
 	load	gr2 EGG
+	load	gr1 XPOS1
 	mul 	gr3 15
-	addpm	gr3 XPOS1
+	add	gr3 gr1
 	tpoint 	gr3
 	twrite 	gr2
 	jump	BTN1_R
@@ -44,12 +45,13 @@ BTN1:
 BTN2:
 	store 	XPOS2 gr14
 	store	YPOS2 gr15
-	load 	gr4 YPOS2
-	load	gr5 EGG
-	mul 	gr4 15
-	addpm	gr4 XPOS2
-	tpoint 	gr4
-	twrite 	gr5
+	load 	gr3 YPOS2
+	load	gr2 EGG
+	load	gr1 XPOS2
+	mul 	gr3 15
+	add	gr3 gr1
+	tpoint 	gr3
+	twrite 	gr2
 	jump	BTN2_R
 
 
@@ -64,6 +66,7 @@ TMP1:
 /* -------- START OF CONTROL -------- */
 
 CONTROL:
+	jump	COUNT1
 	joy1r	P1R
 	joy1l	P1L
 J1:
@@ -79,11 +82,12 @@ J3:
 	jump	CONTROL_R
 
 P1R:
-	store	TMP2 gr13
-	store 	TMP1 gr12
-	load	gr2 TMP2
+	store	MOVE gr13
+	load	gr2 MOVE
+	store 	MOVE gr12
+	load	gr1 MOVE
 	mul	gr2 15
-	addpm	gr2 TMP1
+	add	gr2 gr1
 	add	gr2 1
 	tpoint	gr2
 	tread	gr3
@@ -115,10 +119,14 @@ P2D:
 	add	gr15 1
 	jump 	CONTROL_R
 
+COUNT1:
+	
+
+COUNT2:
+
+
 /* LABELS */
 
-TMP2:
-	0
 
 /* -------- END OF CONTROL -------- */
 
@@ -150,6 +158,15 @@ XPOS2:
 	0
 
 YPOS2:
+	0
+
+MOVE:		/* Used when moving from PM to register */
+	0
+
+TIMER1:		/* Stores players moving counter */
+	0
+
+TIMER2:		/* Stores players moving counter */
 	0
 
 /* -------- END OF GLOBAL VARIABLES -------- */
