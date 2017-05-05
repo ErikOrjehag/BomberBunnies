@@ -23,10 +23,10 @@ ARCHITECTURE behavior OF CPU_tb IS
     tileTypeWrite     : out std_logic_vector(7 downto 0);
     readMap           : out std_logic;
     writeMap          : out std_logic;
-    p1x               : out std_logic_vector(9 downto 0);
-    p1y               : out std_logic_vector(9 downto 0);
-    p2x               : out std_logic_vector(9 downto 0);
-    p2y               : out std_logic_vector(9 downto 0));
+    p1x               : out std_logic_vector(3 downto 0);
+    p1y               : out std_logic_vector(3 downto 0);
+    p2x               : out std_logic_vector(3 downto 0);
+    p2y               : out std_logic_vector(3 downto 0));
   END COMPONENT;
   
   --Inputs

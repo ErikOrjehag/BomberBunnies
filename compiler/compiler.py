@@ -57,10 +57,14 @@ def put_instr(op, grx, mm, addr):
 	grx_actual = grx if grx != None else 0
 	mm_actual = mm if mm != None else 0
 	addr_actual = addr if addr != None else 0
+	
 	addr_str = to_bin(addr_actual, 12) if isinstance(addr_actual, int) else addr_actual;
+	
 	line = to_bin(OPS.index(op), 5) + to_bin(grx_actual, 4) + to_bin(mm_actual, 2) + addr_str
+	
 	grx_comment = '' if grx == None else ', gr' + str(grx)
 	addr_comment = '' if isinstance(addr_actual, int) else ', ' + addr_actual[2:-1]
+
 	put_line(split_line(line), op + grx_comment + addr_comment)
 
 def put_data(integer):
@@ -74,7 +78,7 @@ def put_label(label):
 	put_line(long_label(label), label)
 
 def split_line(line):
-	return line[0:5] + '_' + line[5:9] + '_' + line[9:11] + '_' + line[11:23]
+	return line[0:5] + '_' + line[5:9] + '_' + line[9:11] + '_' + line[11:]
 
 def to_bin(integer, fill):
 	return ('{0:b}'.format(integer)).zfill(fill)
@@ -170,6 +174,12 @@ def math_instr(op):
 	put_instr(op, grx_to_int(grx), MM_IMMEDIATE, None)
 	put_data(int(integer))
 
+def mathpm_instr(op):
+	grx = next_token()
+	label = next_token()
+	put_intr(op, grx_to_int(grx), MM_IMMEDIATE, None)
+	put_label(label)
+
 with open(file_name) as f:
 	program = ''.join(f.readlines())
 
@@ -195,7 +205,8 @@ while True:
 		elif token == "store":
 			label = next_token()
 			grx = next_token()
-			put_instr("store", grx_to_int(grx), MM_DIRECT, short_label(label))
+			put_instr("store", grx_to_int(grx), MM_IMMEDIATE, None)
+			put_label(label)
 
 		elif token == "sleep":
 			put_instr("sleep", None, MM_IMMEDIATE, None)
@@ -205,6 +216,8 @@ while True:
 		elif token == "add": math_instr("add")
 		elif token == "sub": math_instr("sub")
 		elif token == "mul": math_instr("mul")
+
+		elif token == "addpm": mathpm_instr("addpm")
 
 		elif token == "twrite": tile_instr("twrite")
 		elif token == "tread" : tile_instr("tread")
