@@ -41,11 +41,12 @@ architecture behavioral of CPU is
   -- program memory component
   component PROGRAM_MEMORY
     port (
-         pAddr : in unsigned(11 downto 0);
-         PM_out : out std_logic_vector(22 downto 0);
-         PM_in : in std_logic_vector(22 downto 0);
-         PM_write : in std_logic
-         );
+      clk : in std_logic;
+      pAddr : in unsigned(11 downto 0);
+      PM_out : out std_logic_vector(22 downto 0);
+      PM_in : in std_logic_vector(22 downto 0);
+      PM_write : in std_logic
+    );
  
   end component;
 
