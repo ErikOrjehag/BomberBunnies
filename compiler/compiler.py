@@ -204,6 +204,7 @@ while True:
 
 		elif token == "add": math_instr("add")
 		elif token == "sub": math_instr("sub")
+		elif token == "mul": math_instr("mul")
 
 		elif token == "twrite": tile_instr("twrite")
 		elif token == "tread" : tile_instr("tread")
@@ -212,7 +213,6 @@ while True:
 		elif token == "jump": branch_instr("jump")
 		elif token == "beq"  : branch_instr("beq")
 		elif token == "bne"  : branch_instr("bne")
-		elif token == "mul"  : branch_instr("mul")
 		elif token == "joy1r": branch_instr("joy1r")
 		elif token == "joy1u": branch_instr("joy1u")
 		elif token == "joy1l": branch_instr("joy1l")
