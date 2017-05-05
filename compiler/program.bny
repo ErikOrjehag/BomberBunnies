@@ -31,18 +31,23 @@ BTN2_R:
 	jump	BUTTON_R
 
 BTN1:
-	store	TMP1 gr12
-	store 	TMP2 gr13
+	store 	TMP1 gr13
 	load 	gr3 TMP2
+	load	gr2 EGG
 	mul 	gr3 15
-	add 	  
+	add	gr3 gr12
 	tpoint 	gr3
 	twrite 	gr2
 	jump	BTN1_R
 
 BTN2:
-	tpoint	gr14
-	twrite	gr2
+	store 	TMP1 gr15
+	load 	gr3 TMP2
+	load	gr2 EGG
+	mul 	gr3 15
+	add	gr3 gr14
+	tpoint 	gr3
+	twrite 	gr2
 	jump	BTN2_R
 BTN1:
 
@@ -52,7 +57,11 @@ BTN2:
 
 	jump BTN2_R
 
-	
+
+/* LABELS */
+TMP1:
+	0
+
 
 /* -------- END OF BUTTON -------- */
 
@@ -74,6 +83,15 @@ J3:
 	jump	CONTROL_R
 
 P1R:
+	store	TMP2 gr13
+	load	gr2 TMP2
+	mul	gr2 15
+	add	gr2 gr12
+	add	gr2 1
+	tpoint	gr2
+	tread	gr3
+	sub	gr3 0
+	bne	J1
 	add	gr12 1
 	jump 	J1
 P1U:
@@ -100,13 +118,28 @@ P2D:
 	add	gr15 1
 	jump 	CONTROL_R
 
+/* LABELS */
+TMP2:
+	0
+
 /* -------- END OF CONTROL -------- */
 
 
+/* -------- GLOBAL VARIABLES -------- */
 
+GRASS:
+	0
 
+WALL:
+	1
 
-/* -------- TEMPORARY LABELS ------ */
+BREAKABLE:
+	2
 
-TMP1: 0
-TMP2: 0
+EXPLOSION:
+	3
+
+EGG:
+	4
+
+/* -------- END OF GLOBAL VARIABLES -------- */
