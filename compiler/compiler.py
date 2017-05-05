@@ -34,7 +34,8 @@ OPS = [
 	"joy2u",  # 23
 	"joy2l",  # 24
 	"joy2d",  # 25
-	"btn2"    # 26
+	"btn2",   # 26
+	"addpm",
 ]
 
 MM_DIRECT = 0
