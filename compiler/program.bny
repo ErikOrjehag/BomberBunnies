@@ -35,9 +35,8 @@ BTN1:
 	store 	YPOS1 gr13
 	load 	gr3 YPOS1
 	load	gr2 EGG
-	load	gr0 XPOS1
 	mul 	gr3 15
-	add	gr3 gr0
+	add	gr3 XPOS1
 	tpoint 	gr3
 	twrite 	gr2
 	jump	BTN1_R
@@ -47,9 +46,8 @@ BTN2:
 	store	YPOS2 gr15
 	load 	gr3 YPOS2
 	load	gr2 EGG
-	load	gr0 XPOS2
 	mul 	gr3 15
-	add	gr3 gr0
+	add	gr3 XPOS2
 	tpoint 	gr3
 	twrite 	gr2
 	jump	BTN2_R
@@ -85,9 +83,8 @@ P1R:
 	store	MOVE gr13
 	load	gr2 MOVE
 	store 	MOVE gr12
-	load	gr0 MOVE
 	mul	gr2 15
-	add	gr2 gr0
+	add	gr2 move
 	add	gr2 1
 	tpoint	gr2
 	tread	gr3
