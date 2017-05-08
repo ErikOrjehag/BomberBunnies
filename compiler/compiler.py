@@ -139,6 +139,9 @@ def is_int(token):
 def is_label(token):
 	return token[-1] == ':'
 
+def is_label_call(token):
+	return not (token[0] in ['0','1', '2', '3', '4', '5', '6', '7', '8', '9'])
+
 def store_label(label):
 	global ln
 	global lables
@@ -176,6 +179,9 @@ def math_instr(op):
 	if is_int(thing):
 		put_instr(op, grx_to_int(grx), MM_IMMEDIATE, None)
 		put_data(int(thing))
+	elif is_label_call(thing):
+		label_addr = get_label(thing)
+		put_instr(op, grx_to_int(grx), MM_IMMEDIATE, short_label(thing))
 	else:
 		put_instr(op + "gr", grx_to_int(grx), grx_to_int(thing), None)
 
