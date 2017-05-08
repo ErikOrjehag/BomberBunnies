@@ -84,7 +84,7 @@ P1R:
 	load	gr2 MOVE
 	store 	MOVE gr12
 	mul	gr2 15
-	add	gr2 move
+	add	gr2 MOVE
 	add	gr2 1
 	tpoint	gr2
 	tread	gr3
@@ -93,13 +93,13 @@ P1R:
 	add	gr12 1
 	jump 	J1
 P1U:
-	sub	gr13 1
+	sub	gr13 WALL
 	jump 	J2
 P1L:
 	sub	gr12 1
 	jump 	J1
 P1D:
-	add	gr13 1
+	add	gr13 WALL
 	jump 	J2
 
 
