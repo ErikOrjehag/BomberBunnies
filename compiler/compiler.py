@@ -180,7 +180,7 @@ def math_instr(op):
 		put_instr(op, grx_to_int(grx), MM_IMMEDIATE, None)
 		put_data(int(thing))
 	elif is_label_call(thing):
-		put_instr(op, grx_to_int(grx), MM_IMMEDIATE, short_label(thing))
+		put_instr(op, grx_to_int(grx), MM_DIRECT, short_label(thing))
 	else:
 		put_instr(op + "gr", grx_to_int(grx), grx_to_int(thing), None)
 
