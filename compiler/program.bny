@@ -85,9 +85,8 @@ P1R:
 	store	MOVE gr13
 	load	gr2 MOVE
 	store 	MOVE gr12
-	load	gr0 MOVE
 	mul	gr2 15
-	add	gr2 gr0
+	add	gr2 move
 	add	gr2 1
 	tpoint	gr2
 	tread	gr3
