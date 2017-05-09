@@ -33,10 +33,10 @@ BTN2_R:
 BTN1:
 	store 	XPOS1 gr12
 	store 	YPOS1 gr13
-	load 	gr3 YPOS1
+	load 	gr3 WALL
 	load	gr2 EGG
-	mul 	gr3 15
-	add	gr3 XPOS1
+	mul 	gr3 2
+	/*add	gr3 XPOS1*/
 	tpoint 	gr3
 	twrite 	gr2
 	jump	BTN1_R
@@ -44,9 +44,9 @@ BTN1:
 BTN2:
 	store 	XPOS2 gr14
 	store	YPOS2 gr15
-	load 	gr3 YPOS2
+	load 	gr3 WALL
 	load	gr2 EGG
-	mul 	gr3 15
+	mul 	gr3 2
 	add	gr3 XPOS2
 	tpoint 	gr3
 	twrite 	gr2
