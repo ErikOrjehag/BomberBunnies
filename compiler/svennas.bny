@@ -1,0 +1,488 @@
+INIT:	
+	load	gr12 1
+	load	gr14 13
+	load	gr15 11
+
+/* -------- START OF MAIN -------- */
+
+MAIN:	
+	jump EXPLOSION
+	EXPLOSION_R:
+	
+	jump CONTROL
+	CONTROL_R:
+
+	jump BUTTON
+	BUTTON_R: 
+
+	jump MAIN
+
+/* -------- END OF MAIN -------- */
+
+/* -------- START OF EXPLOSION -------- */
+
+EXPLOSION:
+
+/* START OF MAIN_TIMER */
+
+	load	gr0 MAIN_TIMER
+	sub	gr0 40
+	beq	MAIN_TIMER_RESET
+	load	gr0 MAIN_TIMER
+	add 	gr0 1
+	store 	MAIN_TIMER gr0
+	jump 	EXPLOSION_R
+
+MAIN_TIMER_RESET:
+	load	gr0 0
+	store 	MAIN_TIMER gr0 
+
+/* END OF MAIN_TIMER */
+
+BOMB11_TIMER:
+	load	gr2 BOMB11
+	sub 	gr2 1
+	beq	EXPLOSION_R
+	
+	load	gr0 TIMER11
+	sub 	gr0 4095
+	beq	BOMB11_EXPLOSION
+
+	load 	gr0 TIMER11
+	add 	gr0 1	
+	store 	TIMER11 gr0	
+
+BOMB11_EXPLOSION:
+	load	gr2 BOMB11POS
+	load 	gr3 BOOM
+	tpoint	gr2
+	twrite	gr3
+
+	/* Explosion to the right */
+	add	gr2 1
+	tpoint	gr2
+	twrite	gr3
+	add	gr2 1
+	tpoint	gr2
+	twrite	gr3
+
+	/* Explosion to the left */
+	load	gr2 BOMB11POS
+	sub	gr2 1
+	tpoint	gr2
+	twrite	gr3
+	sub	gr2 1
+	tpoint	gr2
+	twrite	gr3
+
+ 	/* Explosion down */
+	load	gr2 BOMB11POS
+	add	gr2 15
+	tpoint	gr2
+	twrite	gr3
+	add	gr2 15
+	tpoint	gr2
+	twrite	gr3
+
+	/* Explosion up */
+	load	gr2 BOMB11POS
+	sub	gr2 15
+	tpoint	gr2
+	twrite	gr3
+	sub	gr2 15
+	tpoint	gr2
+	twrite	gr3
+	
+	load 	gr0 0
+	store 	BOMB11 gr0
+	store	TIMER11 gr0
+
+/*BOMB12_TIMER:
+	load	gr2 BOMB12
+	sub 	gr2 1
+	beq	EXPLOSION_R
+	
+	load	gr0 TIMER12
+	sub 	gr0 4095
+	beq	BOMB12_EXPLOSION
+
+	load 	gr0 TIMER12
+	add 	gr0 1	
+	store 	TIMER12 gr0	
+
+BOMB12_EXPLOSION:
+	load	gr2 BOMB12POS
+	load 	gr3 BOOM
+	tpoint	gr2
+	twrite	gr3
+	load 	gr0 0
+	store 	BOMB11 gr0
+	store	TIMER11 gr0 */
+
+	jump	EXPLOSION_R
+
+/* -------- END OF EXPLOSION -------- */
+
+/* -------- START OF BUTTON -------- */
+
+BUTTON:
+	btn1	BTN1
+	BTN1_R:
+	
+	btn2	BTN2
+	BTN2_R:
+	
+	jump	BUTTON_R
+
+BTN1:
+	/* Checks if player can place more bombs */
+	load	gr0 BOMBCOUNT1
+	sub	gr0 MAXBOMBS
+	beq	BTN1_R
+
+	/* Checks if there's already a egg there */
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	mul	gr0 15
+	add	gr0 XPOS1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EGG
+	beq	BTN2_R
+
+	/* Adds an egg at player1 position */
+	store 	XPOS1 gr12
+	store 	YPOS1 gr13
+	load 	gr3 YPOS1
+	load	gr2 EGG
+	mul 	gr3 15
+	add	gr3 XPOS1
+	tpoint 	gr3
+	twrite 	gr2
+	store	BOMB11POS gr3
+	load	gr0 BOMBCOUNT1
+	add	gr0 1
+	store 	BOMBCOUNT1 gr0
+
+/* START OF BOMBCHECK1: Checks which bombs are out on the field */
+BOMB_A:	
+	load	gr0 BOMB11
+	sub 	gr0 1
+	beq 	BTN1_R  
+/*	beq	BOMB_B */
+	add 	gr0 1
+	store 	BOMB11 gr0
+	jump 	BTN1_R
+
+/*BOMB_B:
+	load	gr0 BOMB12
+	sub 	gr0 1
+	beq	BTN1_R
+	beq	BOMB_C
+	store	BOMB12POS gr3
+	add 	gr0 1
+	store 	BOMB12 gr0
+	jump 	BTN1_R
+
+BOMB_C:
+	load	gr0 BOMB13
+	sub 	gr0 1
+	beq	BTN1_R
+	add 	gr0 1
+	store 	BOMB13 gr0
+	jump 	BTN1_R */
+
+/* END OF BOMBCHECK1*/
+
+BTN2:
+	/* Checks if player can place more bombs */
+	load	gr0 BOMBCOUNT2
+	sub	gr0 MAXBOMBS
+	beq	BTN2_R
+
+	/* Checks if there's already a egg there */
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	mul	gr0 15
+	add	gr0 XPOS2
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EGG
+	beq	BTN2_R
+
+	/* Adds an egg at player2 position */
+	store 	XPOS2 gr14
+	store	YPOS2 gr15
+	load 	gr3 YPOS2
+	load	gr2 EGG
+	mul 	gr3 15
+	add	gr3 XPOS2
+	tpoint 	gr3
+	twrite 	gr2
+	load	gr0 BOMBCOUNT2
+	add	gr0 1
+	store 	BOMBCOUNT2 gr0
+	jump 	BTN2_R
+
+/* START OF BOMBCHECK1: Checks which bombs are out on the field */
+
+/* BOMB_D:	
+	load	gr0 BOMB21
+	sub 	gr0 1
+	beq	BOMB_E
+	add 	gr0 1
+	store 	BOMB21 gr0
+	jump 	BTN2_R */
+
+/* BOMB_E:
+	load	gr0 BOMB22
+	sub 	gr0 1
+	beq	BOMB_F
+	add 	gr0 1
+	store 	BOMB22 gr0
+	jump 	BTN2_R */
+
+/* BOMB_F:
+	load	gr0 BOMB23
+	sub 	gr0 1
+	beq	BTN2_R
+	add 	gr0 1
+	store 	BOMB23 gr0
+	jump 	BTN2_R */
+
+/* END OF BOMBCHECK2*/
+
+
+
+/* -------- END OF BUTTON -------- */
+
+
+/* -------- START OF CONTROL -------- */
+
+CONTROL:
+
+	joy1r	P1R
+	joy1l	P1L
+J1:
+	joy1u	P1U
+	joy1d	P1D
+J2:
+	joy2r	P2R
+	joy2l	P2L
+J3:
+	joy2u	P2U
+	joy2d	P2D
+
+	jump	CONTROL_R
+
+P1R:
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	mul	gr0 15
+	add	gr0 XPOS1
+	add	gr0 1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J1
+	
+	add	gr12 1
+	jump 	J1
+P1U:
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	sub	gr0 1
+	mul	gr0 15
+	add	gr0 XPOS1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J2
+
+	sub	gr13 1
+	jump 	J2
+P1L:
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	mul	gr0 15
+	add	gr0 XPOS1
+	sub	gr0 1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J1
+	
+	sub	gr12 1
+	jump 	J1
+P1D:
+
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	add	gr0 1
+	mul	gr0 15
+	add	gr0 XPOS1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J2
+	
+	add	gr13 1
+	jump 	J2
+
+
+P2R:
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	mul	gr0 15
+	add	gr0 XPOS2
+	add	gr0 1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J3
+	
+	add	gr14 1
+	jump 	J3
+P2U:
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	sub	gr0 1
+	mul	gr0 15
+	add	gr0 XPOS2
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	CONTROL_R
+	
+	sub	gr15 1
+	jump 	CONTROL_R
+P2L:
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	mul	gr0 15
+	add	gr0 XPOS2
+	sub	gr0 1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J3
+	
+	sub	gr14 1
+	jump 	J3
+P2D:
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	add	gr0 1
+	mul	gr0 15
+	add	gr0 XPOS2
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	CONTROL_R
+	
+	add	gr15 1
+	jump 	CONTROL_R
+
+
+
+
+/* -------- END OF CONTROL -------- */
+
+
+/* -------- GLOBAL VARIABLES -------- */
+
+TIMER_INIT:
+	0
+
+MAIN_TIMER:
+	0
+
+BOMB11:
+	0
+
+BOMB12:	
+	0
+
+BOMB13:
+	0
+
+BOMB21:
+	0
+	
+BOMB22:
+	0
+
+BOMB23:
+	0
+
+TIMER11:
+	0
+
+TIMER12:
+	0
+
+TIMER13:
+	0
+
+TIMER21:
+	0
+
+TIMER22:
+	0
+
+TIMER23:
+	0
+
+BOMB11POS:
+	0
+
+BOMB12POS:
+	0
+
+BOMBCOUNT1:
+	0
+
+BOMBCOUNT2:
+	0
+
+MAXBOMBS:
+	3
+
+GRASS:
+	0
+
+WALL:
+	1
+
+BREAKABLE:
+	2
+
+BOOM:
+	3
+
+EGG:
+	4
+
+XPOS1:
+	0
+
+YPOS1:
+	0
+
+XPOS2:
+	0
+
+YPOS2:
+	0
+
+/* -------- END OF GLOBAL VARIABLES -------- */

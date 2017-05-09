@@ -1,0 +1,266 @@
+INIT:	
+	load	gr12 4
+
+/* -------- START OF MAIN -------- */
+
+MAIN:
+
+	jump CONTROL
+	CONTROL_R:
+
+	jump BUTTON
+	BUTTON_R: 
+
+	jump MAIN
+
+/* -------- END OF MAIN -------- */
+
+/* -------- START OF BUTTON -------- */
+
+BUTTON:
+	btn1	BTN1
+	BTN1_R:
+	
+	btn2	BTN2
+	BTN2_R:
+	
+	jump	BUTTON_R
+
+BTN1:
+	/* Checks if player can place more bombs */
+	load	gr0 BOMBS1
+	sub	gr0 MAXBOMBS
+	beq	BTN1_R
+
+	/* Checks if there's already a egg there */
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	mul	gr0 15
+	add	gr0 XPOS1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EGG
+	beq	BTN2_R
+
+	store 	XPOS1 gr12
+	store 	YPOS1 gr13
+	load 	gr3 YPOS1
+	load	gr2 EGG
+	mul 	gr3 15
+	add	gr3 XPOS1
+	tpoint 	gr3
+	twrite 	gr2
+	load	gr0 BOMBS1
+	add	gr0 1
+	store 	BOMBS1 gr0
+	jump	BTN1_R
+
+BTN2:
+	load	gr0 BOMBS2
+	sub	gr0 MAXBOMBS
+	beq	BTN2_R
+
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	mul	gr0 15
+	add	gr0 XPOS2
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EGG
+	beq	BTN2_R
+
+	store 	XPOS2 gr14
+	store	YPOS2 gr15
+	load 	gr3 YPOS2
+	load	gr2 EGG
+	mul 	gr3 15
+	add	gr3 XPOS2
+	tpoint 	gr3
+	twrite 	gr2
+	load	gr0 BOMBS2
+	add	gr0 1
+	store 	BOMBS2 gr0
+	jump	BTN2_R
+
+
+/* -------- END OF BUTTON -------- */
+
+
+/* -------- START OF CONTROL -------- */
+
+CONTROL:
+
+	joy1r	P1R
+	joy1l	P1L
+J1:
+	joy1u	P1U
+	joy1d	P1D
+J2:
+	joy2r	P2R
+	joy2l	P2L
+J3:
+	joy2u	P2U
+	joy2d	P2D
+
+	jump	CONTROL_R
+
+P1R:
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	mul	gr0 15
+	add	gr0 XPOS1
+	add	gr0 1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J1
+	
+	add	gr12 1
+	jump 	J1
+P1U:
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	sub	gr0 1
+	mul	gr0 15
+	add	gr0 XPOS1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J2
+
+	sub	gr13 1
+	jump 	J2
+P1L:
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	mul	gr0 15
+	add	gr0 XPOS1
+	sub	gr0 1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J1
+	
+	sub	gr12 1
+	jump 	J1
+P1D:
+
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	add	gr0 1
+	mul	gr0 15
+	add	gr0 XPOS1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J2
+	
+	add	gr13 1
+	jump 	J2
+
+
+P2R:
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	mul	gr0 15
+	add	gr0 XPOS2
+	add	gr0 1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J3
+	
+	add	gr14 1
+	jump 	J3
+P2U:
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	sub	gr0 1
+	mul	gr0 15
+	add	gr0 XPOS2
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	CONTROL_R
+	
+	sub	gr15 1
+	jump 	CONTROL_R
+P2L:
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	mul	gr0 15
+	add	gr0 XPOS2
+	sub	gr0 1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J3
+	
+	sub	gr14 1
+	jump 	J3
+P2D:
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	add	gr0 1
+	mul	gr0 15
+	add	gr0 XPOS2
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	CONTROL_R
+	
+	add	gr15 1
+	jump 	CONTROL_R
+
+
+/* -------- END OF CONTROL -------- */
+
+
+/* -------- GLOBAL VARIABLES -------- */
+
+BOMBS1:
+	0
+
+BOMBS2:
+	0
+
+MAXBOMBS:
+	5
+
+GRASS:
+	0
+
+WALL:
+	1
+
+BREAKABLE:
+	2
+
+EXPLOSION:
+	3
+
+EGG:
+	4
+
+XPOS1:
+	0
+
+YPOS1:
+	0
+
+XPOS2:
+	0
+
+YPOS2:
+	0
+/* -------- END OF GLOBAL VARIABLES -------- */
