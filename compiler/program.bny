@@ -31,6 +31,22 @@ BUTTON:
 	jump	BUTTON_R
 
 BTN1:
+	/* Checks if player can place more bombs */
+	load	gr0 BOMBS1
+	sub	gr0 MAXBOMBS
+	beq	BTN1_R
+
+	/* Checks if there's already a egg there */
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	mul	gr0 15
+	add	gr0 XPOS1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EGG
+	beq	BTN2_R
+
 	store 	XPOS1 gr12
 	store 	YPOS1 gr13
 	load 	gr3 YPOS1
@@ -39,9 +55,26 @@ BTN1:
 	add	gr3 XPOS1
 	tpoint 	gr3
 	twrite 	gr2
+	load	gr0 BOMBS1
+	add	gr0 1
+	store 	BOMBS1 gr0
 	jump	BTN1_R
 
 BTN2:
+	load	gr0 BOMBS2
+	sub	gr0 MAXBOMBS
+	beq	BTN2_R
+
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	mul	gr0 15
+	add	gr0 XPOS2
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EGG
+	beq	BTN2_R
+
 	store 	XPOS2 gr14
 	store	YPOS2 gr15
 	load 	gr3 YPOS2
@@ -50,6 +83,9 @@ BTN2:
 	add	gr3 XPOS2
 	tpoint 	gr3
 	twrite 	gr2
+	load	gr0 BOMBS2
+	add	gr0 1
+	store 	BOMBS2 gr0
 	jump	BTN2_R
 
 /* LABELS */
@@ -209,6 +245,15 @@ COUNT2:
 
 
 /* -------- GLOBAL VARIABLES -------- */
+
+BOMBS1:
+	0
+
+BOMBS2:
+	0
+
+MAXBOMBS:
+	3
 
 GRASS:
 	0
