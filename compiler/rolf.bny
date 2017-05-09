@@ -1,0 +1,4 @@
+START:
+	load	gr0 4
+	sub	gr0 5
+	bne	START

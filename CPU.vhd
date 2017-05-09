@@ -290,7 +290,7 @@ begin  -- behavioral
       
       -- ALU
       case upm_alu is
-        when "0000" => null;            --noop
+        --when "0000" => null;            --noop
         when "0001" => AR <= buss(11 downto 0);
         when "0010" => AR <= not buss(11 downto 0);
         when "0011" => AR <= (others => '0');
@@ -301,11 +301,11 @@ begin  -- behavioral
         when "1000" => AR <= std_logic_vector(unsigned(AR) + unsigned(buss(11 downto 0)));      --no flags
         when "1001" => AR <= std_logic_vector(shift_left(unsigned(AR), 1));                     --shift left
         when "1010" => AR <= mul(11 downto 0);      --mul
-        when "1011" => null; --AR <= std_logic_vector(unsigned(AR) / unsigned(buss(11 downto 0)));      --div
-        when "1100" => null;            --ledig
+        --when "1011" => null; --AR <= std_logic_vector(unsigned(AR) / unsigned(buss(11 downto 0)));      --div
+        --when "1100" => null;            --ledig
         when "1101" => AR <= std_logic_vector(shift_right(unsigned(AR), 1));
-        when "1110" =>  null;           --ledig
-        when "1111" =>  null;           --ledig
+        --when "1110" =>  null;           --ledig
+        --when "1111" =>  null;           --ledig
         when others => null;
       end case;
 
@@ -313,7 +313,7 @@ begin  -- behavioral
         O <= '0';
         C <= '0';
         N <= AR(11);
-        if AR = (AR'range => '0') then
+        if (AR = x"000") then
           Z <= '1';
         else
           Z <= '0';
@@ -357,22 +357,35 @@ begin  -- behavioral
         --when "00110" =>
         --  readMap <= '1';
         --  uPC <= uPC + 1;
-        when "00111" => null;            --ledig
-        when "01000" =>
-          if Z = '1' then
+        when "00111" =>
+          if Z = '0' then               -- not equal
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
+          end if;
+        when "01000" =>
+          if Z = '1' then               -- equal
+            uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "01001" =>
           if N = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "01010" =>
           if C = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "01011" => 
           if O = '1' then
             uPC <= unsigned(upm_uaddr);
+          else
+            uPC <= uPC + 1;
           end if;
         when "01100" =>
           if L = '1' then
