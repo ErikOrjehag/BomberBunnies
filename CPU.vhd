@@ -245,6 +245,8 @@ begin  -- behavioral
     buss                                        when others;
 
   L <= '0' when LC = (LC'range => '0') else '1';
+
+  mul <= std_logic_vector(unsigned(AR) * unsigned(buss(11 downto 0)));
   
   process(clk)
   begin
@@ -283,7 +285,7 @@ begin  -- behavioral
         when others => null;
       end case;
 
-      mul <= std_logic_vector(unsigned(AR) * unsigned(buss(11 downto 0)));
+      
 --cannot index after conversion, converts here so it can be indexed in ALU
       
       -- ALU
