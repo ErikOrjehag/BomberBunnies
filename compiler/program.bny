@@ -94,26 +94,104 @@ P1R:
 	add	gr12 1
 	jump 	J1
 P1U:
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	sub	gr0 1
+	mul	gr0 15
+	add	gr0 XPOS1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J2
+
 	sub	gr13 1
 	jump 	J2
 P1L:
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	mul	gr0 15
+	add	gr0 XPOS1
+	sub	gr0 1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J1
+	
 	sub	gr12 1
 	jump 	J1
 P1D:
+
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	add	gr0 1
+	mul	gr0 15
+	add	gr0 XPOS1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J2
+	
 	add	gr13 1
 	jump 	J2
 
 
 P2R:
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	mul	gr0 15
+	add	gr0 XPOS2
+	add	gr0 1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J3
+	
 	add	gr14 1
 	jump 	J3
 P2U:
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	sub	gr0 1
+	mul	gr0 15
+	add	gr0 XPOS2
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	CONTROL_R
+	
 	sub	gr15 1
 	jump 	CONTROL_R
 P2L:
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	mul	gr0 15
+	add	gr0 XPOS2
+	sub	gr0 1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	J3
+	
 	sub	gr14 1
 	jump 	J3
 P2D:
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	add	gr0 1
+	mul	gr0 15
+	add	gr0 XPOS2
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
+	bne	CONTROL_R
+	
 	add	gr15 1
 	jump 	CONTROL_R
 
