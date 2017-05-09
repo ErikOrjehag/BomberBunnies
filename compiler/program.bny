@@ -1,9 +1,9 @@
-INIT:	sleep	1
+INIT:	
 
-	load	gr1 18
-	load	gr2 4
+	load	gr12 4
+	/* load	gr2 4
 	tpoint	gr1
-	twrite	gr2
+	twrite	gr2 */
 
 /* -------- START OF MAIN -------- */
 
@@ -13,7 +13,7 @@ MAIN:
 	CONTROL_R:
 
 	jump BUTTON
-	BUTTON_R:
+	BUTTON_R: 
 
 	jump MAIN
 
@@ -23,20 +23,20 @@ MAIN:
 
 BUTTON:
 	btn1	BTN1
-
-BTN1_R:
+	BTN1_R:
+	
 	btn2	BTN2
-
-BTN2_R:
+	BTN2_R:
+	
 	jump	BUTTON_R
 
 BTN1:
 	store 	XPOS1 gr12
 	store 	YPOS1 gr13
-	load 	gr3 WALL
+	load 	gr3 YPOS1
 	load	gr2 EGG
-	mul 	gr3 2
-	/*add	gr3 XPOS1*/
+	mul 	gr3 15
+	add	gr3 XPOS1
 	tpoint 	gr3
 	twrite 	gr2
 	jump	BTN1_R
@@ -44,14 +44,13 @@ BTN1:
 BTN2:
 	store 	XPOS2 gr14
 	store	YPOS2 gr15
-	load 	gr3 WALL
+	load 	gr3 YPOS2
 	load	gr2 EGG
-	mul 	gr3 2
+	mul 	gr3 15
 	add	gr3 XPOS2
 	tpoint 	gr3
 	twrite 	gr2
 	jump	BTN2_R
-
 
 /* LABELS */
 TMP1:
@@ -64,7 +63,8 @@ TMP1:
 /* -------- START OF CONTROL -------- */
 
 CONTROL:
-	/* jump	COUNT1 */
+	jump	COUNT1
+	COUNT_R: 
 	joy1r	P1R
 	joy1l	P1L
 J1:
@@ -80,26 +80,27 @@ J3:
 	jump	CONTROL_R
 
 P1R:
-	store	MOVE gr13
-	load	gr2 MOVE
-	store 	MOVE gr12
-	mul	gr2 15
-	add	gr2 MOVE
-	add	gr2 1
-	tpoint	gr2
-	tread	gr3
-	sub	gr3 0
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	mul	gr0 15
+	add	gr0 XPOS1
+	add	gr0 1
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 GRASS
 	bne	J1
+	
 	add	gr12 1
 	jump 	J1
 P1U:
-	sub	gr13 WALL
+	sub	gr13 1
 	jump 	J2
 P1L:
 	sub	gr12 1
 	jump 	J1
 P1D:
-	add	gr13 WALL
+	add	gr13 1
 	jump 	J2
 
 
@@ -116,8 +117,9 @@ P2D:
 	add	gr15 1
 	jump 	CONTROL_R
 
+
 COUNT1:
-	
+	jump COUNT_R	
 
 COUNT2:
 

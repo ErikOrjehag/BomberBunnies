@@ -1,12 +1,9 @@
-	load	gr0	0
-	load	gr2	1
-LOOP:
-	add	gr0	gr2
-	store	DATA	gr0
-	load	gr13	DATA
-	jump	LOOP
-DATA:
-	0
+	sleep	1
+	load	gr0	2
+	mul	gr0	FOUR
+SLEEP:
+	sleep	1
+	jump	SLEEP
 
-ONE:
-	1
+FOUR:
+	4
