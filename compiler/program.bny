@@ -15,9 +15,51 @@ MAIN:
 	jump BUTTON
 	BUTTON_R: 
 
+	jump TICKBOMBS
+	TICKBOMBS_R:
+
 	jump MAIN
 
 /* -------- END OF MAIN -------- */
+
+/* -------- START OF TICKBOMBS -------- */
+
+TICKBOMBS:
+	load	gr0 0
+	sub	gr0 P1BOMBTIME
+	beq	REMOVE1
+	load	gr0 P1BOMBTIME
+	sub	gr0 1
+	store	P1BOMBTIME gr0
+
+	jump	TICK2
+
+REMOVE1:
+	load	gr0 P1BOMBPOS
+	tpoint	gr0
+	twrite	GRASS
+	
+
+TICK2:
+	load	gr0 0
+	sub	gr0 P2BOMBTIME
+	beq	REMOVE2
+	load	gr0 P2BOMBTIME
+	sub	gr0 1
+	store	P2BOMBTIME gr0
+
+	jump	TICKBOMBS_R
+
+REMOVE2:
+	load	gr0 P2BOMBPOS
+	tpoint	gr0
+	twrite	GRASS
+	
+
+
+	jump	TICKBOMBS_R
+
+/* -------- END OF TICKBOMBS -------- */
 
 /* -------- START OF BUTTON -------- */
 
@@ -55,6 +97,8 @@ BTN1:
 	add	gr3 XPOS1
 	tpoint 	gr3
 	twrite 	gr2
+	store	P1BOMBPOS gr3
+	store	P1BOMBTIME 20
 	load	gr0 BOMBS1
 	add	gr0 1
 	store 	BOMBS1 gr0
@@ -246,6 +290,15 @@ COUNT2:
 
 /* -------- GLOBAL VARIABLES -------- */
 
+P1BOMBPOS:
+	0
+P1BOMBTIME:
+	0
+P2BOMBPOS:
+	0
+P2BOMBTIME:
+	0
+
 BOMBS1:
 	0
 
@@ -253,7 +306,7 @@ BOMBS2:
 	0
 
 MAXBOMBS:
-	3
+	1
 
 GRASS:
 	0
