@@ -42,6 +42,11 @@ TICKBOMBS:
 	jump	TICK2
 
 EXPLODE1:
+	/* Decrease bomb counter for player 1 */
+	load	gr0 BOMBS1
+	sub	gr0 1
+	store	BOMBS1 gr0
+
 	load	gr2 P1BOMBPOS
 	load 	gr3 EXPLOSION
 	tpoint	gr2
@@ -192,7 +197,7 @@ BTN1:
 
 	/* Loads bom position and bomb timer */
 	store	P1BOMBPOS gr3
-	load	gr0 8000
+	load	gr0 16
 	store	P1BOMBTIME gr0
 
 	/* Increases bomb counter */
@@ -410,21 +415,6 @@ BOMBS2:
 MAXBOMBS:
 	1
 
-GRASS:
-	0
-
-WALL:
-	1
-
-BREAKABLE:
-	2
-
-EXPLOSION:
-	3
-
-EGG:
-	4
-
 XPOS1:
 	0
 
@@ -445,5 +435,22 @@ TIMER1:		/* Stores players moving counter */
 
 TIMER2:		/* Stores players moving counter */
 	0
+
+/* TILES */
+GRASS:
+	0
+
+WALL:
+	1
+
+BREAKABLE:
+	2
+
+EXPLOSION:
+	3
+
+EGG:
+	4
+/* END OF TILES */
 
 /* -------- END OF GLOBAL VARIABLES -------- */
