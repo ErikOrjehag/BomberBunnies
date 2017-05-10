@@ -158,13 +158,13 @@ TICKEXPLOSION2:
 /* -------- START OF TICKBOMBS -------- */
 
 TICKBOMBS:
-	jump TICKBOMBS1
-	TICKBOMBS1_R:
+	jump TICKBOMB1
+	TICKBOMB1_R:
 
-	jump TICKBOMBS2
-	TICKBOMBS2_R:
+	jump TICKBOMB2
+	TICKBOMB2_R:
 
-	jump TICKBOMBS_R
+	jump TICKBOMB_R
 
 TICKBOMB1:
 	/* Checks if bomb is placed */
