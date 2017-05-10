@@ -25,35 +25,124 @@ MAIN:
 /* -------- START OF TICKBOMBS -------- */
 
 TICKBOMBS:
-	load	gr0 0
-	sub	gr0 P1BOMBTIME
-	beq	REMOVE1
+	/* Checks if bomb is placed */
+	load	gr0 P1BOMBACTIVE
+	sub	gr0 1
+	bne	TICK2
+
+	/* Decrease counter with 1 */
 	load	gr0 P1BOMBTIME
 	sub	gr0 1
 	store	P1BOMBTIME gr0
 
+	load	gr0 0
+	sub	gr0 P1BOMBTIME
+	beq	EXPLODE1
+	
 	jump	TICK2
 
-REMOVE1:
-	load	gr0 P1BOMBPOS
-	tpoint	gr0
-	twrite	GRASS
+EXPLODE1:
+	load	gr2 P1BOMBPOS
+	load 	gr3 EXPLOSION
+	tpoint	gr2
+	twrite	gr3
+
+	/* Explosion to the right */
+	/* Checks space for explosion */
+	add	gr2 1
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 WALL
+	beq 	P1LEFT
+
+	/* Places explosion */
+	twrite	gr3
+
+	/* Checks space for next explosion */
+	add	gr2 1
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 WALL
+	beq 	P1LEFT
+
+	/* Places explosion */
+	twrite	gr3
+
 	
 
+P1LEFT:
+	/* Explosion to the left */
+	load	gr2 P1BOMBPOS
+
+	/* Checks space for explosion */
+	sub	gr2 1
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 WALL
+	beq 	P1DOWN
+
+	/* Places explosion */
+	twrite	gr3
+
+	/* Checks space for next explosion */
+	sub	gr2 1
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 WALL
+	beq 	P1DOWN
+
+	/* Places explosion */
+	twrite	gr3
+	
+P1DOWN:
+ 	/* Explosion down */
+	load	gr2 P1BOMBPOS
+
+	/* Checks space for explosion */
+	add	gr2 15
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 WALL
+	beq 	P1UP
+
+	/* Places explosion */
+	twrite	gr3
+
+	/* Checks space for next explosion */
+	add	gr2 15
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 WALL
+	beq 	P1UP
+
+	/* Places explosion */
+	twrite	gr3
+
+P1UP:
+	/* Explosion up */
+	load	gr2 P1BOMBPOS
+	
+	/* Checks space for explosion */
+	sub	gr2 15
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 WALL
+	beq 	TICK2
+
+	/* Places explosion */
+	twrite	gr3
+
+	/* Checks space for next explosion */
+	sub	gr2 15
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 WALL
+	beq 	TICK2
+
+	/* Places explosion */
+	twrite	gr3
+
 TICK2:
-	load	gr0 0
-	sub	gr0 P2BOMBTIME
-	beq	REMOVE2
-	load	gr0 P2BOMBTIME
-	sub	gr0 1
-	store	P2BOMBTIME gr0
-
-	jump	TICKBOMBS_R
-
-REMOVE2:
-	load	gr0 P2BOMBPOS
-	tpoint	gr0
-	twrite	GRASS
 	
 
 
@@ -89,6 +178,7 @@ BTN1:
 	sub	gr1 EGG
 	beq	BTN2_R
 
+	/* Places egg */
 	store 	XPOS1 gr12
 	store 	YPOS1 gr13
 	load 	gr3 YPOS1
@@ -97,8 +187,15 @@ BTN1:
 	add	gr3 XPOS1
 	tpoint 	gr3
 	twrite 	gr2
+	load	gr0 1
+	store	P1BOMBACTIVE gr0
+
+	/* Loads bom position and bomb timer */
 	store	P1BOMBPOS gr3
-	store	P1BOMBTIME 20
+	load	gr0 8000
+	store	P1BOMBTIME gr0
+
+	/* Increases bomb counter */
 	load	gr0 BOMBS1
 	add	gr0 1
 	store 	BOMBS1 gr0
@@ -127,6 +224,7 @@ BTN2:
 	add	gr3 XPOS2
 	tpoint 	gr3
 	twrite 	gr2
+
 	load	gr0 BOMBS2
 	add	gr0 1
 	store 	BOMBS2 gr0
@@ -294,9 +392,13 @@ P1BOMBPOS:
 	0
 P1BOMBTIME:
 	0
+P1BOMBACTIVE:
+	0
 P2BOMBPOS:
 	0
 P2BOMBTIME:
+	0
+P2BOMBACTIVE:
 	0
 
 BOMBS1:

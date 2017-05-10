@@ -25,7 +25,7 @@ EXPLOSION:
 
 /* START OF MAIN_TIMER */
 
-	load	gr0 MAIN_TIMER
+	/* load	gr0 MAIN_TIMER
 	sub	gr0 40
 	beq	MAIN_TIMER_RESET
 	load	gr0 MAIN_TIMER
@@ -35,7 +35,7 @@ EXPLOSION:
 
 MAIN_TIMER_RESET:
 	load	gr0 0
-	store 	MAIN_TIMER gr0 
+	store 	MAIN_TIMER gr0 */
 
 /* END OF MAIN_TIMER */
 
@@ -45,7 +45,7 @@ BOMB11_TIMER:
 	beq	EXPLOSION_R
 	
 	load	gr0 TIMER11
-	sub 	gr0 4095
+	sub 	gr0 8000
 	beq	BOMB11_EXPLOSION
 
 	load 	gr0 TIMER11
