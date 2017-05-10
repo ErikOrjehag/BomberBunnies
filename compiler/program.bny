@@ -18,9 +18,142 @@ MAIN:
 	jump TICKBOMBS
 	TICKBOMBS_R:
 
+	jump TICKEXPLOSIONS
+	TICKEXPLOSIONS_R:
+
 	jump MAIN
 
 /* -------- END OF MAIN -------- */
+
+/* -------- START OF TICKEXPLOSIONS -------- */
+TICKEXPLOSIONS:
+	/* Checks if timer is equal to 1 */
+	load	gr0 P1EXPLOSIONACTIVE
+	sub	gr0 1
+	bne	TICKEXPLOSION2
+
+	/* Decreases explosion timer */
+	load	gr0 P1EXPLOSIONTIME
+	sub	gr0 1
+	store	P1EXPLOSIONTIME gr0
+
+	/* Checks if explosion should vanish */
+	load 	gr0 P1EXPLOSIONTIME
+	sub	gr0 0
+	bne	TICKEXPLOSION2
+
+	/* Vanish explosion */
+	load	gr0 0
+	store	P1EXPLOSIONACTIVE gr0
+
+	/* Middle explosion tile */
+	load	gr2 P1EXPLOSIONPOS
+	load 	gr3 GRASS
+	tpoint	gr2
+	twrite	gr3
+
+	/* Explosion to the right */
+	/* Checks space for explosion */
+	add	gr2 1
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	E1LEFT
+
+	/* Places explosion */
+	twrite	gr3
+
+	/* Checks space for next explosion */
+	add	gr2 1
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	E1LEFT
+
+	/* Places explosion */
+	twrite	gr3
+
+	
+
+E1LEFT:
+	/* Explosion to the left */
+	load	gr2 P1EXPLOSIONPOS
+
+	/* Checks space for explosion */
+	sub	gr2 1
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	E1DOWN
+
+	/* Places explosion */
+	twrite	gr3
+
+	/* Checks space for next explosion */
+	sub	gr2 1
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	E1DOWN
+
+	/* Places explosion */
+	twrite	gr3
+	
+E1DOWN:
+ 	/* Explosion down */
+	load	gr2 P1EXPLOSIONPOS
+
+	/* Checks space for explosion */
+	add	gr2 15
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	E1UP
+
+	/* Places explosion */
+	twrite	gr3
+
+	/* Checks space for next explosion */
+	add	gr2 15
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	E1UP
+
+	/* Places explosion */
+	twrite	gr3
+
+E1UP:
+	/* Explosion up */
+	load	gr2 P1EXPLOSIONPOS
+	
+	/* Checks space for explosion */
+	sub	gr2 15
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	TICKEXPLOSION2
+
+	/* Places explosion */
+	twrite	gr3
+
+	/* Checks space for next explosion */
+	sub	gr2 15
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	TICKEXPLOSION2
+
+	/* Places explosion */
+	twrite	gr3
+	
+
+TICKEXPLOSION2:
+	
+
+	jump TICKEXPLOSIONS_R
+
+/* -------- END OF TICKEXPLOSIONS -------- */
 
 /* -------- START OF TICKBOMBS -------- */
 
@@ -42,6 +175,14 @@ TICKBOMBS:
 	jump	TICK2
 
 EXPLODE1:
+	/* Initializes explosion */
+	load	gr0 P1BOMBPOS
+	store 	P1EXPLOSIONPOS gr0
+	load	gr0 1
+	store	P1EXPLOSIONACTIVE gr0
+	load 	gr0 2
+	store	P1EXPLOSIONTIME gr0
+
 	/* Decrease bomb counter for player 1 */
 	load	gr0 BOMBS1
 	sub	gr0 1
@@ -399,11 +540,23 @@ P1BOMBTIME:
 	0
 P1BOMBACTIVE:
 	0
+P1EXPLOSIONTIME:
+	0
+P1EXPLOSIONACTIVE:
+	0
+P1EXPLOSIONPOS:
+	0
 P2BOMBPOS:
 	0
 P2BOMBTIME:
 	0
 P2BOMBACTIVE:
+	0
+P2EXPLOSIONTIME:
+	0
+P2EXPLOSIONACTIVE:
+	0
+P2EXPLOSIONPOS:
 	0
 
 BOMBS1:
