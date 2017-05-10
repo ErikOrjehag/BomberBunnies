@@ -164,7 +164,7 @@ TICKBOMBS:
 	jump TICKBOMB2
 	TICKBOMB2_R:
 
-	jump TICKBOMB_R
+	jump TICKBOMBS_R
 
 TICKBOMB1:
 	/* Checks if bomb is placed */
