@@ -283,19 +283,11 @@ E2UP:
 /* -------- START OF TICKBOMBS -------- */
 
 TICKBOMBS:
-	jump TICKBOMB1
-	TICKBOMB1_R:
-
-	jump TICKBOMB2
-	TICKBOMB2_R:
-
-	jump TICKBOMBS_R
-
-TICKBOMB1:
+	/* Checking bombs for player 1 */
 	/* Checks if bomb is placed */
 	load	gr0 P1BOMB1ACTIVE
 	sub	gr0 1
-	bne	TICKBOMB1_R
+	bne	P2BOMB1
 
 	/* Decrease counter with 1 */
 	load	gr0 P1BOMB1TIME
@@ -304,11 +296,27 @@ TICKBOMB1:
 
 	load	gr0 0
 	sub	gr0 P1BOMB1TIME
-	beq	EXPLODE1
-	
-	jump	TICKBOMB1_R
+	beq	P1EXPLOSION1INIT
 
-EXPLODE1:
+P2BOMB1:
+	/* Checking bombs for player 2 */
+	/* Checks if bomb is placed */
+	load	gr0 P2BOMB1ACTIVE
+	sub	gr0 1
+	bne	TICKBOMBS_R
+
+	/* Decrease counter with 1 */
+	load	gr0 P2BOMB1TIME
+	sub	gr0 1
+	store	P2BOMB1TIME gr0
+
+	load	gr0 0
+	sub	gr0 P2BOMB1TIME
+	beq	P2EXPLOSION1INIT
+
+	jump TICKBOMBS_R
+
+P1EXPLOSION1INIT:
 	/* Initializes explosion */
 	load	gr0 P1BOMB1POS
 	store 	P1EXPLOSION1POS gr0
@@ -321,127 +329,11 @@ EXPLODE1:
 	load	gr0 P1BOMBCOUNT
 	sub	gr0 1
 	store	P1BOMBCOUNT gr0
-
-	load	gr2 P1BOMB1POS
-	load 	gr3 EXPLOSION
-	tpoint	gr2
-	twrite	gr3
-
-	/* Explosion to the right */
-	/* Checks space for explosion */
-	add	gr2 1
-	tpoint	gr2
-	tread	gr0
-	sub 	gr0 WALL
-	beq 	P1LEFT
-
-	/* Places explosion */
-	twrite	gr3
-
-	/* Checks space for next explosion */
-	add	gr2 1
-	tpoint	gr2
-	tread	gr0
-	sub 	gr0 WALL
-	beq 	P1LEFT
-
-	/* Places explosion */
-	twrite	gr3
-
 	
+	load	gr4 P1BOMB1POS
+	jump 	EXPLODE
 
-P1LEFT:
-	/* Explosion to the left */
-	load	gr2 P1BOMB1POS
-
-	/* Checks space for explosion */
-	sub	gr2 1
-	tpoint	gr2
-	tread	gr0
-	sub 	gr0 WALL
-	beq 	P1DOWN
-
-	/* Places explosion */
-	twrite	gr3
-
-	/* Checks space for next explosion */
-	sub	gr2 1
-	tpoint	gr2
-	tread	gr0
-	sub 	gr0 WALL
-	beq 	P1DOWN
-
-	/* Places explosion */
-	twrite	gr3
-	
-P1DOWN:
- 	/* Explosion down */
-	load	gr2 P1BOMB1POS
-
-	/* Checks space for explosion */
-	add	gr2 15
-	tpoint	gr2
-	tread	gr0
-	sub 	gr0 WALL
-	beq 	P1UP
-
-	/* Places explosion */
-	twrite	gr3
-
-	/* Checks space for next explosion */
-	add	gr2 15
-	tpoint	gr2
-	tread	gr0
-	sub 	gr0 WALL
-	beq 	P1UP
-
-	/* Places explosion */
-	twrite	gr3
-
-P1UP:
-	/* Explosion up */
-	load	gr2 P1BOMB1POS
-	
-	/* Checks space for explosion */
-	sub	gr2 15
-	tpoint	gr2
-	tread	gr0
-	sub 	gr0 WALL
-	beq 	TICKBOMB1_R
-
-	/* Places explosion */
-	twrite	gr3
-
-	/* Checks space for next explosion */
-	sub	gr2 15
-	tpoint	gr2
-	tread	gr0
-	sub 	gr0 WALL
-	beq 	TICKBOMB1_R
-
-	/* Places explosion */
-	twrite	gr3
-
-	jump TICKBOMB1_R
-
-TICKBOMB2:
-	/* Checks if bomb is placed */
-	load	gr0 P2BOMB1ACTIVE
-	sub	gr0 1
-	bne	TICKBOMB2_R
-
-	/* Decrease counter with 1 */
-	load	gr0 P2BOMB1TIME
-	sub	gr0 1
-	store	P2BOMB1TIME gr0
-
-	load	gr0 0
-	sub	gr0 P2BOMB1TIME
-	beq	EXPLODE2
-	
-	jump	TICKBOMB2_R
-
-EXPLODE2:
+P2EXPLOSION1INIT:
 	/* Initializes explosion */
 	load	gr0 P2BOMB1POS
 	store 	P2EXPLOSION1POS gr0
@@ -450,23 +342,30 @@ EXPLODE2:
 	load 	gr0 2
 	store	P2EXPLOSION1TIME gr0
 
-	/* Decrease bomb counter for player 2 */
+	/* Decrease bomb counter for player 1 */
 	load	gr0 P2BOMBCOUNT
 	sub	gr0 1
 	store	P2BOMBCOUNT gr0
+	
+	load	gr4 P2BOMB1POS
+	jump 	EXPLODE
 
-	load	gr2 P2BOMB1POS
+/* IDENTISK */
+EXPLODE: /* (POS = GR4) */
+	store	MOVE gr4
+	load	gr2 MOVE
 	load 	gr3 EXPLOSION
 	tpoint	gr2
 	twrite	gr3
 
+EXPLODERIGHT:
 	/* Explosion to the right */
 	/* Checks space for explosion */
 	add	gr2 1
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 WALL
-	beq 	P2LEFT
+	beq 	EXPLODELEFT
 
 	/* Places explosion */
 	twrite	gr3
@@ -476,23 +375,22 @@ EXPLODE2:
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 WALL
-	beq 	P2LEFT
+	beq 	EXPLODELEFT
 
 	/* Places explosion */
 	twrite	gr3
 
-	
-
-P2LEFT:
+EXPLODELEFT:
 	/* Explosion to the left */
-	load	gr2 P2BOMB1POS
+	store	MOVE gr4
+	load	gr2 MOVE
 
 	/* Checks space for explosion */
 	sub	gr2 1
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 WALL
-	beq 	P2DOWN
+	beq 	EXPLODEDOWN
 
 	/* Places explosion */
 	twrite	gr3
@@ -502,21 +400,22 @@ P2LEFT:
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 WALL
-	beq 	P2DOWN
+	beq 	EXPLODEDOWN
 
 	/* Places explosion */
 	twrite	gr3
 	
-P2DOWN:
+EXPLODEDOWN:
  	/* Explosion down */
-	load	gr2 P2BOMB1POS
+	store	MOVE gr4
+	load	gr2 MOVE
 
 	/* Checks space for explosion */
 	add	gr2 15
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 WALL
-	beq 	P2UP
+	beq 	EXPLODEUP
 
 	/* Places explosion */
 	twrite	gr3
@@ -526,21 +425,22 @@ P2DOWN:
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 WALL
-	beq 	P2UP
+	beq 	EXPLODEUP
 
 	/* Places explosion */
 	twrite	gr3
 
-P2UP:
+EXPLODEUP:
 	/* Explosion up */
-	load	gr2 P2BOMB1POS
+	store	MOVE gr4
+	load	gr2 MOVE
 	
 	/* Checks space for explosion */
 	sub	gr2 15
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 WALL
-	beq 	TICKBOMB2_R
+	beq 	TICKBOMBS
 
 	/* Places explosion */
 	twrite	gr3
@@ -550,12 +450,13 @@ P2UP:
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 WALL
-	beq 	TICKBOMB2_R
+	beq 	TICKBOMBS
 
 	/* Places explosion */
 	twrite	gr3
-	
-	jump	TICKBOMB2_R
+
+	jump TICKBOMBS
+
 
 /* -------- END OF TICKBOMBS -------- */
 
