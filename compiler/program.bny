@@ -287,7 +287,7 @@ TICKBOMBS:
 	/* Checks if bomb is placed */
 	load	gr0 P1BOMB1ACTIVE
 	sub	gr0 1
-	bne	P2BOMB1
+	bne	P1BOMB2
 
 	/* Decrease counter with 1 */
 	load	gr0 P1BOMB1TIME
@@ -298,12 +298,47 @@ TICKBOMBS:
 	sub	gr0 P1BOMB1TIME
 	beq	P1EXPLOSION1INIT
 
+P1BOMB2:
+	/* Checking bombs for player 2 */
+	/* Checks if bomb is placed */
+	load	gr0 P1BOMB2ACTIVE
+	sub	gr0 1
+	bne	P1BOMB3
+
+	/* Decrease counter with 1 */
+	load	gr0 P1BOMB2TIME
+	sub	gr0 1
+	store	P1BOMB2TIME gr0
+
+	load	gr0 0
+	sub	gr0 P1BOMB2TIME
+	beq	P1EXPLOSION2INIT
+
+P1BOMB3:
+	/* Checking bombs for player 2 */
+	/* Checks if bomb is placed */
+	load	gr0 P1BOMB3ACTIVE
+	sub	gr0 1
+	bne	P2BOMB1
+
+	/* Decrease counter with 1 */
+	load	gr0 P1BOMB3TIME
+	sub	gr0 1
+	store	P1BOMB3TIME gr0
+
+	load	gr0 0
+	sub	gr0 P1BOMB3TIME
+	beq	P1EXPLOSION3INIT
+
+	jump TICKBOMBS_R
+
+
 P2BOMB1:
 	/* Checking bombs for player 2 */
 	/* Checks if bomb is placed */
 	load	gr0 P2BOMB1ACTIVE
 	sub	gr0 1
-	bne	TICKBOMBS_R
+	bne	P2BOMB2
 
 	/* Decrease counter with 1 */
 	load	gr0 P2BOMB1TIME
@@ -313,6 +348,38 @@ P2BOMB1:
 	load	gr0 0
 	sub	gr0 P2BOMB1TIME
 	beq	P2EXPLOSION1INIT
+
+P2BOMB2:
+	/* Checking bombs for player 2 */
+	/* Checks if bomb is placed */
+	load	gr0 P2BOMB2ACTIVE
+	sub	gr0 1
+	bne	P2BOMB3
+
+	/* Decrease counter with 1 */
+	load	gr0 P2BOMB2TIME
+	sub	gr0 1
+	store	P2BOMB2TIME gr0
+
+	load	gr0 0
+	sub	gr0 P2BOMB2TIME
+	beq	P2EXPLOSION2INIT
+
+P2BOMB3:
+	/* Checking bombs for player 2 */
+	/* Checks if bomb is placed */
+	load	gr0 P2BOMB3ACTIVE
+	sub	gr0 1
+	bne	TICKBOMBS_R
+
+	/* Decrease counter with 1 */
+	load	gr0 P2BOMB3TIME
+	sub	gr0 1
+	store	P2BOMB3TIME gr0
+
+	load	gr0 0
+	sub	gr0 P2BOMB3TIME
+	beq	P2EXPLOSION3INIT
 
 	jump TICKBOMBS_R
 
@@ -333,6 +400,40 @@ P1EXPLOSION1INIT:
 	load	gr4 P1BOMB1POS
 	jump 	EXPLODE
 
+P1EXPLOSION2INIT:
+	/* Initializes explosion */
+	load	gr0 P1BOMB2POS
+	store 	P1EXPLOSION2POS gr0
+	load	gr0 1
+	store	P1EXPLOSION2ACTIVE gr0
+	load 	gr0 2
+	store	P1EXPLOSION2TIME gr0
+
+	/* Decrease bomb counter for player 1 */
+	load	gr0 P1BOMBCOUNT
+	sub	gr0 1
+	store	P1BOMBCOUNT gr0
+	
+	load	gr4 P1BOMB2POS
+	jump 	EXPLODE
+
+P1EXPLOSION3INIT:
+	/* Initializes explosion */
+	load	gr0 P1BOMB3POS
+	store 	P1EXPLOSION3POS gr0
+	load	gr0 1
+	store	P1EXPLOSION3ACTIVE gr0
+	load 	gr0 2
+	store	P1EXPLOSION3TIME gr0
+
+	/* Decrease bomb counter for player 1 */
+	load	gr0 P1BOMBCOUNT
+	sub	gr0 1
+	store	P1BOMBCOUNT gr0
+	
+	load	gr4 P1BOMB3POS
+	jump 	EXPLODE
+
 P2EXPLOSION1INIT:
 	/* Initializes explosion */
 	load	gr0 P2BOMB1POS
@@ -348,6 +449,40 @@ P2EXPLOSION1INIT:
 	store	P2BOMBCOUNT gr0
 	
 	load	gr4 P2BOMB1POS
+	jump 	EXPLODE
+
+P2EXPLOSION2INIT:
+	/* Initializes explosion */
+	load	gr0 P2BOMB2POS
+	store 	P2EXPLOSION2POS gr0
+	load	gr0 1
+	store	P2EXPLOSION2ACTIVE gr0
+	load 	gr0 2
+	store	P2EXPLOSION2TIME gr0
+
+	/* Decrease bomb counter for player 1 */
+	load	gr0 P2BOMBCOUNT
+	sub	gr0 1
+	store	P2BOMBCOUNT gr0
+	
+	load	gr4 P2BOMB2POS
+	jump 	EXPLODE
+
+P2EXPLOSION3INIT:
+	/* Initializes explosion */
+	load	gr0 P2BOMB3POS
+	store 	P2EXPLOSION3POS gr0
+	load	gr0 1
+	store	P2EXPLOSION3ACTIVE gr0
+	load 	gr0 2
+	store	P2EXPLOSION3TIME gr0
+
+	/* Decrease bomb counter for player 1 */
+	load	gr0 P2BOMBCOUNT
+	sub	gr0 1
+	store	P2BOMBCOUNT gr0
+	
+	load	gr4 P2BOMB3POS
 	jump 	EXPLODE
 
 /* IDENTISK */
@@ -499,7 +634,7 @@ BTN1:
 
 	load	  gr0 P1BOMBCOUNT
 	sub	  gr0 2
-	beq	  P1PLACEBOMB2
+	beq	  P1PLACEBOMB3
 
 P1INCREASEBOMBCOUNTER:
 	/* Increases bomb counter */
@@ -511,7 +646,7 @@ P1INCREASEBOMBCOUNTER:
 P1PLACEBOMB1:
 	/* Places egg */
 	store 	XPOS1 gr12
-	store 	YPOS1 gr13
+	store	YPOS1 gr13
 	load 	gr3 YPOS1
 	load	gr2 EGG
 	mul 	gr3 15
@@ -531,7 +666,7 @@ P1PLACEBOMB1:
 P1PLACEBOMB2:
 	/* Places egg */
 	store 	XPOS1 gr12
-	store 	YPOS1 gr13
+	store	YPOS1 gr13
 	load 	gr3 YPOS1
 	load	gr2 EGG
 	mul 	gr3 15
@@ -551,7 +686,7 @@ P1PLACEBOMB2:
 P1PLACEBOMB3:
 	/* Places egg */
 	store 	XPOS1 gr12
-	store 	YPOS1 gr13
+	store	YPOS1 gr13
 	load 	gr3 YPOS1
 	load	gr2 EGG
 	mul 	gr3 15
