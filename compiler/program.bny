@@ -26,11 +26,21 @@ MAIN:
 /* -------- END OF MAIN -------- */
 
 /* -------- START OF TICKEXPLOSIONS -------- */
+
 TICKEXPLOSIONS:
+	jump	BOOM1
+	BOOM1_R:
+
+	jump	BOOM2
+	BOOM2_R:
+
+	jump	TICKEXPLOSIONS_R
+
+BOOM1:
 	/* Checks if timer is equal to 1 */
 	load	gr0 P1EXPLOSIONACTIVE
 	sub	gr0 1
-	bne	TICKEXPLOSION2
+	bne	BOOM1_R
 
 	/* Decreases explosion timer */
 	load	gr0 P1EXPLOSIONTIME
@@ -40,7 +50,7 @@ TICKEXPLOSIONS:
 	/* Checks if explosion should vanish */
 	load 	gr0 P1EXPLOSIONTIME
 	sub	gr0 0
-	bne	TICKEXPLOSION2
+	bne	BOOM1_R
 
 	/* Vanish explosion */
 	load	gr0 0
@@ -132,7 +142,7 @@ E1UP:
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 EXPLOSION
-	bne 	TICKEXPLOSION2
+	bne 	BOOM1_R
 
 	/* Places explosion */
 	twrite	gr3
@@ -142,16 +152,136 @@ E1UP:
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 EXPLOSION
-	bne 	TICKEXPLOSION2
+	bne 	BOOM1_R
 
 	/* Places explosion */
 	twrite	gr3
 	
+	jump BOOM1_R
 
-TICKEXPLOSION2:
+BOOM2:
+	/* Checks if timer is equal to 1 */
+	load	gr0 P2EXPLOSIONACTIVE
+	sub	gr0 1
+	bne	BOOM2_R
+
+	/* Decreases explosion timer */
+	load	gr0 P2EXPLOSIONTIME
+	sub	gr0 1
+	store	P2EXPLOSIONTIME gr0
+
+	/* Checks if explosion should vanish */
+	load 	gr0 P2EXPLOSIONTIME
+	sub	gr0 0
+	bne	BOOM2_R
+
+	/* Vanish explosion */
+	load	gr0 0
+	store	P2EXPLOSIONACTIVE gr0
+
+	/* Middle explosion tile */
+	load	gr2 P2EXPLOSIONPOS
+	load 	gr3 GRASS
+	tpoint	gr2
+	twrite	gr3
+
+	/* Explosion to the right */
+	/* Checks space for explosion */
+	add	gr2 1
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	E2LEFT
+
+	/* Places explosion */
+	twrite	gr3
+
+	/* Checks space for next explosion */
+	add	gr2 1
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	E2LEFT
+
+	/* Places explosion */
+	twrite	gr3
+
 	
 
-	jump TICKEXPLOSIONS_R
+E2LEFT:
+	/* Explosion to the left */
+	load	gr2 P2EXPLOSIONPOS
+
+	/* Checks space for explosion */
+	sub	gr2 1
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	E2DOWN
+
+	/* Places explosion */
+	twrite	gr3
+
+	/* Checks space for next explosion */
+	sub	gr2 1
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	E2DOWN
+
+	/* Places explosion */
+	twrite	gr3
+	
+E2DOWN:
+ 	/* Explosion down */
+	load	gr2 P2EXPLOSIONPOS
+
+	/* Checks space for explosion */
+	add	gr2 15
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	E2UP
+
+	/* Places explosion */
+	twrite	gr3
+
+	/* Checks space for next explosion */
+	add	gr2 15
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	E2UP
+
+	/* Places explosion */
+	twrite	gr3
+
+E2UP:
+	/* Explosion up */
+	load	gr2 P2EXPLOSIONPOS
+	
+	/* Checks space for explosion */
+	sub	gr2 15
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	BOOM2_R
+
+	/* Places explosion */
+	twrite	gr3
+
+	/* Checks space for next explosion */
+	sub	gr2 15
+	tpoint	gr2
+	tread	gr0
+	sub 	gr0 EXPLOSION
+	bne 	BOOM2_R
+
+	/* Places explosion */
+	twrite	gr3
+
+	jump BOOM2_R	
+
 
 /* -------- END OF TICKEXPLOSIONS -------- */
 

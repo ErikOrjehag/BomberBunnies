@@ -68,7 +68,7 @@ architecture Behavioral of PROGRAM_MEMORY is
 
 python compiler.py $1 >> ../PROGRAM_MEMORY.vhd
 
-echo '
+echo "
     others => (others => '0')
   );
 
@@ -90,4 +90,4 @@ begin  -- pMem
   
  -- PM(to_integer(pAddr)) <= PM_in when PM_write = '1' else PM(to_integer(pAddr));
 
-end Behavioral; ' >> ../PROGRAM_MEMORY.vhd
+end Behavioral; " >> ../PROGRAM_MEMORY.vhd
