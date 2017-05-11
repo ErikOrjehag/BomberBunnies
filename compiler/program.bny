@@ -156,26 +156,26 @@ E1UP:
 
 BOOM2:
 	/* Checks if timer is equal to 1 */
-	load	gr0 P2EXPLOSION4ACTIVE
+	load	gr0 P2EXPLOSION1ACTIVE
 	sub	gr0 1
 	bne	BOOM2_R
 
 	/* Decreases explosion timer */
-	load	gr0 P2EXPLOSION4TIME
+	load	gr0 P2EXPLOSION1TIME
 	sub	gr0 1
-	store	P2EXPLOSION4TIME gr0
+	store	P2EXPLOSION1TIME gr0
 
 	/* Checks if explosion should vanish */
-	load 	gr0 P2EXPLOSION4TIME
+	load 	gr0 P2EXPLOSION1TIME
 	sub	gr0 0
 	bne	BOOM2_R
 
 	/* Vanish explosion */
 	load	gr0 0
-	store	P2EXPLOSION4ACTIVE gr0
+	store	P2EXPLOSION1ACTIVE gr0
 
 	/* Middle explosion tile */
-	load	gr2 P2EXPLOSION4POS
+	load	gr2 P2EXPLOSION1POS
 	load 	gr3 GRASS
 	tpoint	gr2
 	twrite	gr3
@@ -205,7 +205,7 @@ BOOM2:
 
 E2LEFT:
 	/* Explosion to the left */
-	load	gr2 P2EXPLOSION4POS
+	load	gr2 P2EXPLOSION1POS
 
 	/* Checks space for explosion */
 	sub	gr2 1
@@ -229,7 +229,7 @@ E2LEFT:
 	
 E2DOWN:
  	/* Explosion down */
-	load	gr2 P2EXPLOSION4POS
+	load	gr2 P2EXPLOSION1POS
 
 	/* Checks space for explosion */
 	add	gr2 15
@@ -253,7 +253,7 @@ E2DOWN:
 
 E2UP:
 	/* Explosion up */
-	load	gr2 P2EXPLOSION4POS
+	load	gr2 P2EXPLOSION1POS
 	
 	/* Checks space for explosion */
 	sub	gr2 15
@@ -426,36 +426,36 @@ P1UP:
 
 TICKBOMB2:
 	/* Checks if bomb is placed */
-	load	gr0 P2BOMB4ACTIVE
+	load	gr0 P2BOMB1ACTIVE
 	sub	gr0 1
 	bne	TICKBOMB2_R
 
 	/* Decrease counter with 1 */
-	load	gr0 P2BOMB4TIME
+	load	gr0 P2BOMB1TIME
 	sub	gr0 1
-	store	P2BOMB4TIME gr0
+	store	P2BOMB1TIME gr0
 
 	load	gr0 0
-	sub	gr0 P2BOMB4TIME
+	sub	gr0 P2BOMB1TIME
 	beq	EXPLODE2
 	
 	jump	TICKBOMB2_R
 
 EXPLODE2:
 	/* Initializes explosion */
-	load	gr0 P2BOMB4POS
-	store 	P2EXPLOSION4POS gr0
+	load	gr0 P2BOMB1POS
+	store 	P2EXPLOSION1POS gr0
 	load	gr0 1
-	store	P2EXPLOSION4ACTIVE gr0
+	store	P2EXPLOSION1ACTIVE gr0
 	load 	gr0 2
-	store	P2EXPLOSION4TIME gr0
+	store	P2EXPLOSION1TIME gr0
 
 	/* Decrease bomb counter for player 2 */
 	load	gr0 P2BOMBCOUNT
 	sub	gr0 1
 	store	P2BOMBCOUNT gr0
 
-	load	gr2 P2BOMB4POS
+	load	gr2 P2BOMB1POS
 	load 	gr3 EXPLOSION
 	tpoint	gr2
 	twrite	gr3
@@ -485,7 +485,7 @@ EXPLODE2:
 
 P2LEFT:
 	/* Explosion to the left */
-	load	gr2 P2BOMB4POS
+	load	gr2 P2BOMB1POS
 
 	/* Checks space for explosion */
 	sub	gr2 1
@@ -509,7 +509,7 @@ P2LEFT:
 	
 P2DOWN:
  	/* Explosion down */
-	load	gr2 P2BOMB4POS
+	load	gr2 P2BOMB1POS
 
 	/* Checks space for explosion */
 	add	gr2 15
@@ -533,7 +533,7 @@ P2DOWN:
 
 P2UP:
 	/* Explosion up */
-	load	gr2 P2BOMB4POS
+	load	gr2 P2BOMB1POS
 	
 	/* Checks space for explosion */
 	sub	gr2 15
@@ -587,6 +587,27 @@ BTN1:
 	sub	gr1 EGG
 	beq	BTN1_R
 
+	/* Checks which bomb to place */
+	load	  gr0 P1BOMBCOUNT
+	sub	  gr0 0
+	beq	  P1PLACEBOMB1
+
+	load	  gr0 P1BOMBCOUNT
+	sub	  gr0 1
+	beq	  P1PLACEBOMB2
+
+	load	  gr0 P1BOMBCOUNT
+	sub	  gr0 2
+	beq	  P1PLACEBOMB2
+
+P1INCREASEBOMBCOUNTER:
+	/* Increases bomb counter */
+	load	gr0 P1BOMBCOUNT
+	add	gr0 1
+	store 	P1BOMBCOUNT gr0
+	jump	BTN1_R
+
+P1PLACEBOMB1:
 	/* Places egg */
 	store 	XPOS1 gr12
 	store 	YPOS1 gr13
@@ -604,11 +625,47 @@ BTN1:
 	load	gr0 16
 	store	P1BOMB1TIME gr0
 
-	/* Increases bomb counter */
-	load	gr0 P1BOMBCOUNT
-	add	gr0 1
-	store 	P1BOMBCOUNT gr0
-	jump	BTN1_R
+	jump	P1INCREASEBOMBCOUNTER
+
+P1PLACEBOMB2:
+	/* Places egg */
+	store 	XPOS1 gr12
+	store 	YPOS1 gr13
+	load 	gr3 YPOS1
+	load	gr2 EGG
+	mul 	gr3 15
+	add	gr3 XPOS1
+	tpoint 	gr3
+	twrite 	gr2
+	load	gr0 1
+	store	P1BOMB2ACTIVE gr0
+
+	/* Loads bomb position and bomb timer */
+	store	P1BOMB2POS gr3
+	load	gr0 16
+	store	P1BOMB2TIME gr0
+
+	jump	P1INCREASEBOMBCOUNTER
+
+P1PLACEBOMB3:
+	/* Places egg */
+	store 	XPOS1 gr12
+	store 	YPOS1 gr13
+	load 	gr3 YPOS1
+	load	gr2 EGG
+	mul 	gr3 15
+	add	gr3 XPOS1
+	tpoint 	gr3
+	twrite 	gr2
+	load	gr0 1
+	store	P1BOMB3ACTIVE gr0
+
+	/* Loads bomb position and bomb timer */
+	store	P1BOMB3POS gr3
+	load	gr0 16
+	store	P1BOMB3TIME gr0
+
+	jump	P1INCREASEBOMBCOUNTER
 
 BTN2:
 	/* Checks if player can place more bombs */
@@ -627,6 +684,27 @@ BTN2:
 	sub	gr1 EGG
 	beq	BTN2_R
 
+	/* Checks which bomb to place */
+	load	  gr0 P2BOMBCOUNT
+	sub	  gr0 0
+	beq	  P2PLACEBOMB1
+
+	load	  gr0 P2BOMBCOUNT
+	sub	  gr0 1
+	beq	  P2PLACEBOMB2
+
+	load	  gr0 P2BOMBCOUNT
+	sub	  gr0 2
+	beq	  P2PLACEBOMB3
+
+P2INCREASEBOMBCOUNTER:
+	/* Increases bomb counter */
+	load	gr0 P2BOMBCOUNT
+	add	gr0 1
+	store 	P2BOMBCOUNT gr0
+	jump	BTN2_R
+
+P2PLACEBOMB1:
 	/* Places egg */
 	store 	XPOS2 gr14
 	store	YPOS2 gr15
@@ -637,22 +715,54 @@ BTN2:
 	tpoint 	gr3
 	twrite 	gr2
 	load	gr0 1
-	store	P2BOMB4ACTIVE gr0
+	store	P2BOMB1ACTIVE gr0
 
 	/* Loads bomb position and bomb timer */
-	store	P2BOMB4POS gr3
+	store	P2BOMB1POS gr3
 	load	gr0 16
-	store	P2BOMB4TIME gr0
+	store	P2BOMB1TIME gr0
 
-	/* Increases bomb counter */
-	load	gr0 P2BOMBCOUNT
-	add	gr0 1
-	store 	P2BOMBCOUNT gr0
-	jump	BTN2_R
+	jump	P2INCREASEBOMBCOUNTER
 
-/* LABELS */
-TMP1:
-	0
+P2PLACEBOMB2:
+	/* Places egg */
+	store 	XPOS2 gr14
+	store	YPOS2 gr15
+	load 	gr3 YPOS2
+	load	gr2 EGG
+	mul 	gr3 15
+	add	gr3 XPOS2
+	tpoint 	gr3
+	twrite 	gr2
+	load	gr0 1
+	store	P2BOMB2ACTIVE gr0
+
+	/* Loads bomb position and bomb timer */
+	store	P2BOMB2POS gr3
+	load	gr0 16
+	store	P2BOMB2TIME gr0
+
+	jump	P2INCREASEBOMBCOUNTER
+
+P2PLACEBOMB3:
+	/* Places egg */
+	store 	XPOS2 gr14
+	store	YPOS2 gr15
+	load 	gr3 YPOS2
+	load	gr2 EGG
+	mul 	gr3 15
+	add	gr3 XPOS2
+	tpoint 	gr3
+	twrite 	gr2
+	load	gr0 1
+	store	P2BOMB3ACTIVE gr0
+
+	/* Loads bomb position and bomb timer */
+	store	P2BOMB3POS gr3
+	load	gr0 16
+	store	P2BOMB3TIME gr0
+
+	jump	P2INCREASEBOMBCOUNTER
 
 
 /* -------- END OF BUTTON -------- */
@@ -895,7 +1005,7 @@ P2BOMBCOUNT:
 	0
 
 MAXBOMBS:
-	1
+	3
 
 XPOS1:
 	0
