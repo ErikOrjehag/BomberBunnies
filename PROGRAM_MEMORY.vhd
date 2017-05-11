@@ -63,12 +63,7 @@ architecture Behavioral of PROGRAM_MEMORY is
   constant pm_c : pm_t := (
        -- OP    GRx  M  Adr
 
-
-    
-
-
-   
-0 => b"00000_1100_01_000000000000", -- load, gr12
+   0 => b"00000_1100_01_000000000000", -- load, gr12
    1 => b"00000_0000_00_000000000100", -- 4
    2 => b"00100_0000_01_000000000000", -- jump
    3 => b"00000_0000_00_000010101101", -- CONTROL
@@ -422,8 +417,7 @@ architecture Behavioral of PROGRAM_MEMORY is
  351 => b"00000_0000_00_000000000000", -- 0
 
 
-
-    others => (others => '0')
+    others => (others => 0)
   );
 
   signal PM : pm_t := pm_c;
@@ -436,14 +430,12 @@ begin  -- pMem
   process (clk)
   begin
     if rising_edge(clk) then
-      if PM_write = '1' then
+      if PM_write = 1 then
         PM(to_integer(pAddr)) <= PM_in;
       end if;
     end if;
   end process;
   
- -- PM(to_integer(pAddr)) <= PM_in when PM_write = '1' else PM(to_integer(pAddr));
+ -- PM(to_integer(pAddr)) <= PM_in when PM_write = 1 else PM(to_integer(pAddr));
 
-end Behavioral;
-
-
+end Behavioral; 
