@@ -1,8 +1,125 @@
-INIT:	
+INIT:
+	/* Reset players */
+	load	gr0 0
+	store	P1DEAD gr0
+	store	P2DEAD gr0
+	store	P1BOMBCOUNT gr0
+	store	P2BOMBCOUNT gr0
+	load	gr12 1
+	load	gr13 1
+	load	gr14 13
+	load	gr15 11
+
+	/* Reset bombs */
+	store	P1BOMB1POS gr0
+	store	P1BOMB1ACTIVE gr0
+	store	P1BOMB1TIME gr0
+
+	store	P1BOMB2POS gr0
+	store	P1BOMB2ACTIVE gr0
+	store	P1BOMB2TIME gr0
+
+	store	P1BOMB3POS gr0
+	store	P1BOMB3ACTIVE gr0
+	store	P1BOMB3TIME gr0
+
+	store	P2BOMB1POS gr0
+	store	P2BOMB1ACTIVE gr0
+	store	P2BOMB1TIME gr0
+
+	store	P2BOMB2POS gr0
+	store	P2BOMB2ACTIVE gr0
+	store	P2BOMB2TIME gr0
+
+	store	P2BOMB3POS gr0
+	store	P2BOMB3ACTIVE gr0
+	store	P2BOMB3TIME gr0
+
+	/* Reset explosions */
+	store	P1EXPLOSION1POS gr0
+	store	P1EXPLOSION1ACTIVE gr0
+	store	P1EXPLOSION1TIME gr0
+
+	store	P1EXPLOSION2POS gr0
+	store	P1EXPLOSION2ACTIVE gr0
+	store	P1EXPLOSION2TIME gr0
+
+	store	P1EXPLOSION3POS gr0
+	store	P1EXPLOSION3ACTIVE gr0
+	store	P1EXPLOSION3TIME gr0
+
+	store	P2EXPLOSION1POS gr0
+	store	P2EXPLOSION1ACTIVE gr0
+	store	P2EXPLOSION1TIME gr0
+
+	store	P2EXPLOSION2POS gr0
+	store	P2EXPLOSION2ACTIVE gr0
+	store	P2EXPLOSION2TIME gr0
+
+	store	P2EXPLOSION3POS gr0
+	store	P2EXPLOSION3ACTIVE gr0
+	store	P2EXPLOSION3TIME gr0
+
+	/* Loads tile at index */
+	load	gr0 0
+	load	gr3 195		/* End of index */
+
+INITLOOP:
+	store	MOVE gr0
+	load	gr2 MOVE
+	store	MOVE gr3
+	sub	gr2 MOVE
+	beq	INITEND
+
+	tpoint	gr0
+	tread	gr1
+	
+	sub	gr1 WALL
+	beq	INCREASE
+
+	/* Place breakable wall */
+	load	 gr1 BREAKABLE
+	twrite	 gr1
+
+INCREASE:
+	add	gr0 1
+	jump 	INITLOOP
+
+INITEND:
+	load	gr0 GRASS
+	load	gr1 16
+	
+	tpoint	gr1
+	twrite	gr0
+
+	add	gr1 1
+	tpoint	gr1
+	twrite	gr0
+
+	add	gr1 14
+	tpoint	gr1
+	twrite	gr0
+
+	load	gr1 178
+	tpoint	gr1
+	twrite	gr0
+
+	sub	gr1 1
+	tpoint	gr1
+	twrite	gr0
+
+	sub	gr1 14
+	tpoint	gr1
+	twrite	gr0
 
 /* -------- START OF MAIN -------- */
 
 MAIN:
+	jump CHECKDEATH
+	CHECKDEATH_R:
+
+	jump CHECKBOMBDEATH
+	CHECKBOMBDEATH_R:
 
 	jump CONTROL
 	CONTROL_R:
@@ -19,6 +136,127 @@ MAIN:
 	jump MAIN
 
 /* -------- END OF MAIN -------- */
+
+/* -------- START OF CHECKBOMBDEATH -------- */
+
+CHECKBOMBDEATH:
+	load	gr2 1	/* Value to set time later */
+
+	/* Check if bombs explode */
+	load	gr0 P1BOMB1POS
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EXPLOSION
+	beq	P1BOMB1DETONATE
+	P1BOMB1DETONATE_R:
+
+	load	gr0 P1BOMB2POS
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EXPLOSION
+	beq	P1BOMB2DETONATE
+	P1BOMB2DETONATE_R:
+
+	load	gr0 P1BOMB3POS
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EXPLOSION
+	beq	P1BOMB3DETONATE
+	P1BOMB3DETONATE_R:
+
+	load	gr0 P2BOMB1POS
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EXPLOSION
+	beq	P2BOMB1DETONATE
+	P2BOMB1DETONATE_R:
+
+	load	gr0 P2BOMB2POS
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EXPLOSION
+	beq	P2BOMB2DETONATE
+	P2BOMB2DETONATE_R:
+
+	load	gr0 P2BOMB3POS
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EXPLOSION
+	beq	P2BOMB3DETONATE
+	P2BOMB3DETONATE_R:
+
+	jump	CHECKBOMBDEATH_R
+
+P1BOMB1DETONATE:
+	store	P1BOMB1TIME gr2
+	jump 	P1BOMB1DETONATE_R
+
+P1BOMB2DETONATE:
+	store	P1BOMB2TIME gr2
+	jump 	P1BOMB2DETONATE_R
+
+P1BOMB3DETONATE:
+	store	P1BOMB3TIME gr2
+	jump 	P1BOMB3DETONATE_R
+
+P2BOMB1DETONATE:
+	store	P2BOMB1TIME gr2
+	jump 	P2BOMB1DETONATE_R
+
+P2BOMB2DETONATE:
+	store	P2BOMB2TIME gr2
+	jump 	P2BOMB2DETONATE_R
+
+P2BOMB3DETONATE:
+	store	P2BOMB3TIME gr2
+	jump 	P2BOMB3DETONATE_R
+
+/* -------- END OF CHECKBOMBDEATH -------- */
+
+/* -------- START OF CHECKDEATH -------- */
+
+CHECKDEATH:
+	/* Loads coordinates */
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+
+	/* Calculates player 1 index */
+	load	gr0 YPOS1
+	mul	gr0 15
+	add	gr0 XPOS1
+
+	/* Check if player exploded */
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EXPLOSION
+	beq	P1DEATH
+	
+	/* Calculates player 2 index */
+	load	gr0 YPOS2
+	mul	gr0 15
+	add	gr0 XPOS2
+
+	/* Check if player exploded */
+	tpoint	gr0
+	tread	gr1
+	sub	gr1 EXPLOSION
+	beq	P2DEATH
+
+	jump 	CHECKDEATH_R
+
+P1DEATH:
+	load	gr0 1
+	store	P1DEAD gr0
+	jump	CHECKDEATH_R
+
+P2DEATH:
+	load	gr0 1
+	store	P2DEAD gr0
+	jump	CHECKDEATH_R
+
+/* -------- END OF CHECKDEATH -------- */
 
 /* -------- START OF TICKEXPLOSIONS -------- */
 
@@ -626,6 +864,11 @@ BUTTON:
 	jump	BUTTON_R
 
 BTN1:
+	/* Restart game if player is dead */
+	load	gr0 P1DEAD
+	sub	gr0 1
+	beq	INIT
+
 	/* Checks if player can place more bombs */
 	load	gr0 P1BOMBCOUNT
 	sub	gr0 MAXBOMBS
@@ -725,6 +968,11 @@ P1PLACEBOMB3:
 	jump	P1INCREASEBOMBCOUNTER
 
 BTN2:
+	/* Restart game if player is dead */
+	load	gr0 P2DEAD
+	sub	gr0 1
+	beq	INIT
+
 	/* Checks if player can place more bombs */
 	load	gr0 P2BOMBCOUNT
 	sub	gr0 MAXBOMBS
@@ -828,14 +1076,22 @@ P2PLACEBOMB3:
 /* -------- START OF CONTROL -------- */
 
 CONTROL:
-	jump	COUNT1
-	COUNT_R: 
+	/* Player cannot move if dead */
+	load	gr0 P1DEAD
+	sub	gr0 1
+	beq	J2
+
 	joy1r	P1R
 	joy1l	P1L
 J1:
 	joy1u	P1U
 	joy1d	P1D
+
 J2:
+	/* Player cannot move if dead */
+	load	gr0 P2DEAD
+	sub	gr0 1
+	beq	CONTROL_R
 	joy2r	P2R
 	joy2l	P2L
 J3:
@@ -961,12 +1217,6 @@ P2D:
 	jump 	CONTROL_R
 
 
-COUNT1:
-	jump COUNT_R	
-
-COUNT2:
-
-
 /* LABELS */
 
 
@@ -974,6 +1224,11 @@ COUNT2:
 
 
 /* -------- GLOBAL VARIABLES -------- */
+
+P1DEAD:
+	0
+P2DEAD:
+	0
 
 /* PLAYER 1 BOMBS AND EXPLOSIONS */
 P1BOMB1POS:
