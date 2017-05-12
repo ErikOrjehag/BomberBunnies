@@ -384,6 +384,10 @@ P2BOMB3:
 	jump TICKBOMBS_R
 
 P1EXPLOSION1INIT:
+	/* Deactivate bomb */
+	load	gr0 0
+	store	P1BOMB1ACTIVE gr0
+
 	/* Initializes explosion */
 	load	gr0 P1BOMB1POS
 	store 	P1EXPLOSION1POS gr0
@@ -401,6 +405,10 @@ P1EXPLOSION1INIT:
 	jump 	EXPLODE
 
 P1EXPLOSION2INIT:
+	/* Deactivate bomb */
+	load	gr0 0
+	store	P1BOMB2ACTIVE gr0
+
 	/* Initializes explosion */
 	load	gr0 P1BOMB2POS
 	store 	P1EXPLOSION2POS gr0
@@ -418,6 +426,10 @@ P1EXPLOSION2INIT:
 	jump 	EXPLODE
 
 P1EXPLOSION3INIT:
+	/* Deactivate bomb */
+	load	gr0 0
+	store	P1BOMB3ACTIVE gr0
+
 	/* Initializes explosion */
 	load	gr0 P1BOMB3POS
 	store 	P1EXPLOSION3POS gr0
@@ -435,6 +447,10 @@ P1EXPLOSION3INIT:
 	jump 	EXPLODE
 
 P2EXPLOSION1INIT:
+	/* Deactivate bomb */
+	load	gr0 0
+	store	P2BOMB1ACTIVE gr0
+
 	/* Initializes explosion */
 	load	gr0 P2BOMB1POS
 	store 	P2EXPLOSION1POS gr0
@@ -452,6 +468,10 @@ P2EXPLOSION1INIT:
 	jump 	EXPLODE
 
 P2EXPLOSION2INIT:
+	/* Deactivate bomb */
+	load	gr0 0
+	store	P2BOMB2ACTIVE gr0
+
 	/* Initializes explosion */
 	load	gr0 P2BOMB2POS
 	store 	P2EXPLOSION2POS gr0
@@ -469,6 +489,10 @@ P2EXPLOSION2INIT:
 	jump 	EXPLODE
 
 P2EXPLOSION3INIT:
+	/* Deactivate bomb */
+	load	gr0 0
+	store	P2BOMB3ACTIVE gr0
+
 	/* Initializes explosion */
 	load	gr0 P2BOMB3POS
 	store 	P2EXPLOSION3POS gr0
@@ -624,17 +648,19 @@ BTN1:
 	beq	BTN1_R
 
 	/* Checks which bomb to place */
-	load	  gr0 P1BOMBCOUNT
+	load	  gr0 P1BOMB1ACTIVE
 	sub	  gr0 0
 	beq	  P1PLACEBOMB1
 
-	load	  gr0 P1BOMBCOUNT
-	sub	  gr0 1
+	load	  gr0 P1BOMB2ACTIVE
+	sub	  gr0 0
 	beq	  P1PLACEBOMB2
 
-	load	  gr0 P1BOMBCOUNT
-	sub	  gr0 2
+	load	  gr0 P1BOMB3ACTIVE
+	sub	  gr0 0
 	beq	  P1PLACEBOMB3
+
+	jump 	  BTN1_R
 
 P1INCREASEBOMBCOUNTER:
 	/* Increases bomb counter */
@@ -653,10 +679,10 @@ P1PLACEBOMB1:
 	add	gr3 XPOS1
 	tpoint 	gr3
 	twrite 	gr2
+
+	/* Initialize bomb */
 	load	gr0 1
 	store	P1BOMB1ACTIVE gr0
-
-	/* Loads bomb position and bomb timer */
 	store	P1BOMB1POS gr3
 	load	gr0 16
 	store	P1BOMB1TIME gr0
@@ -721,16 +747,16 @@ BTN2:
 	beq	BTN2_R
 
 	/* Checks which bomb to place */
-	load	  gr0 P2BOMBCOUNT
+	load	  gr0 P2BOMB1ACTIVE
 	sub	  gr0 0
 	beq	  P2PLACEBOMB1
 
-	load	  gr0 P2BOMBCOUNT
-	sub	  gr0 1
+	load	  gr0 P2BOMB2ACTIVE
+	sub	  gr0 0
 	beq	  P2PLACEBOMB2
 
-	load	  gr0 P2BOMBCOUNT
-	sub	  gr0 2
+	load	  gr0 P2BOMB3ACTIVE
+	sub	  gr0 0
 	beq	  P2PLACEBOMB3
 
 P2INCREASEBOMBCOUNTER:
