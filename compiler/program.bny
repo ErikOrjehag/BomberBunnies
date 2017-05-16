@@ -444,6 +444,9 @@ FADERIGHT:
 	tread	gr0
 	sub 	gr0 WALL
 	beq 	FADELEFT
+	tread	gr0
+	sub 	gr0 BREAKABLE
+	beq 	FADELEFT
 
 	/* Places explosion */
 	twrite	gr3
@@ -453,6 +456,9 @@ FADERIGHT:
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 WALL
+	beq 	FADELEFT
+	tread	gr0
+	sub 	gr0 BREAKABLE
 	beq 	FADELEFT
 
 	/* Places explosion */
@@ -469,6 +475,9 @@ FADELEFT:
 	tread	gr0
 	sub 	gr0 WALL
 	beq 	FADEDOWN
+	tread	gr0
+	sub 	gr0 BREAKABLE
+	beq 	FADEDOWN
 
 	/* Places explosion */
 	twrite	gr3
@@ -478,6 +487,9 @@ FADELEFT:
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 WALL
+	beq 	FADEDOWN
+	tread	gr0
+	sub 	gr0 BREAKABLE
 	beq 	FADEDOWN
 
 	/* Places explosion */
@@ -494,6 +506,9 @@ FADEDOWN:
 	tread	gr0
 	sub 	gr0 WALL
 	beq 	FADEUP
+	tread	gr0
+	sub 	gr0 BREAKABLE
+	beq 	FADEUP
 
 	/* Places explosion */
 	twrite	gr3
@@ -503,6 +518,9 @@ FADEDOWN:
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 WALL
+	beq 	FADEUP
+	tread	gr0
+	sub 	gr0 BREAKABLE
 	beq 	FADEUP
 
 	/* Places explosion */
@@ -519,6 +537,9 @@ FADEUP:
 	tread	gr0
 	sub 	gr0 WALL
 	beq 	TICKEXPLOSIONS
+	tread	gr0
+	sub 	gr0 BREAKABLE
+	beq 	TICKEXPLOSIONS
 
 	/* Places explosion */
 	twrite	gr3
@@ -528,6 +549,9 @@ FADEUP:
 	tpoint	gr2
 	tread	gr0
 	sub 	gr0 WALL
+	beq 	TICKEXPLOSIONS
+	tread	gr0
+	sub 	gr0 BREAKABLE
 	beq 	TICKEXPLOSIONS
 
 	/* Places explosion */
@@ -778,11 +802,16 @@ EXPLODERIGHT:
 	add	gr2 1
 	tpoint	gr2
 	tread	gr0
+	store	MOVE gr0
+	load	gr7 MOVE
 	sub 	gr0 WALL
 	beq 	EXPLODELEFT
 
 	/* Places explosion */
 	twrite	gr3
+
+	sub	gr7 BREAKABLE
+	beq	EXPLODELEFT
 
 	/* Checks space for next explosion */
 	add	gr2 1
@@ -803,11 +832,16 @@ EXPLODELEFT:
 	sub	gr2 1
 	tpoint	gr2
 	tread	gr0
+	store	MOVE gr0
+	load	gr7 MOVE
 	sub 	gr0 WALL
 	beq 	EXPLODEDOWN
 
 	/* Places explosion */
 	twrite	gr3
+
+	sub	gr7 BREAKABLE
+	beq	EXPLODEDOWN
 
 	/* Checks space for next explosion */
 	sub	gr2 1
@@ -828,11 +862,16 @@ EXPLODEDOWN:
 	add	gr2 15
 	tpoint	gr2
 	tread	gr0
+	store	MOVE gr0
+	load	gr7 MOVE
 	sub 	gr0 WALL
 	beq 	EXPLODEUP
 
 	/* Places explosion */
 	twrite	gr3
+
+	sub	gr7 BREAKABLE
+	beq	EXPLODEUP
 
 	/* Checks space for next explosion */
 	add	gr2 15
@@ -853,11 +892,16 @@ EXPLODEUP:
 	sub	gr2 15
 	tpoint	gr2
 	tread	gr0
+	store	MOVE gr0
+	load	gr7 MOVE
 	sub 	gr0 WALL
 	beq 	TICKBOMBS
 
 	/* Places explosion */
 	twrite	gr3
+
+	sub	gr7 BREAKABLE
+	beq	TICKBOMBS
 
 	/* Checks space for next explosion */
 	sub	gr2 15
