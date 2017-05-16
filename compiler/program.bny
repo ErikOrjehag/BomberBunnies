@@ -249,11 +249,33 @@ CHECKDEATH:
 P1DEATH:
 	load	gr0 1
 	store	P1DEAD gr0
+	store	XPOS1 gr12
+	store	YPOS1 gr13
+	load	gr0 YPOS1
+	mul	gr0 15
+	add	gr0 XPOS1
+	store	DEADPOS1 gr0
+	tpoint	gr0
+	load	gr0 5
+	twrite	gr0
+	load 	gr12 0
+	load 	gr13 16
 	jump	CHECKDEATH_R
 
 P2DEATH:
 	load	gr0 1
 	store	P2DEAD gr0
+	store	XPOS2 gr14
+	store	YPOS2 gr15
+	load	gr0 YPOS2
+	mul	gr0 15
+	add	gr0 XPOS2
+	store	DEADPOS2 gr0
+	tpoint	gr0
+	load 	gr0 5
+	twrite	gr0
+	load 	gr14 0
+	load 	gr15 16
 	jump	CHECKDEATH_R
 
 /* -------- END OF CHECKDEATH -------- */
@@ -420,8 +442,8 @@ FADERIGHT:
 	add	gr2 1
 	tpoint	gr2
 	tread	gr0
-	sub 	gr0 EXPLOSION
-	bne 	FADELEFT
+	sub 	gr0 WALL
+	beq 	FADELEFT
 
 	/* Places explosion */
 	twrite	gr3
@@ -430,8 +452,8 @@ FADERIGHT:
 	add	gr2 1
 	tpoint	gr2
 	tread	gr0
-	sub 	gr0 EXPLOSION
-	bne 	FADELEFT
+	sub 	gr0 WALL
+	beq 	FADELEFT
 
 	/* Places explosion */
 	twrite	gr3
@@ -445,8 +467,8 @@ FADELEFT:
 	sub	gr2 1
 	tpoint	gr2
 	tread	gr0
-	sub 	gr0 EXPLOSION
-	bne 	FADEDOWN
+	sub 	gr0 WALL
+	beq 	FADEDOWN
 
 	/* Places explosion */
 	twrite	gr3
@@ -455,8 +477,8 @@ FADELEFT:
 	sub	gr2 1
 	tpoint	gr2
 	tread	gr0
-	sub 	gr0 EXPLOSION
-	bne 	FADEDOWN
+	sub 	gr0 WALL
+	beq 	FADEDOWN
 
 	/* Places explosion */
 	twrite	gr3
@@ -470,8 +492,8 @@ FADEDOWN:
 	add	gr2 15
 	tpoint	gr2
 	tread	gr0
-	sub 	gr0 EXPLOSION
-	bne 	FADEUP
+	sub 	gr0 WALL
+	beq 	FADEUP
 
 	/* Places explosion */
 	twrite	gr3
@@ -480,8 +502,8 @@ FADEDOWN:
 	add	gr2 15
 	tpoint	gr2
 	tread	gr0
-	sub 	gr0 EXPLOSION
-	bne 	FADEUP
+	sub 	gr0 WALL
+	beq 	FADEUP
 
 	/* Places explosion */
 	twrite	gr3
@@ -495,8 +517,8 @@ FADEUP:
 	sub	gr2 15
 	tpoint	gr2
 	tread	gr0
-	sub 	gr0 EXPLOSION
-	bne 	TICKEXPLOSIONS
+	sub 	gr0 WALL
+	beq 	TICKEXPLOSIONS
 
 	/* Places explosion */
 	twrite	gr3
@@ -505,8 +527,8 @@ FADEUP:
 	sub	gr2 15
 	tpoint	gr2
 	tread	gr0
-	sub 	gr0 EXPLOSION
-	bne 	TICKEXPLOSIONS
+	sub 	gr0 WALL
+	beq 	TICKEXPLOSIONS
 
 	/* Places explosion */
 	twrite	gr3
@@ -1228,6 +1250,10 @@ P2D:
 P1DEAD:
 	0
 P2DEAD:
+	0
+DEADPOS1:
+	0
+DEADPOS2:
 	0
 
 /* PLAYER 1 BOMBS AND EXPLOSIONS */

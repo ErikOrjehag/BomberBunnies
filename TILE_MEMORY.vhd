@@ -13,7 +13,7 @@ end TILE_MEMORY;
 
 architecture behavioral of TILE_MEMORY is
   -- Tile memory type
-  type ram_t is array (0 to 1279) of std_logic_vector(7 downto 0);
+  type ram_t is array (0 to 1791) of std_logic_vector(7 downto 0);
 
   signal index : integer := 0;
   
@@ -22,6 +22,8 @@ architecture behavioral of TILE_MEMORY is
   -- DestructiveWall
   -- Eggbomb
   -- Explosion
+  -- Dead bunny
+  -- Bloody wall
 
   -- Tile memory
   signal memory : ram_t :=
@@ -41,41 +43,7 @@ architecture behavioral of TILE_MEMORY is
                  x"34",x"34",x"34",x"54",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"74",x"54",x"34",x"54",x"34",
                  x"34",x"34",x"34",x"34",x"34",x"14",x"34",x"34",x"54",x"34",x"34",x"34",x"74",x"34",x"34",x"34",
                  x"34",x"54",x"34",x"54",x"34",x"54",x"34",x"34",x"34",x"34",x"34",x"34",x"74",x"74",x"54",x"34",
-                 
-                 --x"49",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",-- Grå vägg
-                 --x"49",x"6D",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"DA",
-                 --x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
-                 --x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
-                 --x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
-                 --x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
-                 --x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
-                 --x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
-                 --x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
-                 --x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
-                 --x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
-                 --x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
-                 --x"49",x"6D",x"91",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"B6",x"DA",x"DA",
-                 --x"49",x"6D",x"91",x"91",x"91",x"91",x"91",x"91",x"91",x"91",x"91",x"91",x"91",x"91",x"DA",x"DA",
-                 --x"49",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"6D",x"DA",
-                 --x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",x"49",
-
-                 --x"88",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE", -- Gul vägg med blod
-                 --x"88",x"CC",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"E0",x"FE",x"FE",x"FD",
-                 --x"88",x"CC",x"F4",x"FC",x"FC",x"E4",x"FC",x"FC",x"FC",x"FC",x"E4",x"E4",x"E4",x"FC",x"FD",x"FD",
-                 --x"88",x"CC",x"F4",x"FC",x"E4",x"E4",x"E4",x"FC",x"FC",x"E4",x"FC",x"E4",x"FC",x"FC",x"FD",x"FD",
-                 --x"88",x"CC",x"F4",x"FC",x"E4",x"FC",x"E4",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FD",x"FD",
-                 --x"88",x"CC",x"F4",x"FC",x"FC",x"FC",x"FC",x"E4",x"FC",x"FC",x"FC",x"FC",x"E4",x"FC",x"FD",x"FD",
-                 --x"88",x"CC",x"F4",x"FC",x"FC",x"FC",x"FC",x"E4",x"FC",x"FC",x"E4",x"E4",x"FC",x"E4",x"FD",x"FD",
-                 --x"88",x"CC",x"F4",x"FC",x"E4",x"FC",x"FC",x"E4",x"E4",x"E4",x"E4",x"FC",x"FC",x"FC",x"FD",x"FD",
-                 --x"88",x"CC",x"F4",x"FC",x"FC",x"FC",x"FC",x"E4",x"E4",x"E4",x"FC",x"FC",x"FC",x"FC",x"FD",x"FD",
-                 --x"88",x"CC",x"F4",x"FC",x"FC",x"E4",x"FC",x"FC",x"E4",x"E4",x"E4",x"FC",x"FC",x"FC",x"FD",x"FD",
-                 --x"88",x"CC",x"F4",x"FC",x"FC",x"FC",x"FC",x"E4",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FD",x"FD",
-                 --x"88",x"CC",x"F4",x"FC",x"FC",x"FC",x"E4",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FD",x"FD",
-                 --x"88",x"CC",x"F4",x"FC",x"E4",x"E4",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FD",x"FD",
-                 --x"88",x"CC",x"F4",x"A4",x"F4",x"F4",x"F4",x"F4",x"F4",x"F4",x"F4",x"F4",x"F4",x"F4",x"FD",x"FD",
-                 --x"88",x"CC",x"CC",x"A4",x"A4",x"CC",x"CC",x"CC",x"CC",x"CC",x"CC",x"CC",x"CC",x"CC",x"CC",x"FD",
-                 --x"88",x"88",x"A4",x"88",x"88",x"88",x"88",x"88",x"88",x"88",x"88",x"88",x"88",x"88",x"88",x"88",
-
+             
                  x"88",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE", -- Gul vägg
                  x"88",x"CC",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",
                  x"88",x"CC",x"F4",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FE",x"FE",
@@ -142,24 +110,43 @@ architecture behavioral of TILE_MEMORY is
                  x"54",x"34",x"54",x"34",x"34",x"FC",x"FC",x"03",x"03",x"FC",x"FC",x"34",x"34",x"34",x"54",x"54",
                  x"34",x"34",x"34",x"54",x"34",x"34",x"FC",x"FC",x"FC",x"FC",x"34",x"74",x"54",x"34",x"54",x"34",
                  x"34",x"34",x"34",x"34",x"34",x"14",x"34",x"34",x"54",x"34",x"34",x"34",x"74",x"34",x"34",x"34",
-                 x"34",x"54",x"34",x"54",x"34",x"54",x"34",x"34",x"34",x"34",x"34",x"34",x"74",x"74",x"54",x"34"
+                 x"34",x"54",x"34",x"54",x"34",x"54",x"34",x"34",x"34",x"34",x"34",x"34",x"74",x"74",x"54",x"34",
 
-                 --x"74",x"34",x"74",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",   -- Död kanin
-                 --x"34",x"34",x"34",x"34",x"34",x"54",x"34",x"34",x"34",x"34",x"54",x"34",x"34",x"54",x"14",x"54",
-                 --x"54",x"34",x"14",x"14",x"14",x"54",x"34",x"34",x"34",x"34",x"54",x"14",x"34",x"54",x"34",x"34",
-                 --x"54",x"14",x"34",x"B6",x"FF",x"FF",x"34",x"34",x"34",x"34",x"FF",x"FF",x"FF",x"34",x"34",x"34",
-                 --x"34",x"14",x"FF",x"FF",x"FF",x"FF",x"FF",x"34",x"34",x"FF",x"FF",x"FF",x"FF",x"B6",x"34",x"54",
-                 --x"34",x"34",x"FF",x"FF",x"34",x"34",x"FF",x"FF",x"FF",x"FF",x"34",x"34",x"FF",x"FF",x"14",x"54",
-                 --x"54",x"FF",x"B6",x"34",x"34",x"FF",x"FF",x"FF",x"B6",x"FF",x"FF",x"34",x"34",x"FF",x"B6",x"34",
-                 --x"34",x"FF",x"34",x"34",x"FF",x"FF",x"34",x"FF",x"FF",x"34",x"FF",x"FF",x"E0",x"34",x"FF",x"34",
-                 --x"34",x"34",x"74",x"E0",x"B6",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"B6",x"E0",x"74",x"34",x"34",
-                 --x"34",x"34",x"E0",x"E0",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"E0",x"E0",x"54",x"E0",
-                 --x"34",x"34",x"E0",x"E0",x"FF",x"FF",x"E0",x"FF",x"FF",x"E0",x"FF",x"FF",x"E0",x"E0",x"34",x"34",
-                 --x"34",x"E0",x"E0",x"E0",x"E0",x"FF",x"E0",x"E0",x"E0",x"E0",x"FF",x"E0",x"E0",x"34",x"34",x"E0",
-                 --x"54",x"34",x"E0",x"E0",x"E0",x"E0",x"FF",x"B6",x"FF",x"FF",x"E0",x"E0",x"34",x"34",x"54",x"54",
-                 --x"34",x"34",x"E0",x"E0",x"E0",x"E0",x"E0",x"E0",x"E0",x"E0",x"E0",x"E0",x"E0",x"34",x"54",x"34",
-                 --x"34",x"34",x"34",x"34",x"E0",x"E0",x"E0",x"E0",x"E0",x"34",x"E0",x"34",x"74",x"E0",x"E0",x"34",
-                 --x"E0",x"54",x"34",x"54",x"34",x"54",x"34",x"34",x"34",x"34",x"34",x"E0",x"74",x"74",x"54",x"34"
+                 x"74",x"34",x"74",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",x"34",   -- Död kanin
+                 x"34",x"34",x"34",x"34",x"34",x"54",x"34",x"34",x"34",x"34",x"54",x"34",x"34",x"54",x"14",x"54",
+                 x"54",x"34",x"14",x"14",x"14",x"54",x"34",x"34",x"34",x"34",x"54",x"14",x"34",x"54",x"34",x"34",
+                 x"54",x"14",x"34",x"B6",x"FF",x"FF",x"34",x"34",x"34",x"34",x"FF",x"FF",x"FF",x"34",x"34",x"34",
+                 x"34",x"14",x"FF",x"FF",x"FF",x"FF",x"FF",x"34",x"34",x"FF",x"FF",x"FF",x"FF",x"B6",x"34",x"54",
+                 x"34",x"34",x"FF",x"FF",x"34",x"34",x"FF",x"FF",x"FF",x"FF",x"34",x"34",x"FF",x"FF",x"14",x"54",
+                 x"54",x"FF",x"B6",x"34",x"34",x"FF",x"FF",x"FF",x"B6",x"FF",x"FF",x"34",x"34",x"FF",x"B6",x"34",
+                 x"34",x"FF",x"34",x"34",x"FF",x"FF",x"34",x"FF",x"FF",x"34",x"FF",x"FF",x"E0",x"34",x"FF",x"34",
+                 x"34",x"34",x"74",x"E0",x"B6",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"B6",x"E0",x"74",x"34",x"34",
+                 x"34",x"34",x"E0",x"E0",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"FF",x"E0",x"E0",x"54",x"E0",
+                 x"34",x"34",x"E0",x"E0",x"FF",x"FF",x"E0",x"FF",x"FF",x"E0",x"FF",x"FF",x"E0",x"E0",x"34",x"34",
+                 x"34",x"E0",x"E0",x"E0",x"E0",x"FF",x"E0",x"E0",x"E0",x"E0",x"FF",x"E0",x"E0",x"34",x"34",x"E0",
+                 x"54",x"34",x"E0",x"E0",x"E0",x"E0",x"FF",x"B6",x"FF",x"FF",x"E0",x"E0",x"34",x"34",x"54",x"54",
+                 x"34",x"34",x"E0",x"E0",x"E0",x"E0",x"E0",x"E0",x"E0",x"E0",x"E0",x"E0",x"E0",x"34",x"54",x"34",
+                 x"34",x"34",x"34",x"34",x"E0",x"E0",x"E0",x"E0",x"E0",x"34",x"E0",x"34",x"74",x"E0",x"E0",x"34",
+                 x"E0",x"54",x"34",x"54",x"34",x"54",x"34",x"34",x"34",x"34",x"34",x"E0",x"74",x"74",x"54",x"34",
+
+                 
+                 x"88",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE", -- Gul vägg med blod
+                 x"88",x"CC",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"FE",x"E0",x"FE",x"FE",x"FD",
+                 x"88",x"CC",x"F4",x"FC",x"FC",x"E4",x"FC",x"FC",x"FC",x"FC",x"E4",x"E4",x"E4",x"FC",x"FD",x"FD",
+                 x"88",x"CC",x"F4",x"FC",x"E4",x"E4",x"E4",x"FC",x"FC",x"E4",x"FC",x"E4",x"FC",x"FC",x"FD",x"FD",
+                 x"88",x"CC",x"F4",x"FC",x"E4",x"FC",x"E4",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FD",x"FD",
+                 x"88",x"CC",x"F4",x"FC",x"FC",x"FC",x"FC",x"E4",x"FC",x"FC",x"FC",x"FC",x"E4",x"FC",x"FD",x"FD",
+                 x"88",x"CC",x"F4",x"FC",x"FC",x"FC",x"FC",x"E4",x"FC",x"FC",x"E4",x"E4",x"FC",x"E4",x"FD",x"FD",
+                 x"88",x"CC",x"F4",x"FC",x"E4",x"FC",x"FC",x"E4",x"E4",x"E4",x"E4",x"FC",x"FC",x"FC",x"FD",x"FD",
+                 x"88",x"CC",x"F4",x"FC",x"FC",x"FC",x"FC",x"E4",x"E4",x"E4",x"FC",x"FC",x"FC",x"FC",x"FD",x"FD",
+                 x"88",x"CC",x"F4",x"FC",x"FC",x"E4",x"FC",x"FC",x"E4",x"E4",x"E4",x"FC",x"FC",x"FC",x"FD",x"FD",
+                 x"88",x"CC",x"F4",x"FC",x"FC",x"FC",x"FC",x"E4",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FD",x"FD",
+                 x"88",x"CC",x"F4",x"FC",x"FC",x"FC",x"E4",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FD",x"FD",
+                 x"88",x"CC",x"F4",x"FC",x"E4",x"E4",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FC",x"FD",x"FD",
+                 x"88",x"CC",x"F4",x"A4",x"F4",x"F4",x"F4",x"F4",x"F4",x"F4",x"F4",x"F4",x"F4",x"F4",x"FD",x"FD",
+                 x"88",x"CC",x"CC",x"A4",x"A4",x"CC",x"CC",x"CC",x"CC",x"CC",x"CC",x"CC",x"CC",x"CC",x"CC",x"FD",
+                 x"88",x"88",x"A4",x"88",x"88",x"88",x"88",x"88",x"88",x"88",x"88",x"88",x"88",x"88",x"88",x"88"
+
 
                  );                            
 
