@@ -1,3 +1,5 @@
+/* Example program */
+
 SETGRASS:
 	load	gr1	GRASS
 	jump	BEGIN
@@ -16,6 +18,7 @@ LOOP:
 	btn2	SETWALL
 	jump	LOOP
 
+/* Program constants */
 
 GRASS:
 	0

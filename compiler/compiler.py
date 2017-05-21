@@ -8,34 +8,10 @@ lables = {}
 output = ''
 
 OPS = [
-	"load",   #  0
-	"store",  #  1
-	"add",    #  2
-	"sub",    #  3
-	"jump",   #  4
-	"sleep",  #  5
-	"beq",    #  6
-	"bne",    #  7
-	"mul",    #  8
-	"",       #  9
-	"",       # 10
-	"",       # 11
-	"",       # 12
-	"",       # 13
-	"twrite", # 14
-	"tread",  # 15
-	"tpoint", # 16
-	"joy1r",  # 17
-	"joy1u",  # 18
-	"joy1l",  # 19
-	"joy1d",  # 20
-	"btn1",   # 21
-	"joy2r",  # 22
-	"joy2u",  # 23
-	"joy2l",  # 24
-	"joy2d",  # 25
-	"btn2",   # 26
-	"addgr",
+	"load", "store", "add", "sub", "jump", "sleep", "beq", "bne", "mul",
+	"", "", "", "", "", # not used
+	"twrite", "tread", "tpoint", "joy1r", "joy1u", "joy1l", "joy1d",
+	"btn1", "joy2r", "joy2u", "joy2l", "joy2d", "btn2"
 ]
 
 MM_DIRECT = 0
@@ -73,9 +49,6 @@ def put_data(integer):
 	put_line(split_line(line), str(integer))
 
 def put_label(label):
-	#label_ln = get_label_ln(label)
-	#line = to_bin(label_ln, 23)
-	#put_line(line, label + ' ' + str(label_ln))
 	put_line(long_label(label), label)
 
 def split_line(line):
@@ -97,13 +70,12 @@ def next_char():
 		return ''
 
 def next_token():
-# line comments with /* */
 	comment_val = 0 # increases when '/', '*', '*' and '/' is found
 	found_comment = False
 	token = ''
+
 	while True:
 		character = next_char()
-
 
 		if comment_val == 0 and character == '/':
 			comment_val += 1
@@ -116,7 +88,7 @@ def next_token():
 			found_comment = False
 			comment_val = 0
 			token = ''
-                        continue
+			continue
 		elif comment_val < 2:
 			comment_val = 0
 
@@ -132,26 +104,17 @@ def is_op(token):
 	return token in OPS
 
 def is_int(token):
-	if token[0] in ('-', '+'):
-		return token[1:].isdigit()
 	return token.isdigit()
 
 def is_label(token):
 	return token[-1] == ':'
-
-def is_label_call(token):
-	return not (token[0] in ['0','1', '2', '3', '4', '5', '6', '7', '8', '9'])
 
 def store_label(label):
 	global ln
 	global lables
 	lables[label] = ln
 
-def get_label_ln(label):
-	return lables[label]
-
 def grx_to_int(grx):
-	#return int(grx[-1]) if len(grx) == 3 else int(grx[-2:])
 	return int(grx[2:])
 
 def unexpected(token):
@@ -179,10 +142,8 @@ def math_instr(op):
 	if is_int(thing):
 		put_instr(op, grx_to_int(grx), MM_IMMEDIATE, None)
 		put_data(int(thing))
-	else: # is_label_call(thing):
+	else:
 		put_instr(op, grx_to_int(grx), MM_DIRECT, short_label(thing))
-	#else:
-	#	put_instr(op + "gr", grx_to_int(grx), grx_to_int(thing), None)
 
 with open(file_name) as f:
 	program = ''.join(f.readlines())
@@ -247,5 +208,3 @@ for label, line_num in lables.iteritems():
 	output = output.replace('S#' + label + '#', to_bin(line_num, 12))
 
 print(output)
-
-
