@@ -1,9 +1,0 @@
-	sleep	1
-	load	gr0	2
-	mul	gr0	FOUR
-SLEEP:
-	sleep	1
-	jump	SLEEP
-FOUR:
-	4
-
